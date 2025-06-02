@@ -1,6 +1,5 @@
 import 'package:act/Core/Utils/Theme/theme.dart';
 import 'package:act/Features/Auth/Presentation/Screens/auth.dart';
-import 'package:act/Features/Auth/Presentation/Screens/auth_two.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 

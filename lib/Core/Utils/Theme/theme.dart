@@ -9,7 +9,17 @@ class TAppTheme {
     brightness: Brightness.light,
     primaryColor: Colors.blue,
     scaffoldBackgroundColor: Colors.white,
-    // textTheme: TTextTheme.lightTextTheme,
+    colorScheme: ColorScheme(
+      brightness: Brightness.light,
+      primary: Color(0xFFFFC107), // Vibrant yellow (lightbulb/gears)
+      onPrimary: Color(0xFF000000), // Black for contrast on yellow
+      secondary: Color(0xFF2196F3), // Bright blue (planet/lightbulb)
+      onSecondary: Color(0xFFFFFFFF), // White for text/icons on blue
+      error: Color(0xFFB00020), // Standard red error color
+      onError: Color(0xFFFFFFFF), // White text on error
+      surface: Color(0xFFFFFFFF), // Background content area (paper white)
+      onSurface: Color(0xFF212121), // Dark grey for text on surface
+    ),
   );
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
@@ -17,7 +27,17 @@ class TAppTheme {
     brightness: Brightness.dark,
     primaryColor: Colors.blue,
     scaffoldBackgroundColor: Colors.white,
-    // textTheme: TTextTheme.darkTextTheme,
+    colorScheme: ColorScheme(
+      brightness: Brightness.dark,
+      primary: Color(0xFFFFC107), // Vibrant yellow (lightbulb/gears)
+      onPrimary: Color(0xFF000000), // Black for contrast on yellow
+      secondary: Color(0xFF2196F3), // Bright blue (planet/lightbulb)
+      onSecondary: Color(0xFFFFFFFF), // White for text/icons on blue
+      error: Color(0xFFB00020), // Standard red error color
+      onError: Color(0xFFFFFFFF), // White text on error
+      surface: Color(0xFFFFFFFF), // Background content area (paper white)
+      onSurface: Color(0xFF212121), // Dark grey for text on surface
+    ),
   );
 }
 
