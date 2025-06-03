@@ -2,6 +2,8 @@ import 'package:act/Core/Presentation/Desktop/Screens/custom_drawer.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
 import 'package:act/Features/EmployeeManagement/Constant/employee_management.dart';
 import 'package:act/Features/EmployeeManagement/Screens/EmployeeDetails/employee_info_card.dart';
+import 'package:act/Features/EmployeeManagement/Widgets/employee_dashboard_upper_widget.dart';
+import 'package:act/Features/EmployeeManagement/Widgets/employee_dashboard_lower_widget.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_tabbar.dart';
 import 'package:act/Features/EmployeeManagement/Screens/EmployeeLeaveRequest/employee_leave_request.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +43,13 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
     return Scaffold(
       body: Row(
         children: [
-          Expanded(flex: 2, child: CustomDrawer(employeeManagement: true)),
+          Expanded(
+            flex: 2,
+            child: CustomDrawer(
+              employeeManagement: true,
+              employeeDetails: true,
+            ),
+          ),
           Expanded(
             flex: 12,
             child: Column(
@@ -49,7 +57,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                 CustomAppbar(),
                 Expanded(
                   child: Container(
-                    color: const Color(0xffF5F5F5),
+                    color: cardsColors,
                     child: Column(
                       children: [
                         SizedBox(
@@ -107,7 +115,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                              color: const Color(0xfff5f5f5),
+                                              color: cardsColors,
                                               borderRadius:
                                                   BorderRadius.circular(07.sp),
                                             ),
@@ -194,178 +202,11 @@ class EmployeeDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [DashboardUpperWidget(), DashboardLowerWidget()]);
-  }
-}
-
-class DashboardUpperWidget extends StatelessWidget {
-  const DashboardUpperWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xfff5f5f5),
-                borderRadius: BorderRadius.circular(07.sp),
-              ),
-              child: Center(
-                child: AppText.small("Chart Container", fontSize: 17),
-              ),
-            ).withPadding(padding: EdgeInsets.symmetric(vertical: 07.sp)),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: DashboardCards().withPadding(
-                          padding: EdgeInsets.only(
-                            top: 07.sp,
-                            left: 07.sp,
-                            bottom: 07.sp,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            borderRadius: BorderRadius.circular(07.sp),
-                          ),
-                        ).withPadding(padding: EdgeInsets.all(07.sp)),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            borderRadius: BorderRadius.circular(07.sp),
-                          ),
-                        ).withPadding(
-                          padding: EdgeInsets.only(left: 07.sp, bottom: 07.sp),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            borderRadius: BorderRadius.circular(07.sp),
-                          ),
-                        ).withPadding(
-                          padding: EdgeInsets.only(
-                            left: 07.sp,
-                            bottom: 07.sp,
-                            right: 07.sp,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class DashboardCards extends StatelessWidget {
-  const DashboardCards({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xfff5f5f5),
-        borderRadius: BorderRadius.circular(07.sp),
-      ),
-    );
-  }
-}
-
-class DashboardLowerWidget extends StatelessWidget {
-  const DashboardLowerWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            borderRadius: BorderRadius.circular(07.sp),
-                          ),
-                        ).withPadding(padding: EdgeInsets.only(bottom: 07.sp)),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            borderRadius: BorderRadius.circular(07.sp),
-                          ),
-                        ).withPadding(
-                          padding: EdgeInsets.only(bottom: 07.sp, left: 07.sp),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            borderRadius: BorderRadius.circular(07.sp),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            borderRadius: BorderRadius.circular(07.sp),
-                          ),
-                        ).withPadding(padding: EdgeInsets.only(left: 07.sp)),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xfff5f5f5),
-                borderRadius: BorderRadius.circular(07.sp),
-              ),
-            ).withPadding(padding: EdgeInsets.symmetric(horizontal: 07.sp)),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        EmployeeDashboardUpperWidget(),
+        EmployeeDashboardLowerWidget(),
+      ],
     );
   }
 }

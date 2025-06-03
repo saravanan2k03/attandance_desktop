@@ -21,7 +21,10 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
     return Scaffold(
       body: Row(
         children: [
-          Expanded(flex: 2, child: CustomDrawer(employeeManagement: true)),
+          Expanded(
+            flex: 2,
+            child: CustomDrawer(employeeManagement: true, addEmployee: true),
+          ),
           Expanded(
             flex: 12,
             child: Column(
@@ -29,7 +32,7 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
                 CustomAppbar(),
                 Expanded(
                   child: Container(
-                    color: const Color(0xffF5F5F5),
+                    color: cardsColors,
                     child: Column(
                       children: [
                         SizedBox(

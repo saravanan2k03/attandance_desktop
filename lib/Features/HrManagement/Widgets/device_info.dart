@@ -69,7 +69,7 @@ class _DeviceInfoCardState extends State<DeviceInfoCard> {
             height: 45.sp,
             width: calcSize(context).longestSide,
             decoration: BoxDecoration(
-              color: Color(0xfff5f5f5),
+              color: cardsColors,
               borderRadius: BorderRadius.circular(07.sp),
             ),
             child: Center(child: AppText.small("Calender", fontSize: 17)),

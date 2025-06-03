@@ -21,7 +21,10 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
     return Scaffold(
       body: Row(
         children: [
-          Expanded(flex: 2, child: CustomDrawer(employeeManagement: true)),
+          Expanded(
+            flex: 2,
+            child: CustomDrawer(employeeManagement: true, allEmployee: true),
+          ),
           Expanded(
             flex: 12,
             child: Column(
@@ -29,7 +32,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                 CustomAppbar(),
                 Expanded(
                   child: Container(
-                    color: const Color(0xffF5F5F5),
+                    color: cardsColors,
                     child: Column(
                       children: [
                         SizedBox(
@@ -68,9 +71,8 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  width: 50.sp,
-                                  child: CustomBorderTextForm(title: "Search"),
+                                AllEmployeeFilter().withPadding(
+                                  padding: EdgeInsets.all(07.sp),
                                 ),
                                 10.height,
                                 const CustomTable(
@@ -81,6 +83,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                     'Designation',
                                     'Gender',
                                     'Work Shift',
+                                    'Date of Joining',
                                   ],
                                 ),
                                 10.height,
@@ -135,6 +138,62 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class AllEmployeeFilter extends StatelessWidget {
+  const AllEmployeeFilter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 07.sp,
+      runSpacing: 07.sp,
+      children: [
+        SizedBox(width: 40.sp, child: CustomBorderTextForm(title: "Search")),
+        SizedBox(
+          width: 40.sp,
+          child: CustomBorderDropDownForm(hintText: "Gender"),
+        ),
+        SizedBox(
+          width: 40.sp,
+          child: CustomBorderDropDownForm(hintText: "Department"),
+        ),
+        SizedBox(
+          width: 40.sp,
+          child: CustomBorderDropDownForm(hintText: "Designation"),
+        ),
+        SizedBox(
+          width: 40.sp,
+          child: CustomBorderDropDownForm(hintText: "Work shift"),
+        ),
+
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              height: 18.sp,
+              width: 40.sp,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(07.sp),
+              ),
+              child: Center(child: AppText.small("Clear", fontSize: 17)),
+            ),
+            07.width,
+            Container(
+              height: 18.sp,
+              width: 40.sp,
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(07.sp),
+              ),
+              child: Center(child: AppText.small("Submit", fontSize: 17)),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

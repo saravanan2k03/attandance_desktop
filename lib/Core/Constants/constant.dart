@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 const desktopConstraints = 1100;
 const mobileConstraints = 600;
 Color commonColor = Color(0xffd1e4ff);
+Color cardsColors = Color(0xfff5f5f5);
 Size calcSize(context) {
   return MediaQuery.of(context).size;
 }

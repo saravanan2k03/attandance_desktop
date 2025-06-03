@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/expansion_menu_widget.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/menu_card.dart';
@@ -18,12 +17,20 @@ class CustomDrawer extends StatelessWidget {
   final bool? employeeManagement;
   final bool? payrollManagement;
   final bool? report;
+  final bool? allEmployee;
+  final bool? addEmployee;
+  final bool? employeeDetails;
+  final bool? attendanceDetails;
   const CustomDrawer({
     super.key,
     this.dashboard,
     this.employeeManagement,
     this.payrollManagement,
     this.report,
+    this.allEmployee,
+    this.addEmployee,
+    this.employeeDetails,
+    this.attendanceDetails,
   });
 
   @override
@@ -59,7 +66,7 @@ class CustomDrawer extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           log("message");
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const Dashboard(),
@@ -86,7 +93,7 @@ class CustomDrawer extends StatelessWidget {
                     menuwidget: [
                       InkWell(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const EmployeeManagement(),
@@ -97,14 +104,14 @@ class CustomDrawer extends StatelessWidget {
                         child: MenuCardsForDesktop(
                           color: Colors.black,
                           title: "All Employee",
-                          enable: employeeManagement ?? false,
+                          enable: allEmployee ?? false,
                           icondata: Icons.group,
                           pageIndex: 0,
                         ),
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const AddEmployeeData(),
@@ -115,14 +122,14 @@ class CustomDrawer extends StatelessWidget {
                         child: MenuCardsForDesktop(
                           color: Colors.black,
                           title: "Add Employee",
-                          enable: employeeManagement ?? false,
+                          enable: addEmployee ?? false,
                           icondata: Icons.person_add,
                           pageIndex: 0,
                         ),
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const EmployeeDetails(),
@@ -133,7 +140,7 @@ class CustomDrawer extends StatelessWidget {
                         child: MenuCardsForDesktop(
                           color: Colors.black,
                           title: "Employee Details",
-                          enable: employeeManagement ?? false,
+                          enable: employeeDetails ?? false,
                           icondata: Icons.account_circle,
                           pageIndex: 0,
                         ),
@@ -147,7 +154,7 @@ class CustomDrawer extends StatelessWidget {
                     menuwidget: [
                       InkWell(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder:
@@ -159,7 +166,7 @@ class CustomDrawer extends StatelessWidget {
                         child: MenuCardsForDesktop(
                           color: Colors.black,
                           title: "Attendance Details",
-                          enable: payrollManagement ?? false,
+                          enable: attendanceDetails ?? false,
                           icondata: Icons.event_available,
                           pageIndex: 0,
                         ),

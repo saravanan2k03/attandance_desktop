@@ -36,7 +36,13 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
     return Scaffold(
       body: Row(
         children: [
-          Expanded(flex: 2, child: CustomDrawer(payrollManagement: true)),
+          Expanded(
+            flex: 2,
+            child: CustomDrawer(
+              payrollManagement: true,
+              attendanceDetails: true,
+            ),
+          ),
           Expanded(
             flex: 12,
             child: Column(
@@ -44,7 +50,7 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                 CustomAppbar(),
                 Expanded(
                   child: Container(
-                    color: const Color(0xffF5F5F5),
+                    color: cardsColors,
                     child: Column(
                       children: [
                         SizedBox(
@@ -98,7 +104,7 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                              color: const Color(0xfff5f5f5),
+                                              color: cardsColors,
                                               borderRadius:
                                                   BorderRadius.circular(07.sp),
                                             ),

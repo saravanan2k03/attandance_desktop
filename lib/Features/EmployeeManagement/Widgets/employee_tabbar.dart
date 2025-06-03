@@ -37,7 +37,7 @@ class _EmployeeTabbarState extends State<EmployeeTabbar> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xfff5f5f5),
+            color: cardsColors,
             borderRadius: BorderRadius.circular(07.sp),
           ),
           child: Row(
