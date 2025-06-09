@@ -19,15 +19,21 @@ class AttendanceManagement extends StatefulWidget {
 }
 
 class _AttendanceManagementState extends State<AttendanceManagement> {
-  void changetabbar(bool attendanceDetails, bool payrollDetails) {
+  void changetabbar(
+    bool attendanceDetails,
+    bool payrollDetails,
+    bool leaveRequestapproval,
+  ) {
     attendanceDetailsvar = attendanceDetails;
     payrollDetailsvar = payrollDetails;
+    leaveRequestapprovalvar = leaveRequestapproval;
   }
 
   @override
   void initState() {
     attendanceDetailsvar = true;
     payrollDetailsvar = false;
+    leaveRequestapprovalvar = false;
     super.initState();
   }
 
@@ -113,7 +119,11 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                                 InkWell(
                                                   onTap: () {
                                                     setState(() {
-                                                      changetabbar(true, false);
+                                                      changetabbar(
+                                                        true,
+                                                        false,
+                                                        false,
+                                                      );
                                                     });
                                                   },
 
@@ -127,13 +137,34 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                                 InkWell(
                                                   onTap: () {
                                                     setState(() {
-                                                      changetabbar(false, true);
+                                                      changetabbar(
+                                                        false,
+                                                        true,
+                                                        false,
+                                                      );
                                                     });
                                                   },
                                                   child: TabbarCard(
                                                     cardenable:
                                                         payrollDetailsvar,
                                                     label: "Payroll Details",
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      changetabbar(
+                                                        false,
+                                                        false,
+                                                        true,
+                                                      );
+                                                    });
+                                                  },
+                                                  child: TabbarCard(
+                                                    cardenable:
+                                                        leaveRequestapprovalvar,
+                                                    label:
+                                                        "Leave Request Approval",
                                                   ),
                                                 ),
                                               ],

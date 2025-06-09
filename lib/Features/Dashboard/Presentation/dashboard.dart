@@ -35,23 +35,23 @@ class DashboardCards extends StatelessWidget {
       child: Column(
         children: [
           Expanded(flex: 5, child: HrDashboardUpperWidget()),
-          Expanded(
-            flex: 2,
-            child: Row(
-              spacing: 07.sp,
-              children: [
-                HrDashboardMiddleCards(),
-                HrDashboardMiddleCards(),
-                HrDashboardMiddleCards(),
-                HrDashboardMiddleCards(),
-                HrDashboardMiddleCards(),
-                HrDashboardMiddleCards(),
-                HrDashboardMiddleCards(),
-              ],
-            ).withPadding(
-              padding: EdgeInsets.only(right: 07.sp, bottom: 07.sp),
-            ),
-          ),
+          // Expanded(
+          //   flex: 2,
+          //   child: Row(
+          //     spacing: 07.sp,
+          //     children: [
+          //       HrDashboardMiddleCards(),
+          //       HrDashboardMiddleCards(),
+          //       HrDashboardMiddleCards(),
+          //       HrDashboardMiddleCards(),
+          //       HrDashboardMiddleCards(),
+          //       HrDashboardMiddleCards(),
+          //       HrDashboardMiddleCards(),
+          //     ],
+          //   ).withPadding(
+          //     padding: EdgeInsets.only(right: 07.sp, bottom: 07.sp),
+          //   ),
+          // ),
           Expanded(flex: 5, child: HrDashboardLowerWidget()),
         ],
       ).withPadding(padding: EdgeInsets.all(07.sp)),

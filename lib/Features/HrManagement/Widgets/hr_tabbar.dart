@@ -21,6 +21,7 @@ class HrTabbar extends StatelessWidget {
             children: [
               TabbarCard(cardenable: true, label: "Attendance Details"),
               TabbarCard(cardenable: false, label: "Payroll Details"),
+              TabbarCard(cardenable: false, label: "Leave Request Approval"),
             ],
           ).withPadding(padding: EdgeInsets.all(07.sp)),
         ).withPadding(padding: EdgeInsets.all(07.sp)),
