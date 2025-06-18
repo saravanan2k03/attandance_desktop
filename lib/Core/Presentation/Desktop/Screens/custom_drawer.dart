@@ -179,6 +179,23 @@ class CustomDrawer extends StatelessWidget {
                     initialexpanded: report ?? false,
                     menuwidget: [],
                   ),
+                  ExpansionMenuForDeskTop(
+                    title: "Configuration",
+                    iconData: Icons.insert_drive_file,
+                    initialexpanded: false,
+                    menuwidget: [
+                      InkWell(
+                        onTap: () {},
+                        child: MenuCardsForDesktop(
+                          color: Colors.black,
+                          title: "Configuration",
+                          enable: false,
+                          icondata: Icons.tune,
+                          pageIndex: 0,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ).withPadding(padding: EdgeInsets.symmetric(horizontal: 05.sp)),
             ),

@@ -4,12 +4,12 @@ import 'package:act/Core/Utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class EmployeeDashboardCards extends StatelessWidget {
+class HrDashboardCards extends StatelessWidget {
   final String aggregatedString;
   final String aggregationCount;
   final IconData iconData;
   final String title;
-  const EmployeeDashboardCards({
+  const HrDashboardCards({
     super.key,
     required this.aggregatedString,
     required this.aggregationCount,
