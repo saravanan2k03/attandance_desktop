@@ -27,6 +27,7 @@ class piechartWidget extends StatefulWidget {
   State<piechartWidget> createState() => _piechartWidgetState();
 }
 
+// ignore: camel_case_types
 class _piechartWidgetState extends State<piechartWidget> {
   int touchedIndex = -1;
   List<PieChartSectionData> feedModelDataToPiechart(

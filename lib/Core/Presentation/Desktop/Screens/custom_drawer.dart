@@ -4,6 +4,7 @@ import 'package:act/Core/Presentation/Desktop/Widgets/expansion_menu_widget.dart
 import 'package:act/Core/Presentation/Desktop/Widgets/menu_card.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/Configuration/Confiugration.dart';
 import 'package:act/Features/Dashboard/Presentation/dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/add_employee_data.dart';
 import 'package:act/Features/EmployeeManagement/Screens/EmployeeDetails/employee_details.dart';
@@ -21,6 +22,7 @@ class CustomDrawer extends StatelessWidget {
   final bool? addEmployee;
   final bool? employeeDetails;
   final bool? attendanceDetails;
+  final bool? configuration;
   const CustomDrawer({
     super.key,
     this.dashboard,
@@ -31,6 +33,7 @@ class CustomDrawer extends StatelessWidget {
     this.addEmployee,
     this.employeeDetails,
     this.attendanceDetails,
+    this.configuration,
   });
 
   @override
@@ -182,14 +185,21 @@ class CustomDrawer extends StatelessWidget {
                   ExpansionMenuForDeskTop(
                     title: "Configuration",
                     iconData: Icons.insert_drive_file,
-                    initialexpanded: false,
+                    initialexpanded: configuration ?? false,
                     menuwidget: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ConfiugrationPage(),
+                            ),
+                          );
+                        },
                         child: MenuCardsForDesktop(
                           color: Colors.black,
                           title: "Configuration",
-                          enable: false,
+                          enable: configuration ?? false,
                           icondata: Icons.tune,
                           pageIndex: 0,
                         ),

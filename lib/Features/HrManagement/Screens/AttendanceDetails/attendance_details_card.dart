@@ -54,6 +54,6 @@ class AttendanceDetailsCard extends StatelessWidget {
           ],
         ),
       ],
-    ).withPadding(padding: EdgeInsets.all(07.sp));
+    );
   }
 }

@@ -150,23 +150,6 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                                     label: "Payroll Details",
                                                   ),
                                                 ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      changetabbar(
-                                                        false,
-                                                        false,
-                                                        true,
-                                                      );
-                                                    });
-                                                  },
-                                                  child: TabbarCard(
-                                                    cardenable:
-                                                        leaveRequestapprovalvar,
-                                                    label:
-                                                        "Leave Request Approval",
-                                                  ),
-                                                ),
                                               ],
                                             ).withPadding(
                                               padding: EdgeInsets.all(07.sp),
@@ -184,7 +167,7 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                                 padding: EdgeInsets.all(07.sp),
                                               ),
                                         ),
-                                        child: PayrollDetailsCard(),
+                                        child: LeaveRequestCard(),
                                       ),
                                     ],
                                   ),

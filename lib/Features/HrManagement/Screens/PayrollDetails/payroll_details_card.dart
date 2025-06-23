@@ -6,8 +6,8 @@ import 'package:act/Features/HrManagement/Screens/PayrollDetails/payroll_filter.
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class PayrollDetailsCard extends StatelessWidget {
-  const PayrollDetailsCard({super.key});
+class LeaveRequestCard extends StatelessWidget {
+  const LeaveRequestCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class PayrollDetailsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const PayrollFilter(),
+          const LeaveRequestFilter(),
           Expanded(
             child: Container(
               decoration: BoxDecoration(

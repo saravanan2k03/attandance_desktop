@@ -1,3 +1,6 @@
+import 'package:act/Core/Utils/app_text.dart';
+import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Core/Utils/licensekey_diagloue.dart';
 import 'package:act/Core/gen/assets.gen.dart';
 import 'package:act/Features/Auth/Presentation/Widgets/my_textfield.dart';
 import 'package:act/Features/Dashboard/Presentation/dashboard.dart';
@@ -45,6 +48,22 @@ class Auth extends StatelessWidget {
                         controller: TextEditingController(),
                       ),
                     ),
+                    SizedBox(
+                      width: 350,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            child: AppText.medium(
+                              "Forgot Password",
+                              color: Colors.blue,
+                              fontSize: 15,
+                            ).withPadding(padding: EdgeInsets.only(top: 05.sp)),
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 2.h),
                     InkWell(
                       onTap: () {
@@ -81,7 +100,12 @@ class Auth extends StatelessWidget {
             right: 07,
             child: Padding(
               padding: EdgeInsets.all(07.sp),
-              child: Icon(Icons.settings, color: Colors.black, size: 25),
+              child: InkWell(
+                onTap: () {
+                  showLicenseDialog(context);
+                },
+                child: Icon(Icons.settings, color: Colors.black, size: 25),
+              ),
             ),
           ),
         ],

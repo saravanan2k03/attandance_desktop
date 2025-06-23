@@ -1,9 +1,22 @@
+import 'package:act/Core/Services/observer.dart';
 import 'package:act/Core/Utils/Theme/theme.dart';
 import 'package:act/Features/Auth/Presentation/Screens/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:sizer/sizer.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = MyGlobalObserver();
+  String envFile;
+  envFile = "dotenv";
+  // envFile = "dotenvprod";
+  await dotenv.load(fileName: envFile);
+
+  ///Hive initialization
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 

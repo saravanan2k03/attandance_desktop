@@ -31,7 +31,16 @@ class FillingForm extends StatelessWidget {
 
 class CustomBorderTextForm extends StatelessWidget {
   final String? title;
-  const CustomBorderTextForm({super.key, this.title});
+  final bool? readOnly;
+  final Function()? onTap;
+  final String? initialValue;
+  const CustomBorderTextForm({
+    super.key,
+    this.title,
+    this.readOnly,
+    this.onTap,
+    this.initialValue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +50,10 @@ class CustomBorderTextForm extends StatelessWidget {
       //     border: Border.all(), borderRadius: BorderRadius.circular(07.sp)),
       child: CustomTextFormField(
         title: title ?? "",
-        initialValue: "",
+        initialValue: initialValue ?? "",
         enable: true,
+        readOnly: readOnly,
+        onTap: onTap,
       ),
     );
   }
