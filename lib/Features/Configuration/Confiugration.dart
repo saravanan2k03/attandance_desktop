@@ -31,10 +31,14 @@ class _ConfiugrationPageState extends State<ConfiugrationPage> {
                 CustomAppbar(),
                 Expanded(
                   child: SingleChildScrollView(
-                    child: Column(
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      runAlignment: WrapAlignment.center,
+                      spacing: 07.sp,
+                      runSpacing: 07.sp,
                       children: [
                         Container(
-                          // height: 75.sp,
+                          height: 70.sp,
                           width: 60.sp,
                           padding: EdgeInsets.all(8.sp),
                           decoration: BoxDecoration(
@@ -42,109 +46,122 @@ class _ConfiugrationPageState extends State<ConfiugrationPage> {
                             borderRadius: BorderRadius.circular(07.sp),
                           ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              AppText.medium(
-                                "Configuration Settings",
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AppText.medium(
+                                    "Configuration Settings",
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
 
-                              10.height, // spacing
-                              CustomBorderDropDownForm(hintText: "Work shift"),
-                              10.height, // spacing
-                              CustomTextFormFieldwithcontroller(
-                                title: "Punch In Start Time",
-                                controller: punchInStartTimeController,
-                                readOnly: true,
-                                onTap: () async {
-                                  final selectedTime = await selectTime(
-                                    context,
-                                  );
-                                  punchInStartTimeController.text =
-                                      selectedTime;
-                                },
-                              ),
+                                  10.height, // spacing
+                                  CustomBorderDropDownForm(
+                                    hintText: "Work shift",
+                                  ),
+                                  10.height, // spacing
+                                  CustomTextFormFieldwithcontroller(
+                                    title: "Punch In Start Time",
+                                    controller: punchInStartTimeController,
+                                    readOnly: true,
+                                    onTap: () async {
+                                      final selectedTime = await selectTime(
+                                        context,
+                                      );
+                                      punchInStartTimeController.text =
+                                          selectedTime;
+                                    },
+                                  ),
 
-                              10.height,
+                                  10.height,
 
-                              CustomTextFormFieldwithcontroller(
-                                title: "Punch In End Time",
-                                controller: punchInEndTimeController,
-                                readOnly: true,
-                                onTap: () async {
-                                  final selectedTime = await selectTime(
-                                    context,
-                                  );
-                                  punchInEndTimeController.text = selectedTime;
-                                },
-                              ),
-                              10.height,
+                                  CustomTextFormFieldwithcontroller(
+                                    title: "Punch In End Time",
+                                    controller: punchInEndTimeController,
+                                    readOnly: true,
+                                    onTap: () async {
+                                      final selectedTime = await selectTime(
+                                        context,
+                                      );
+                                      punchInEndTimeController.text =
+                                          selectedTime;
+                                    },
+                                  ),
+                                  10.height,
 
-                              CustomTextFormFieldwithcontroller(
-                                title: "Punch In Start Late Time",
-                                controller: punchInEndTimeController,
-                                readOnly: true,
-                                onTap: () async {
-                                  final selectedTime = await selectTime(
-                                    context,
-                                  );
-                                  punchInEndTimeController.text = selectedTime;
-                                },
-                              ),
-                              10.height,
+                                  CustomTextFormFieldwithcontroller(
+                                    title: "Punch In Start Late Time",
+                                    controller: punchInEndTimeController,
+                                    readOnly: true,
+                                    onTap: () async {
+                                      final selectedTime = await selectTime(
+                                        context,
+                                      );
+                                      punchInEndTimeController.text =
+                                          selectedTime;
+                                    },
+                                  ),
+                                  10.height,
 
-                              CustomTextFormFieldwithcontroller(
-                                title: "Punch In End Late Time",
-                                controller: punchInEndTimeController,
-                                readOnly: true,
-                                onTap: () async {
-                                  final selectedTime = await selectTime(
-                                    context,
-                                  );
-                                  punchInEndTimeController.text = selectedTime;
-                                },
-                              ),
-                              10.height,
+                                  CustomTextFormFieldwithcontroller(
+                                    title: "Punch In End Late Time",
+                                    controller: punchInEndTimeController,
+                                    readOnly: true,
+                                    onTap: () async {
+                                      final selectedTime = await selectTime(
+                                        context,
+                                      );
+                                      punchInEndTimeController.text =
+                                          selectedTime;
+                                    },
+                                  ),
+                                  10.height,
 
-                              CustomTextFormFieldwithcontroller(
-                                title: "Punch Out Start Time",
-                                controller: punchInEndTimeController,
-                                readOnly: true,
-                                onTap: () async {
-                                  final selectedTime = await selectTime(
-                                    context,
-                                  );
-                                  punchInEndTimeController.text = selectedTime;
-                                },
-                              ),
-                              10.height,
+                                  CustomTextFormFieldwithcontroller(
+                                    title: "Punch Out Start Time",
+                                    controller: punchInEndTimeController,
+                                    readOnly: true,
+                                    onTap: () async {
+                                      final selectedTime = await selectTime(
+                                        context,
+                                      );
+                                      punchInEndTimeController.text =
+                                          selectedTime;
+                                    },
+                                  ),
+                                  10.height,
 
-                              CustomTextFormFieldwithcontroller(
-                                title: "Punch Out End Time",
-                                controller: punchInEndTimeController,
-                                readOnly: true,
-                                onTap: () async {
-                                  final selectedTime = await selectTime(
-                                    context,
-                                  );
-                                  punchInEndTimeController.text = selectedTime;
-                                },
-                              ),
-                              10.height,
+                                  CustomTextFormFieldwithcontroller(
+                                    title: "Punch Out End Time",
+                                    controller: punchInEndTimeController,
+                                    readOnly: true,
+                                    onTap: () async {
+                                      final selectedTime = await selectTime(
+                                        context,
+                                      );
+                                      punchInEndTimeController.text =
+                                          selectedTime;
+                                    },
+                                  ),
+                                  10.height,
 
-                              CustomTextFormFieldwithcontroller(
-                                title: "Over Time Working End Time",
-                                controller: punchInEndTimeController,
-                                readOnly: true,
-                                onTap: () async {
-                                  final selectedTime = await selectTime(
-                                    context,
-                                  );
-                                  punchInEndTimeController.text = selectedTime;
-                                },
+                                  CustomTextFormFieldwithcontroller(
+                                    title: "Over Time Working End Time",
+                                    controller: punchInEndTimeController,
+                                    readOnly: true,
+                                    onTap: () async {
+                                      final selectedTime = await selectTime(
+                                        context,
+                                      );
+                                      punchInEndTimeController.text =
+                                          selectedTime;
+                                    },
+                                  ),
+                                  10.height,
+                                ],
                               ),
-                              10.height,
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -186,8 +203,64 @@ class _ConfiugrationPageState extends State<ConfiugrationPage> {
                             ],
                           ),
                         ),
+                        Container(
+                          height: 70.sp,
+                          width: 60.sp,
+                          decoration: BoxDecoration(color: cardsColors),
+                          child: Column(
+                            children: [
+                              AppText.medium(
+                                "Designation Setting",
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 70.sp,
+                          width: 60.sp,
+                          decoration: BoxDecoration(color: cardsColors),
+                          child: Column(
+                            children: [
+                              AppText.medium(
+                                "Department Setting",
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 70.sp,
+                          width: 60.sp,
+                          decoration: BoxDecoration(color: cardsColors),
+                          child: Column(
+                            children: [
+                              AppText.medium(
+                                "Leave Type Setting",
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 70.sp,
+                          width: 60.sp,
+                          decoration: BoxDecoration(color: cardsColors),
+                          child: Column(
+                            children: [
+                              AppText.medium(
+                                "Holidays Setting",
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
-                    ),
+                    ).withPadding(padding: EdgeInsets.all(07.sp)),
                   ),
                 ),
               ],

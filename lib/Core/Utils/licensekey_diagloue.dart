@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -157,7 +159,7 @@ void showLicenseDialog(BuildContext context) {
                     Row(
                       children: [
                         Expanded(
-                          child: Container(
+                          child: SizedBox(
                             height: 48.0,
                             child: TextButton(
                               onPressed: () {
