@@ -8,8 +8,19 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
-class Auth extends StatelessWidget {
+class Auth extends StatefulWidget {
   const Auth({super.key});
+
+  @override
+  State<Auth> createState() => _AuthState();
+}
+
+class _AuthState extends State<Auth> {
+  @override
+  void initState() {
+    ;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +77,7 @@ class Auth extends StatelessWidget {
                     ),
                     SizedBox(height: 2.h),
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
