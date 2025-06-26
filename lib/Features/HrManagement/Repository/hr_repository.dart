@@ -1,34 +1,43 @@
+import 'dart:convert';
+
 import 'package:act/Core/Services/api_network_services.dart';
 import 'package:act/Core/Utils/urls.dart';
 import 'package:act/Features/EmployeeManagement/Models/base_response.dart';
 import 'package:act/Features/HrManagement/Models/attendance_list_model.dart';
 import 'package:act/Features/HrManagement/Models/device_list_model.dart';
+import 'package:act/Features/HrManagement/Models/device_response_model.dart';
+import 'package:act/Features/HrManagement/Models/hr_dashboard_model.dart';
 import 'package:act/Features/HrManagement/Models/update_attendance_record_model.dart';
+import 'package:act/Features/HrManagement/Models/update_device_response_model.dart';
 
 class HrRepository {
-  // Future<DeviceAddModel> addDevice({
-  //   required String licenseKey,
-  //   required String deviceName,
-  //   required String deviceIp,
-  //   required String devicePort,
-  //   required String syncInterval,
-  //   required String lastSyncInterval,
-  //   required bool isActive,
-  // }) async {
-  //   final url = Uri.parse("${ApiConstants.baseUrl}devices/add/");
+  Future<DeviceResponseModel> addDevice({
+    required String licenseKey,
+    required String deviceName,
+    required String deviceIp,
+    required String devicePort,
+    required String syncInterval,
+    required String lastSyncInterval,
+    required bool isActive,
+  }) async {
+    final Uri url = Uri.parse("${ApiConstants.baseUrl}devices/add/");
 
-  //   final body = {
-  //     "license_key": licenseKey,
-  //     "device_name": deviceName,
-  //     "device_ip": deviceIp,
-  //     "device_port": devicePort,
-  //     "sync_interval": syncInterval,
-  //     "last_sync_interval": lastSyncInterval,
-  //     "is_active": isActive,
-  //   };
+    final Map<String, dynamic> body = {
+      "license_key": licenseKey,
+      "device_name": deviceName,
+      "device_ip": deviceIp,
+      "device_port": devicePort,
+      "sync_interval": syncInterval,
+      "last_sync_interval": lastSyncInterval,
+      "is_active": isActive,
+    };
 
-  //   return postApiData(url, body, (json) => DeviceAddModel.fromJson(json));
-  // }
+    return postApiData<DeviceResponseModel>(
+      url,
+      body,
+      (responseBody) => DeviceResponseModel.fromJson(responseBody),
+    );
+  }
 
   Future<DeviceListModel> listDevices(String licenseKey) async {
     final url = Uri.parse(
@@ -38,7 +47,7 @@ class HrRepository {
     return fetchApiData(url, (json) => DeviceListModel.fromJson(json));
   }
 
-  Future<DeviceListModel> updateDevice({
+  Future<DevicelupdateModel> updateDevice({
     required int id,
     required String licenseKey,
     required String deviceName,
@@ -60,7 +69,7 @@ class HrRepository {
       "is_active": isActive,
     };
 
-    return patchApiData(url, body, (json) => DeviceListModel.fromJson(json));
+    return patchApiData(url, body, (json) => DevicelupdateModel.fromJson(json));
   }
 
   Future<AttendanceListModel> listAttendance({
@@ -165,5 +174,16 @@ class HrRepository {
     final body = {"leave_id": leaveId, "action": action};
 
     return postApiData(url, body, (json) => BaseResponseModel.fromJson(json));
+  }
+
+  Future<HRDashboardModel> fetchDashboardData(String licenseKey) async {
+    final url = Uri.parse("${ApiConstants.baseUrl}dashboard/hr/");
+    final body = {"license_key": licenseKey};
+
+    return await postApiData<HRDashboardModel>(
+      url,
+      body,
+      (data) => HRDashboardModel.fromJson(jsonDecode(data)),
+    );
   }
 }

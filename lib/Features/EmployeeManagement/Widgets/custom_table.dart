@@ -34,7 +34,9 @@ class CustomTable extends StatelessWidget {
 
   Widget buildDataTable() {
     return DataTable(
-      dataRowColor: WidgetStateColor.resolveWith((states) => Colors.lightGreen),
+      dataRowColor: WidgetStateColor.resolveWith(
+        (states) => const Color.fromARGB(255, 253, 249, 249),
+      ),
       clipBehavior: Clip.antiAlias,
       headingRowColor: WidgetStateColor.resolveWith(
         (states) => const Color(0xffF6F8FA),

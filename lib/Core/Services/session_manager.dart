@@ -5,19 +5,6 @@ import 'package:act/Core/Services/hive_services.dart';
 
 class SessionManagerClass {
   final HiveServices localdb = HiveServices();
-  Future<String> getEmpowerUsername() async {
-    try {
-      var raw = await localdb.readData('empower_username');
-      if (raw != null) {
-        var dec = EncryptionRepo.decryptData(raw);
-        return dec;
-      } else {
-        return "";
-      }
-    } on Exception catch (e) {
-      throw HttpException("Error In getEmpowerUsername:::${(e.toString())}");
-    }
-  }
 
   Future<void> setAccessToken(String token) async {
     try {
@@ -73,6 +60,130 @@ class SessionManagerClass {
       throw HttpException(
         "Error In getRefreshToken:::${e.toString()}",
       ).toString();
+    }
+  }
+
+  Future<void> setlicence(String token) async {
+    try {
+      var enc = EncryptionRepo.encryptData(token);
+      // log("setRefreshToken::encryption::$enc");
+      await localdb.createData('licencekey', enc);
+    } on Exception catch (e) {
+      throw HttpException(
+        "Error In setlicencekey:::${e.toString()}",
+      ).toString();
+    }
+  }
+
+  Future<String> getlicence() async {
+    try {
+      var raw = await localdb.readData('licencekey');
+      if (raw != null) {
+        var dec = EncryptionRepo.decryptData(raw);
+        return dec;
+      } else {
+        return "";
+      }
+    } on Exception catch (e) {
+      throw HttpException(
+        "Error In getlicencekey:::${e.toString()}",
+      ).toString();
+    }
+  }
+
+  Future<void> setuserid(String token) async {
+    try {
+      var enc = EncryptionRepo.encryptData(token);
+      // log("setRefreshToken::encryption::$enc");
+      await localdb.createData('userid', enc);
+    } on Exception catch (e) {
+      throw HttpException("Error In setuserid:::${e.toString()}").toString();
+    }
+  }
+
+  Future<void> setusername(String token) async {
+    try {
+      var enc = EncryptionRepo.encryptData(token);
+      // log("setRefreshToken::encryption::$enc");
+      await localdb.createData('username', enc);
+    } on Exception catch (e) {
+      throw HttpException("Error In username:::${e.toString()}").toString();
+    }
+  }
+
+  Future<void> setemail(String token) async {
+    try {
+      var enc = EncryptionRepo.encryptData(token);
+      // log("setRefreshToken::encryption::$enc");
+      await localdb.createData('email', enc);
+    } on Exception catch (e) {
+      throw HttpException("Error In setemail:::${e.toString()}").toString();
+    }
+  }
+
+  Future<void> setusertype(String token) async {
+    try {
+      var enc = EncryptionRepo.encryptData(token);
+      // log("setRefreshToken::encryption::$enc");
+      await localdb.createData('user_type', enc);
+    } on Exception catch (e) {
+      throw HttpException("Error In setusertype:::${e.toString()}").toString();
+    }
+  }
+
+  Future<String> getuserid() async {
+    try {
+      var raw = await localdb.readData('userid');
+      if (raw != null) {
+        var dec = EncryptionRepo.decryptData(raw);
+        return dec;
+      } else {
+        return "";
+      }
+    } on Exception catch (e) {
+      throw HttpException("Error In getuserid:::${e.toString()}").toString();
+    }
+  }
+
+  Future<String> getusername() async {
+    try {
+      var raw = await localdb.readData('username');
+      if (raw != null) {
+        var dec = EncryptionRepo.decryptData(raw);
+        return dec;
+      } else {
+        return "";
+      }
+    } on Exception catch (e) {
+      throw HttpException("Error In getusername:::${e.toString()}").toString();
+    }
+  }
+
+  Future<String> getemail() async {
+    try {
+      var raw = await localdb.readData('email');
+      if (raw != null) {
+        var dec = EncryptionRepo.decryptData(raw);
+        return dec;
+      } else {
+        return "";
+      }
+    } on Exception catch (e) {
+      throw HttpException("Error In getemail:::${e.toString()}").toString();
+    }
+  }
+
+  Future<String> getusertype() async {
+    try {
+      var raw = await localdb.readData('user_type');
+      if (raw != null) {
+        var dec = EncryptionRepo.decryptData(raw);
+        return dec;
+      } else {
+        return "";
+      }
+    } on Exception catch (e) {
+      throw HttpException("Error In getusertype:::${e.toString()}").toString();
     }
   }
 }

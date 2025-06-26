@@ -3,11 +3,24 @@ import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/Dashboard/Presentation/Widgets/hr_dashboard_cards.dart';
 import 'package:act/Features/Dashboard/Presentation/Widgets/monthly_attendance_overview.dart';
+import 'package:act/Features/HrManagement/Models/hr_dashboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class HrDashboardUpperWidget extends StatelessWidget {
-  const HrDashboardUpperWidget({super.key});
+  final String totalEmployees;
+  final String employeesPresentToday;
+  final String employeesAbsentToday;
+  final String employeesonLeaveToday;
+  final MonthlyAttendanceChart monthlyAttendanceChart;
+  const HrDashboardUpperWidget({
+    super.key,
+    required this.totalEmployees,
+    required this.employeesPresentToday,
+    required this.employeesAbsentToday,
+    required this.employeesonLeaveToday,
+    required this.monthlyAttendanceChart,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +36,9 @@ class HrDashboardUpperWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText.small("Monthly Attendance Overview", fontSize: 17),
-                MonthlyAttendanceOverview(),
+                MonthlyAttendanceOverview(
+                  monthlyAttendanceChart: monthlyAttendanceChart,
+                ),
               ],
             ).withPadding(padding: EdgeInsets.all(07.sp)),
           ).withPadding(padding: EdgeInsets.symmetric(vertical: 07.sp)),
@@ -37,7 +52,7 @@ class HrDashboardUpperWidget extends StatelessWidget {
                     Expanded(
                       child: HrDashboardCards(
                         aggregatedString: "Total",
-                        aggregationCount: "23",
+                        aggregationCount: totalEmployees,
                         iconData: Icons.group,
                         title: "Total Employees",
                       ).withPadding(
@@ -51,7 +66,7 @@ class HrDashboardUpperWidget extends StatelessWidget {
                     Expanded(
                       child: HrDashboardCards(
                         aggregatedString: "Total",
-                        aggregationCount: "23",
+                        aggregationCount: employeesPresentToday,
                         iconData: Icons.how_to_reg,
                         title: "Employees Present Today",
                       ).withPadding(padding: EdgeInsets.all(07.sp)),
@@ -65,7 +80,7 @@ class HrDashboardUpperWidget extends StatelessWidget {
                     Expanded(
                       child: HrDashboardCards(
                         aggregatedString: "Total",
-                        aggregationCount: "23",
+                        aggregationCount: employeesAbsentToday,
                         iconData: Icons.person_off,
                         title: "Employees Absent Today",
                       ).withPadding(
@@ -75,7 +90,7 @@ class HrDashboardUpperWidget extends StatelessWidget {
                     Expanded(
                       child: HrDashboardCards(
                         aggregatedString: "Total",
-                        aggregationCount: "23",
+                        aggregationCount: employeesonLeaveToday,
                         iconData: Icons.beach_access,
                         title: "Employees on Leave Today",
                       ).withPadding(

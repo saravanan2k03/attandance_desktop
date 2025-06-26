@@ -1,6 +1,7 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/Configuration/Models/leave_type_list_model.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,19 @@ class LeaveTypeSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<DataRow> getLeaveTypeTableRows(LeaveTypeListModel leaveTypeModel) {
+      return leaveTypeModel.leaveTypes?.map((leaveType) {
+            return DataRow(
+              cells: [
+                DataCell(Text(leaveType.id?.toString() ?? "-")),
+                DataCell(Text(leaveType.leaveType ?? "-")),
+                DataCell(Text((leaveType.isActive ?? false) ? "Yes" : "No")),
+              ],
+            );
+          }).toList() ??
+          [];
+    }
+
     return Container(
       height: 70.sp,
       width: 60.sp,
@@ -50,8 +64,9 @@ class LeaveTypeSetting extends StatelessWidget {
               color: commonColor,
               child: Column(
                 children: [
-                  const CustomTable(
+                  CustomTable(
                     datacolumns: ['ID', 'Leave Type', 'Active'],
+                    dataRow: getLeaveTypeTableRows(leaveTypeListModel),
                   ),
                 ],
               ),

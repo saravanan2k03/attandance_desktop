@@ -61,10 +61,24 @@ class CustomBorderTextForm extends StatelessWidget {
 
 class CustomBorderDropDownForm extends StatelessWidget {
   final String? hintText;
-  const CustomBorderDropDownForm({super.key, this.hintText});
+  final List<String>? dropDownMenu;
+  final String? selectedItem;
+  final Function(String?)? onChanged;
+  const CustomBorderDropDownForm({
+    super.key,
+    this.hintText,
+    this.dropDownMenu,
+    this.selectedItem,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MyDropdown(hintText: hintText);
+    return MyDropdown(
+      hintText: hintText,
+      dropDownMenu: dropDownMenu,
+      selectedItem: selectedItem,
+      onChanged: onChanged,
+    );
   }
 }

@@ -1,50 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class MyDropdown extends StatefulWidget {
   final String? hintText;
-  const MyDropdown({super.key, this.hintText});
+  final List<String>? dropDownMenu;
+  final String? selectedItem;
+  final Function(String?)? onChanged;
+  const MyDropdown({
+    super.key,
+    this.hintText,
+    this.dropDownMenu,
+    this.selectedItem,
+    this.onChanged,
+  });
 
   @override
   MyDropdownState createState() => MyDropdownState();
 }
 
 class MyDropdownState extends State<MyDropdown> {
-  String? _selectedItem; // Keep track of the selected item. Nullable.
-
-  // List of items to populate the dropdown.
-  final List<String> _dropdownItems = [
-    'Option 1',
-    'Option 2',
-    'Option 3',
-    'Option 4',
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return DropdownMenu<String>(
-      width: 50.sp,
-      initialSelection: _selectedItem,
-      inputDecorationTheme: const InputDecorationTheme(
-        enabledBorder: OutlineInputBorder(),
-        focusedBorder: OutlineInputBorder(),
-        errorBorder: OutlineInputBorder(),
-        disabledBorder: OutlineInputBorder(),
+    return DropdownButtonFormField<String>(
+      isExpanded: true,
+      value:
+          (widget.dropDownMenu?.contains(widget.selectedItem) ?? false)
+              ? widget.selectedItem
+              : null,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        border: OutlineInputBorder(),
+        labelText: widget.hintText ?? "",
       ),
-      dropdownMenuEntries:
-          _dropdownItems.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(
-          value: value,
-          label: value,
-        );
-      }).toList(),
-      onSelected: (String? newValue) {
-        setState(() {
-          _selectedItem = newValue;
-        });
-      },
-      enableSearch: false,
-      hintText: widget.hintText ?? "",
+      items:
+          widget.dropDownMenu?.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(
+                  value,
+                  softWrap: true,
+                  maxLines: 3, // wrap into multiple lines
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            );
+          }).toList(),
+      onChanged: widget.onChanged,
     );
   }
 }

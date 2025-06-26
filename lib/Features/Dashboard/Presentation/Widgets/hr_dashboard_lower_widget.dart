@@ -3,14 +3,42 @@ import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/Dashboard/Presentation/Widgets/hr_dashboard_cards.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
+import 'package:act/Features/HrManagement/Models/hr_dashboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class HrDashboardLowerWidget extends StatelessWidget {
-  const HrDashboardLowerWidget({super.key});
+  final String pendingLeaveRequests;
+  final String newJoinsThisMonth;
+  final String lateCheckinsToday;
+  final String activeDevicesLoggedIn;
+  final List<EmployeeLeaveToday> employeeLeaveToday;
+  const HrDashboardLowerWidget({
+    super.key,
+    required this.pendingLeaveRequests,
+    required this.newJoinsThisMonth,
+    required this.lateCheckinsToday,
+    required this.activeDevicesLoggedIn,
+    required this.employeeLeaveToday,
+  });
 
   @override
   Widget build(BuildContext context) {
+    List<DataRow> buildEmployeeLeaveTableRows(
+      List<EmployeeLeaveToday> employeeLeaveTodayList,
+    ) {
+      return employeeLeaveTodayList.map((e) {
+        return DataRow(
+          cells: [
+            DataCell(Text(e.employeeId.toString())),
+            DataCell(Text(e.fullName)),
+            DataCell(Text(e.department)),
+            DataCell(Text(e.designation)),
+          ],
+        );
+      }).toList();
+    }
+
     return Row(
       children: [
         Expanded(
@@ -22,7 +50,7 @@ class HrDashboardLowerWidget extends StatelessWidget {
                     Expanded(
                       child: HrDashboardCards(
                         aggregatedString: "Total",
-                        aggregationCount: "23",
+                        aggregationCount: pendingLeaveRequests,
                         iconData: Icons.pending_actions,
                         title: "Pending Leave Requests",
                       ).withPadding(padding: EdgeInsets.only(bottom: 07.sp)),
@@ -30,7 +58,7 @@ class HrDashboardLowerWidget extends StatelessWidget {
                     Expanded(
                       child: HrDashboardCards(
                         aggregatedString: "Total",
-                        aggregationCount: "23",
+                        aggregationCount: newJoinsThisMonth,
                         iconData: Icons.person_add,
                         title: "New Joins This Month",
                       ).withPadding(
@@ -46,7 +74,7 @@ class HrDashboardLowerWidget extends StatelessWidget {
                     Expanded(
                       child: HrDashboardCards(
                         aggregatedString: "Total",
-                        aggregationCount: "23",
+                        aggregationCount: lateCheckinsToday,
                         iconData: Icons.timelapse,
                         title: "Late Check-ins Today",
                       ),
@@ -54,7 +82,7 @@ class HrDashboardLowerWidget extends StatelessWidget {
                     Expanded(
                       child: HrDashboardCards(
                         aggregatedString: "Total",
-                        aggregationCount: "23",
+                        aggregationCount: activeDevicesLoggedIn,
                         iconData: Icons.devices,
                         title: "Active Devices Logged In",
                       ).withPadding(padding: EdgeInsets.only(left: 07.sp)),
@@ -93,6 +121,9 @@ class HrDashboardLowerWidget extends StatelessWidget {
                             "Department",
                             "Designation",
                           ],
+                          dataRow: buildEmployeeLeaveTableRows(
+                            employeeLeaveToday,
+                          ),
                         ),
                       ],
                     ),

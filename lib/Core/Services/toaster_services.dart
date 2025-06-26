@@ -21,13 +21,14 @@ class ToasterService {
     toast.show(context);
   }
 
-  void displayWarningMotionToast(BuildContext context) {
+  void displayWarningMotionToast(BuildContext context, String title) {
     MotionToast.warning(
       title: const Text(
-        'Warning Motion Toast',
+        'Warning',
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
-      description: const Text('This is a Warning'),
+      description: Text(title),
+      toastAlignment: Alignment.bottomRight,
       animationCurve: Curves.bounceIn,
       borderRadius: 0,
       animationDuration: const Duration(milliseconds: 1000),

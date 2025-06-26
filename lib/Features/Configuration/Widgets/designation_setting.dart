@@ -1,6 +1,7 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/Configuration/Models/designation_list_model.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,21 @@ class DesignationSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<DataRow> getDesignationTableRows(
+      DesingantionListModel designationModel,
+    ) {
+      return designationModel.designations?.map((designation) {
+            return DataRow(
+              cells: [
+                DataCell(Text(designation.id?.toString() ?? "-")),
+                DataCell(Text(designation.designationName ?? "-")),
+                const DataCell(Text("Yes")),
+              ],
+            );
+          }).toList() ??
+          [];
+    }
+
     return Container(
       height: 70.sp,
       width: 60.sp,
@@ -50,8 +66,9 @@ class DesignationSetting extends StatelessWidget {
               color: commonColor,
               child: Column(
                 children: [
-                  const CustomTable(
+                  CustomTable(
                     datacolumns: ['ID', 'Designation', 'Active'],
+                    dataRow: getDesignationTableRows(designation),
                   ),
                 ],
               ),

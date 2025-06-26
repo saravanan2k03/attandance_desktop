@@ -1,6 +1,7 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/Configuration/Models/holiday_list_model.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,19 @@ class HolidaySetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<DataRow> getHolidayTableRows(HolidayListModel holidayModel) {
+      return holidayModel.leaves?.map((holiday) {
+            return DataRow(
+              cells: [
+                DataCell(Text(holiday.id?.toString() ?? "-")),
+                DataCell(Text(holiday.leaveName ?? "-")),
+                DataCell(Text((holiday.isActive ?? false) ? "Yes" : "No")),
+              ],
+            );
+          }).toList() ??
+          [];
+    }
+
     TextEditingController toDateController = TextEditingController();
     return Container(
       height: 70.sp,
@@ -66,8 +80,9 @@ class HolidaySetting extends StatelessWidget {
               color: commonColor,
               child: Column(
                 children: [
-                  const CustomTable(
+                  CustomTable(
                     datacolumns: ['ID', 'Holiday Name', 'Active'],
+                    dataRow: getHolidayTableRows(holidaylist),
                   ),
                 ],
               ),

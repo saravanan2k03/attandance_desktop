@@ -9,6 +9,7 @@ class ApiConstants {
   static String adddepartments = "departments/add/";
   static String updatedepartment = "departments/update/";
   static String listdepartment = "departments/";
+  static String listdesignation = "designations/";
   static String updatedesination = "designations/update/";
   static String adddesignation = "designations/add/";
 }

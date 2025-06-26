@@ -86,13 +86,17 @@ class EmployeeDashboardLowerWidget extends StatelessWidget {
                         color: commonColor,
                         borderRadius: BorderRadius.circular(07.sp),
                       ),
-                      child: CustomTable(
-                        datacolumns: [
-                          "Id",
-                          "Date",
-                          "Punch-In",
-                          "Punch-Out",
-                          "Status",
+                      child: Column(
+                        children: [
+                          CustomTable(
+                            datacolumns: [
+                              "Id",
+                              "Date",
+                              "Punch-In",
+                              "Punch-Out",
+                              "Status",
+                            ],
+                          ),
                         ],
                       ),
                     ),

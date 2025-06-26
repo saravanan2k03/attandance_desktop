@@ -15,9 +15,12 @@ class DepartmentListModel {
 
   factory DepartmentListModel.fromMap(Map<String, dynamic> map) {
     return DepartmentListModel(
-      departments: List<Departments>.from(
-        map['departments']?.map((x) => Departments.fromMap(x)),
-      ),
+      departments:
+          map['departments'] != null
+              ? List<Departments>.from(
+                map['departments'].map((x) => Departments.fromMap(x)),
+              )
+              : [],
     );
   }
   String toJson() => json.encode(toMap());

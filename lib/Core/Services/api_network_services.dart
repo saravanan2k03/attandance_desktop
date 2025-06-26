@@ -4,6 +4,9 @@ import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/urls.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 
 Future<bool> refreshToken() async {
   String refreshTokenUrl =
@@ -269,5 +272,91 @@ Future<bool> deleteApiData(Uri url) async {
   } catch (e) {
     if (kDebugMode) print('DELETE Error: $e');
     throw Exception('DELETE failed: $e');
+  }
+}
+
+Future<T> getApiData<T>(Uri url, T Function(String) fromJson) async {
+  try {
+    final headers = {"Content-Type": "application/json"};
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      return fromJson(response.body);
+    } else {
+      throw Exception("Failed: ${response.statusCode} - ${response.body}");
+    }
+  } catch (e) {
+    throw Exception("GET request error: $e");
+  }
+}
+
+Future<T> postApiDataWithImage<T>(
+  Uri url,
+  XFile? image,
+  XFile? document,
+  Map<String, String> fields,
+  T Function(String) fromJson,
+) async {
+  try {
+    final session = SessionManagerClass();
+    final token = await session.getAccessToken();
+
+    var request = http.MultipartRequest("POST", url)
+      ..headers["Authorization"] = "Bearer $token";
+
+    fields.forEach((key, value) {
+      request.fields[key] = value;
+    });
+
+    if (image != null) {
+      if (kIsWeb) {
+        final bytes = await image.readAsBytes();
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'profile_pic',
+            bytes,
+            filename: 'profile.jpg',
+            contentType: MediaType('image', 'jpeg'),
+          ),
+        );
+      } else {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'profile_pic',
+            image.path,
+            contentType: MediaType.parse(
+              lookupMimeType(image.path) ?? 'image/jpeg',
+            ),
+          ),
+        );
+      }
+    }
+
+    if (document != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'document',
+          document.path,
+          contentType: MediaType.parse(
+            lookupMimeType(document.path) ?? 'application/pdf',
+          ),
+        ),
+      );
+    }
+
+    final streamedResponse = await request.send();
+    final responseBody = await streamedResponse.stream.bytesToString();
+
+    if (streamedResponse.statusCode == 200) {
+      return fromJson(responseBody);
+    } else {
+      throw HttpException(
+        'Failed: ${streamedResponse.statusCode} - $responseBody',
+      );
+    }
+  } catch (e) {
+    if (kDebugMode) print('Multipart POST Error: $e');
+    throw Exception('POST with image failed: $e');
   }
 }

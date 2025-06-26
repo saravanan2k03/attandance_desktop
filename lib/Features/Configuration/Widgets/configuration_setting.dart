@@ -10,10 +10,20 @@ class ConfigurationSetting extends StatelessWidget {
     super.key,
     required this.punchInStartTimeController,
     required this.punchInEndTimeController,
+    required this.punchInStartLateTimeController,
+    required this.punchInEndLateTime,
+    required this.punchOutStartTime,
+    required this.punchOutEndTime,
+    required this.overTimeWorkingEndTime,
   });
 
   final TextEditingController punchInStartTimeController;
   final TextEditingController punchInEndTimeController;
+  final TextEditingController punchInStartLateTimeController;
+  final TextEditingController punchInEndLateTime;
+  final TextEditingController punchOutStartTime;
+  final TextEditingController punchOutEndTime;
+  final TextEditingController overTimeWorkingEndTime;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +48,10 @@ class ConfigurationSetting extends StatelessWidget {
               ),
 
               10.height, // spacing
-              CustomBorderDropDownForm(hintText: "Work shift"),
+              CustomBorderDropDownForm(
+                hintText: "Work shift",
+                dropDownMenu: workShift,
+              ),
               10.height, // spacing
               CustomTextFormFieldwithcontroller(
                 title: "Punch In Start Time",
@@ -65,55 +78,55 @@ class ConfigurationSetting extends StatelessWidget {
 
               CustomTextFormFieldwithcontroller(
                 title: "Punch In Start Late Time",
-                controller: punchInEndTimeController,
+                controller: punchInStartLateTimeController,
                 readOnly: true,
                 onTap: () async {
                   final selectedTime = await selectTime(context);
-                  punchInEndTimeController.text = selectedTime;
+                  punchInStartLateTimeController.text = selectedTime;
                 },
               ),
               10.height,
 
               CustomTextFormFieldwithcontroller(
                 title: "Punch In End Late Time",
-                controller: punchInEndTimeController,
+                controller: punchInEndLateTime,
                 readOnly: true,
                 onTap: () async {
                   final selectedTime = await selectTime(context);
-                  punchInEndTimeController.text = selectedTime;
+                  punchInEndLateTime.text = selectedTime;
                 },
               ),
               10.height,
 
               CustomTextFormFieldwithcontroller(
                 title: "Punch Out Start Time",
-                controller: punchInEndTimeController,
+                controller: punchOutStartTime,
                 readOnly: true,
                 onTap: () async {
                   final selectedTime = await selectTime(context);
-                  punchInEndTimeController.text = selectedTime;
+                  punchOutStartTime.text = selectedTime;
                 },
               ),
               10.height,
 
               CustomTextFormFieldwithcontroller(
                 title: "Punch Out End Time",
-                controller: punchInEndTimeController,
+                controller: punchOutEndTime,
                 readOnly: true,
                 onTap: () async {
                   final selectedTime = await selectTime(context);
-                  punchInEndTimeController.text = selectedTime;
+                  punchOutEndTime.text = selectedTime;
                 },
               ),
               10.height,
 
               CustomTextFormFieldwithcontroller(
                 title: "Over Time Working End Time",
-                controller: punchInEndTimeController,
+                controller: overTimeWorkingEndTime,
                 readOnly: true,
                 onTap: () async {
                   final selectedTime = await selectTime(context);
-                  punchInEndTimeController.text = selectedTime;
+                  overTimeWorkingEndTime.text = selectedTime;
                 },
               ),
               10.height,

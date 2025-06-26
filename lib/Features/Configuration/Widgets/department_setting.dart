@@ -1,6 +1,7 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/Configuration/Models/list_department_model.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,19 @@ class DepartmentSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<DataRow> getDepartmentTableRows(DepartmentListModel departmentModel) {
+      return departmentModel.departments?.map((department) {
+            return DataRow(
+              cells: [
+                DataCell(Text(department.id?.toString() ?? "-")),
+                DataCell(Text(department.departmentName ?? "-")),
+                DataCell(Text((department.isActive ?? false) ? "Yes" : "No")),
+              ],
+            );
+          }).toList() ??
+          [];
+    }
+
     return Container(
       height: 70.sp,
       width: 60.sp,
@@ -50,8 +64,9 @@ class DepartmentSetting extends StatelessWidget {
               color: commonColor,
               child: Column(
                 children: [
-                  const CustomTable(
+                  CustomTable(
                     datacolumns: ['ID', 'Department', 'Active'],
+                    dataRow: getDepartmentTableRows(deparment),
                   ),
                 ],
               ),

@@ -1,26 +1,41 @@
+import 'package:act/Features/HrManagement/Models/hr_dashboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 import 'package:sizer/sizer.dart';
 
 class MonthlyAttendanceOverview extends StatelessWidget {
-  const MonthlyAttendanceOverview({super.key});
-  static List<charts.Series<MonthlyAttendanceOverviewModel, String>>
+  final MonthlyAttendanceChart monthlyAttendanceChart;
+
+  const MonthlyAttendanceOverview({
+    super.key,
+    required this.monthlyAttendanceChart,
+  });
+  List<charts.Series<MonthlyAttendanceOverviewModel, String>>
   _createRandomData() {
-    final dataList = [
-      MonthlyAttendanceOverviewModel('Jan', 3),
-      MonthlyAttendanceOverviewModel('Feb', 5),
-      MonthlyAttendanceOverviewModel('Mar', 7),
-      MonthlyAttendanceOverviewModel('Apr', 1),
-      MonthlyAttendanceOverviewModel('May', 5),
-      MonthlyAttendanceOverviewModel('Jun', 5),
-      MonthlyAttendanceOverviewModel('Jul', 22),
-      MonthlyAttendanceOverviewModel('Aug', 25),
-      MonthlyAttendanceOverviewModel('Sep', 52),
-      MonthlyAttendanceOverviewModel('Oct', 6),
-      MonthlyAttendanceOverviewModel('Nov', 19),
-      MonthlyAttendanceOverviewModel('Dec', 10),
-    ];
+    List<MonthlyAttendanceOverviewModel> chartData = [];
+    // final dataList = [
+    //   MonthlyAttendanceOverviewModel('Jan', 3),
+    //   MonthlyAttendanceOverviewModel('Feb', 5),
+    //   MonthlyAttendanceOverviewModel('Mar', 7),
+    //   MonthlyAttendanceOverviewModel('Apr', 1),
+    //   MonthlyAttendanceOverviewModel('May', 5),
+    //   MonthlyAttendanceOverviewModel('Jun', 5),
+    //   MonthlyAttendanceOverviewModel('Jul', 22),
+    //   MonthlyAttendanceOverviewModel('Aug', 25),
+    //   MonthlyAttendanceOverviewModel('Sep', 52),
+    //   MonthlyAttendanceOverviewModel('Oct', 6),
+    //   MonthlyAttendanceOverviewModel('Nov', 19),
+    //   MonthlyAttendanceOverviewModel('Dec', 10),
+    // ];
+    for (var i = 0; i < monthlyAttendanceChart.labels.length; i++) {
+      chartData.add(
+        MonthlyAttendanceOverviewModel(
+          monthlyAttendanceChart.labels[i],
+          monthlyAttendanceChart.present[i],
+        ),
+      );
+    }
 
     return [
       charts.Series<MonthlyAttendanceOverviewModel, String>(
@@ -28,7 +43,7 @@ class MonthlyAttendanceOverview extends StatelessWidget {
         colorFn: (_, __) => charts.Color.fromHex(code: "#554343"),
         domainFn: (MonthlyAttendanceOverviewModel data, _) => data.label,
         measureFn: (MonthlyAttendanceOverviewModel data, _) => data.value,
-        data: dataList,
+        data: chartData,
       ),
     ];
   }

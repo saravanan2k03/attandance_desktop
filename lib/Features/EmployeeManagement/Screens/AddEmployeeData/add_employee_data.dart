@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Presentation/Desktop/Screens/custom_drawer.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
@@ -6,6 +8,7 @@ import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/employee_personal_details.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/employee_profile_details.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 
 class AddEmployeeData extends StatefulWidget {
@@ -16,6 +19,38 @@ class AddEmployeeData extends StatefulWidget {
 }
 
 class _AddEmployeeDataState extends State<AddEmployeeData> {
+  // Employee Personal Details
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController mobileNoController = TextEditingController();
+  final TextEditingController dateOfBirthController = TextEditingController();
+  final TextEditingController joiningDateController = TextEditingController();
+  final ValueNotifier<String?> genderController = ValueNotifier<String?>(null);
+  final TextEditingController emailIdController = TextEditingController();
+  final TextEditingController nationalityController = TextEditingController();
+  final TextEditingController iqamaNumberController = TextEditingController();
+
+  // Employee Profile Details
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final ValueNotifier<String?> departmentController = ValueNotifier<String?>(
+    null,
+  );
+  final ValueNotifier<String?> designationController = ValueNotifier<String?>(
+    null,
+  );
+  final TextEditingController basicSalaryController = TextEditingController();
+  final TextEditingController overTimeSalaryController =
+      TextEditingController();
+  final TextEditingController gosiDeductionController = TextEditingController();
+  final ValueNotifier<String?> workShiftController = ValueNotifier<String?>(
+    null,
+  );
+  final ValueNotifier<String?> userTypeController = ValueNotifier<String?>(
+    null,
+  );
+  final TextEditingController addressController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,9 +115,44 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
                                   child: SingleChildScrollView(
                                     child: Column(
                                       children: [
-                                        const EmployeePersonalDetails(),
+                                        EmployeePersonalDetails(
+                                          dateOfBirthController:
+                                              dateOfBirthController,
+                                          emailIdController: emailIdController,
+                                          firstNameController:
+                                              firstNameController,
+                                          genderController: genderController,
+                                          iqamaNumberController:
+                                              iqamaNumberController,
+                                          joiningDateController:
+                                              joiningDateController,
+                                          lastNameController:
+                                              lastNameController,
+                                          mobileNoController:
+                                              mobileNoController,
+                                          nationalityController:
+                                              nationalityController,
+                                        ),
                                         10.height,
-                                        const EmployeeProfileDetails(),
+                                        EmployeeProfileDetails(
+                                          basicSalaryController:
+                                              basicSalaryController,
+                                          departmentController:
+                                              departmentController,
+                                          designationController:
+                                              departmentController,
+                                          gosiDeductionController:
+                                              gosiDeductionController,
+                                          passwordController:
+                                              passwordController,
+                                          userNameController:
+                                              userNameController,
+                                          userTypeController:
+                                              userTypeController,
+                                          workShiftController:
+                                              workShiftController,
+                                          addressController: addressController,
+                                        ),
                                         10.height,
                                         Row(
                                           mainAxisAlignment:
@@ -146,24 +216,55 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
   }
 }
 
-class ProfileUpload extends StatelessWidget {
+class ProfileUpload extends StatefulWidget {
   const ProfileUpload({super.key});
 
   @override
+  State<ProfileUpload> createState() => _ProfileUploadState();
+}
+
+class _ProfileUploadState extends State<ProfileUpload> {
+  File? _pickedImage;
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        _pickedImage = File(image.path);
+      });
+
+      print('Image Path: ${image.path}');
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Stack(
           children: [
-            CircleAvatar(radius: 70),
+            CircleAvatar(
+              radius: 70,
+              backgroundImage:
+                  _pickedImage != null ? FileImage(_pickedImage!) : null,
+              child:
+                  _pickedImage == null
+                      ? const Icon(Icons.person, size: 60)
+                      : null,
+            ),
             Positioned(
               bottom: 2,
               right: 2,
-              child: CircleAvatar(
-                backgroundColor: Colors.grey,
-                radius: 20,
-                child: Center(
+              child: GestureDetector(
+                onTap: _pickImage,
+                child: const CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  radius: 20,
                   child: Icon(Icons.camera_alt_rounded, color: Colors.white),
                 ),
               ),

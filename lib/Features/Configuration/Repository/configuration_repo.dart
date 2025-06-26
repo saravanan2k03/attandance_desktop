@@ -66,7 +66,7 @@ class ConfigurationRepo {
   Future<DesingantionListModel> listDesignationApi(String key) async {
     ///Url//
     String listDeparmentrepoUrl =
-        "${ApiConstants.baseUrl}${ApiConstants.listdepartment}?license_key=$key";
+        "${ApiConstants.baseUrl}${ApiConstants.listdesignation}?license_key=$key";
     final url = Uri.parse(listDeparmentrepoUrl);
     return fetchApiData(url, (json) => DesingantionListModel.fromJson(json));
   }

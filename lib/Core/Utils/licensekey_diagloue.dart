@@ -1,5 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
+import 'package:act/Core/Data/Repository/core_repo.dart';
+import 'package:act/Core/Services/session_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -207,31 +211,76 @@ void showLicenseDialog(BuildContext context) {
                               ],
                             ),
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 String enteredKey =
                                     licenseController.text.trim();
-                                // Add your validation logic here
-                                if (enteredKey.isNotEmpty) {
-                                  // Process the license key
-                                  Navigator.of(context).pop();
 
-                                  // Show success message (optional)
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        "License key submitted successfully!",
-                                      ),
-                                      backgroundColor: Colors.green,
-                                      behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          8.0,
+                                if (enteredKey.isNotEmpty) {
+                                  try {
+                                    final result = await LicenseRepo()
+                                        .checkLicenseStatus(enteredKey);
+
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.of(context).pop(); // Close dialog
+
+                                    if (result.activated) {
+                                      final session = SessionManagerClass();
+                                      session.setlicence(enteredKey);
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "License key activated successfully!",
+                                          ),
+                                          backgroundColor: Colors.green,
+                                          behavior: SnackBarBehavior.floating,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8.0,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                      var licencekey =
+                                          await session.getlicence();
+                                      log(licencekey.toString());
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "Invalid license key or not activated.",
+                                          ),
+                                          backgroundColor: Colors.red,
+                                          behavior: SnackBarBehavior.floating,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8.0,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    // Handle API error
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "Something went wrong. Try again.",
+                                        ),
+                                        backgroundColor: Colors.red,
+                                        behavior: SnackBarBehavior.floating,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            8.0,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 } else {
-                                  // Show error for empty field
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
@@ -248,6 +297,7 @@ void showLicenseDialog(BuildContext context) {
                                   );
                                 }
                               },
+
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 shadowColor: Colors.transparent,

@@ -1,4 +1,10 @@
+import 'package:act/Core/Services/session_manager.dart';
+import 'package:act/Core/Services/toaster_services.dart';
 import 'package:act/Core/Utils/app_text.dart';
+import 'package:act/Features/Configuration/Models/designation_list_model.dart';
+import 'package:act/Features/Configuration/Models/holiday_list_model.dart';
+import 'package:act/Features/Configuration/Models/leave_type_list_model.dart';
+import 'package:act/Features/Configuration/Models/list_department_model.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -6,6 +12,21 @@ const desktopConstraints = 1100;
 const mobileConstraints = 600;
 Color commonColor = Color(0xffd1e4ff);
 Color cardsColors = Color(0xfff5f5f5);
+var usertypeforappbar = "admin";
+var gender = ['Male', "Female", "Other"];
+DepartmentListModel deparment = DepartmentListModel(departments: []);
+DesingantionListModel designation = DesingantionListModel(designations: []);
+HolidayListModel holidaylist = HolidayListModel();
+LeaveTypeListModel leaveTypeListModel = LeaveTypeListModel();
+
+var workShift = ['Morning', 'Night', 'Evening'];
+
+Future<void> getuserType() async {
+  final session = SessionManagerClass();
+  usertypeforappbar = await session.getusertype();
+}
+
+final ToasterService toasterService = ToasterService();
 Size calcSize(context) {
   return MediaQuery.of(context).size;
 }

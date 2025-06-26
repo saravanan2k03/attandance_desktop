@@ -19,6 +19,12 @@ class ConfiugrationPage extends StatefulWidget {
 class _ConfiugrationPageState extends State<ConfiugrationPage> {
   TextEditingController punchInStartTimeController = TextEditingController();
   TextEditingController punchInEndTimeController = TextEditingController();
+  TextEditingController punchInStartLateTimeController =
+      TextEditingController();
+  TextEditingController punchInEndLateTime = TextEditingController();
+  TextEditingController punchOutStartTime = TextEditingController();
+  TextEditingController punchOutEndTime = TextEditingController();
+  TextEditingController overTimeWorkingEndTime = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +49,12 @@ class _ConfiugrationPageState extends State<ConfiugrationPage> {
                           punchInStartTimeController:
                               punchInStartTimeController,
                           punchInEndTimeController: punchInEndTimeController,
+                          overTimeWorkingEndTime: overTimeWorkingEndTime,
+                          punchInEndLateTime: punchInEndLateTime,
+                          punchInStartLateTimeController:
+                              punchInStartLateTimeController,
+                          punchOutEndTime: punchOutEndTime,
+                          punchOutStartTime: punchOutStartTime,
                         ),
                         DesignationSetting(),
                         DepartmentSetting(),
