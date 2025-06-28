@@ -1,13 +1,26 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/EmployeeManagement/Models/employee_dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_dashboard_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class EmployeeDashboardLowerWidget extends StatelessWidget {
-  const EmployeeDashboardLowerWidget({super.key});
+  final String absentinThisMonth;
+  final String overtimeWorking;
+  final String clockIn;
+  final String punchOut;
+  final List<AttendanceTableData> tableData;
+  const EmployeeDashboardLowerWidget({
+    super.key,
+    required this.absentinThisMonth,
+    required this.overtimeWorking,
+    required this.clockIn,
+    required this.punchOut,
+    required this.tableData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +36,7 @@ class EmployeeDashboardLowerWidget extends StatelessWidget {
                       Expanded(
                         child: EmployeeDashboardCards(
                           aggregatedString: "Total",
-                          aggregationCount: "50",
+                          aggregationCount: absentinThisMonth,
                           iconData: Icons.person_off,
                           title: "Absent in This Month",
                         ).withPadding(padding: EdgeInsets.only(bottom: 07.sp)),
@@ -31,7 +44,7 @@ class EmployeeDashboardLowerWidget extends StatelessWidget {
                       Expanded(
                         child: EmployeeDashboardCards(
                           aggregatedString: "Total",
-                          aggregationCount: "50",
+                          aggregationCount: overtimeWorking,
                           iconData: Icons.alarm_on,
                           title: "Overtime Working",
                         ).withPadding(
@@ -47,7 +60,7 @@ class EmployeeDashboardLowerWidget extends StatelessWidget {
                       Expanded(
                         child: EmployeeDashboardCards(
                           aggregatedString: "Time",
-                          aggregationCount: "9:30 AM",
+                          aggregationCount: clockIn,
                           iconData: Icons.login,
                           title: "Clock In",
                         ),
@@ -55,7 +68,7 @@ class EmployeeDashboardLowerWidget extends StatelessWidget {
                       Expanded(
                         child: EmployeeDashboardCards(
                           aggregatedString: "Time",
-                          aggregationCount: "7:30 PM",
+                          aggregationCount: punchOut,
                           iconData: Icons.logout,
                           title: "Punch Out",
                         ).withPadding(padding: EdgeInsets.only(left: 07.sp)),

@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
+import 'package:act/Core/Services/hive_services.dart';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/urls.dart';
+import 'package:act/Features/Auth/Repository/auth_repo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -14,6 +17,9 @@ Future<bool> refreshToken() async {
   try {
     final url = Uri.parse(refreshTokenUrl);
     final session = SessionManagerClass();
+
+    final AuthRepo authRepo = AuthRepo();
+    final HiveServices hiveServices = HiveServices();
     //Token
     var token = await session.getRefreshToken();
 
@@ -27,7 +33,9 @@ Future<bool> refreshToken() async {
       session.setAccessToken(responsdata['access']);
       return true;
     } else if (response.statusCode == 401) {
-      // getIt.get<LoginBloc>().add(Logout_event());
+      authRepo.logoutapi().whenComplete(() {
+        hiveServices.deleteallData().then((value) {});
+      });
       return false;
     } else {
       throw HttpException('Failed to fetch data: ${response.statusCode}');
@@ -190,6 +198,7 @@ Future<T> putApiData<T>(
     );
 
     if (response.statusCode == 200) {
+      log(response.body);
       return fromJson(response.body);
     } else if (response.statusCode == 401) {
       var value = await refreshToken();

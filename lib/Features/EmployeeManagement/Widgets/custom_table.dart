@@ -21,10 +21,10 @@ class CustomTable extends StatelessWidget {
                 calcSize(context).width < 1200
                     ? Axis.horizontal
                     : Axis.vertical,
-            physics:
-                calcSize(context).width < 1200
-                    ? null
-                    : const NeverScrollableScrollPhysics(),
+            // physics:
+            //     calcSize(context).width < 1200
+            //         ? null
+            //         : const NeverScrollableScrollPhysics(),
             child: buildDataTable(),
           ),
         ),

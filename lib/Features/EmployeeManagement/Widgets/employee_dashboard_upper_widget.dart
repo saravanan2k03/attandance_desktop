@@ -8,7 +8,24 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class EmployeeDashboardUpperWidget extends StatelessWidget {
-  const EmployeeDashboardUpperWidget({super.key});
+  final double monthlyAbsents;
+  final double monthlyPresents;
+  final double pieleavesTaken;
+  final String attendanceThisMonth;
+  final String leavesTaken;
+  final String lateLogins;
+  final String pendingLeaveRequests;
+
+  const EmployeeDashboardUpperWidget({
+    super.key,
+    required this.monthlyAbsents,
+    required this.monthlyPresents,
+    required this.pieleavesTaken,
+    required this.attendanceThisMonth,
+    required this.leavesTaken,
+    required this.lateLogins,
+    required this.pendingLeaveRequests,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +55,19 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                         code: "Monthly Absents",
                         color: Color(0xff9dbdff),
                         title: "Absent in This Month",
-                        value: 0.5,
+                        value: monthlyAbsents,
                       ),
                       ChartData(
                         code: "Monthly Presents",
                         color: Color(0xffffd09b),
                         title: "Present in This Month",
-                        value: 0.2,
+                        value: monthlyPresents,
                       ),
                       ChartData(
                         code: "Leaves Taken",
                         color: Color(0xfffd8b51),
                         title: "Leaves Taken",
-                        value: 0.3,
+                        value: pieleavesTaken,
                       ),
                     ],
                   ),
@@ -103,7 +120,7 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                       Expanded(
                         child: EmployeeDashboardCards(
                           aggregatedString: "Total",
-                          aggregationCount: "50",
+                          aggregationCount: attendanceThisMonth,
                           iconData: Icons.calendar_today,
                           title: "Attendance This Month",
                         ).withPadding(
@@ -117,7 +134,7 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                       Expanded(
                         child: EmployeeDashboardCards(
                           aggregatedString: "Total",
-                          aggregationCount: "50",
+                          aggregationCount: leavesTaken,
                           iconData: Icons.beach_access,
                           title: "Leaves Taken",
                         ).withPadding(
@@ -138,7 +155,7 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                       Expanded(
                         child: EmployeeDashboardCards(
                           aggregatedString: "Total",
-                          aggregationCount: "50",
+                          aggregationCount: lateLogins,
                           iconData: Icons.timelapse,
                           title: "Late Logins",
                         ).withPadding(
@@ -148,7 +165,7 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                       Expanded(
                         child: EmployeeDashboardCards(
                           aggregatedString: "Total",
-                          aggregationCount: "50",
+                          aggregationCount: pendingLeaveRequests,
                           iconData: Icons.pending_actions,
                           title: "Pending Leave Requests",
                         ).withPadding(

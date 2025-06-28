@@ -4,6 +4,7 @@ import 'package:act/Core/Services/api_network_services.dart';
 import 'package:act/Core/Utils/urls.dart';
 import 'package:act/Features/EmployeeManagement/Models/base_response.dart';
 import 'package:act/Features/EmployeeManagement/Models/employee_dashboard.dart';
+import 'package:act/Features/EmployeeManagement/Models/employee_detail_reponse.dart';
 import 'package:act/Features/EmployeeManagement/Models/employee_leave_details.dart';
 import 'package:act/Features/EmployeeManagement/Models/leave_details_model.dart';
 import 'package:act/Features/EmployeeManagement/Models/simple_employee_list.dart';
@@ -34,11 +35,9 @@ class EmployeeRepo {
 
   Future<BaseResponseModel> addOrUpdateEmployee({
     required String licenseKey,
-    required String username,
     required String email,
     required String firstName,
     required String lastName,
-    required String password,
     required String dateOfBirth,
     required String gender,
     required String nationality,
@@ -48,10 +47,17 @@ class EmployeeRepo {
     required String workStatus,
     required String basicSalary,
     required String gosiApplicable,
-    required String filename,
     required String departmentId,
     required String designationId,
     required List<Map<String, dynamic>> leaveDetails,
+    required String filename,
+    required String address,
+    required String fingerPrintCode,
+    String? username, // Required only if creating a new employee
+    String? password,
+    String? employeeId, // Required only if updating
+    String? gosiDeductionAmount,
+    String? overTimeSalary,
     XFile? profilePic,
     XFile? document,
   }) async {
@@ -59,11 +65,9 @@ class EmployeeRepo {
 
     final Map<String, String> fields = {
       "license_key": licenseKey,
-      "username": username,
       "email": email,
       "first_name": firstName,
       "last_name": lastName,
-      "password": password,
       "date_of_birth": dateOfBirth,
       "gender": gender,
       "nationality": nationality,
@@ -74,10 +78,21 @@ class EmployeeRepo {
       "basic_salary": basicSalary,
       "gosi_applicable": gosiApplicable,
       "filename": filename,
+      "address": address,
+      "finger_print_code": fingerPrintCode,
       "department_id": departmentId,
       "designation_id": designationId,
       "leave_details": jsonEncode(leaveDetails),
     };
+
+    // Optional fields (included only if not null)
+    if (username != null) fields["username"] = username;
+    if (password != null) fields["password"] = password;
+    if (employeeId != null) fields["employee_id"] = employeeId;
+    if (gosiDeductionAmount != null) {
+      fields["gosi_deduction_amount"] = gosiDeductionAmount;
+    }
+    if (overTimeSalary != null) fields["over_time_salary"] = overTimeSalary;
 
     return postApiDataWithImage(
       url,
@@ -126,11 +141,10 @@ class EmployeeRepo {
     );
   }
 
-  static Future<EmployeeDashboardModel> fetchEmployeeDashboard({
-    required String licenseKey,
+  Future<EmployeeDashboardModel> fetchEmployeeDashboard({
     required String employeeId,
   }) async {
-    final queryParams = {'license_key': licenseKey, 'employee_id': employeeId};
+    final queryParams = {'employee_id': employeeId};
     final uri = Uri.parse(
       "${ApiConstants.baseUrl}attendance/dashboard/",
     ).replace(queryParameters: queryParams);
@@ -139,5 +153,18 @@ class EmployeeRepo {
       uri,
       (resBody) => EmployeeDashboardModel.fromJson(jsonDecode(resBody)),
     );
+  }
+
+  Future<EmployeeDetailResponse> getEmployeeDetails(int employeeId) async {
+    final url = Uri.parse(
+      "${ApiConstants.baseUrl}employees/$employeeId/details/",
+    );
+
+    final response = await fetchApiData(
+      url,
+      (json) => EmployeeDetailResponse.fromJson(jsonDecode(json)),
+    );
+
+    return response;
   }
 }

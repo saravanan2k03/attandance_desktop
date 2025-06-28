@@ -6,6 +6,7 @@ import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/Theme/theme.dart';
 import 'package:act/Features/Auth/Presentation/Screens/auth.dart';
 import 'package:act/Features/Dashboard/Presentation/dashboard.dart';
+import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/new_leave_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

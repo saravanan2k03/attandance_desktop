@@ -3,8 +3,9 @@ import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_tabbar.dart';
 import 'package:act/Features/HrManagement/Constants/hr_management_constant.dart';
 import 'package:act/Features/HrManagement/Screens/AttendanceDetails/attendance_details_card.dart';
-import 'package:act/Features/HrManagement/Widgets/device_info.dart';
+import 'package:act/Features/HrManagement/Screens/LeaveRequestAction/leave_request_action.dart';
 import 'package:act/Features/HrManagement/Screens/PayrollDetails/payroll_details_card.dart';
+import 'package:act/Features/HrManagement/Widgets/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
@@ -19,22 +20,27 @@ class AttendanceManagement extends StatefulWidget {
 }
 
 class _AttendanceManagementState extends State<AttendanceManagement> {
-  void changetabbar(
-    bool attendanceDetails,
-    bool payrollDetails,
-    bool leaveRequestapproval,
-  ) {
-    attendanceDetailsvar = attendanceDetails;
-    payrollDetailsvar = payrollDetails;
-    leaveRequestapprovalvar = leaveRequestapproval;
+  // Local tab state variables
+  bool attendanceDetailsTab = true;
+  bool payrollDetailsTab = false;
+  bool leaveRequestTab = false;
+
+  void changeTab({
+    required bool attendance,
+    required bool payroll,
+    required bool leave,
+  }) {
+    setState(() {
+      attendanceDetailsTab = attendance;
+      payrollDetailsTab = payroll;
+      leaveRequestTab = leave;
+    });
   }
 
   @override
   void initState() {
-    attendanceDetailsvar = true;
-    payrollDetailsvar = false;
-    leaveRequestapprovalvar = false;
     super.initState();
+    changeTab(attendance: true, payroll: false, leave: false);
   }
 
   @override
@@ -60,7 +66,6 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                     child: Column(
                       children: [
                         SizedBox(
-                          // height: 35.sp,
                           width: calcSize(context).longestSide,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +98,7 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                         Expanded(
                           child: Row(
                             children: [
-                              const Expanded(flex: 2, child: DeviceInfoCard()),
+                              const Expanded(flex: 3, child: DeviceInfoCard()),
                               07.width,
                               Expanded(
                                 flex: 10,
@@ -106,6 +111,7 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                   ),
                                   child: Column(
                                     children: [
+                                      // Tabbar UI
                                       Row(
                                         children: [
                                           Container(
@@ -118,36 +124,43 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    setState(() {
-                                                      changetabbar(
-                                                        true,
-                                                        false,
-                                                        false,
-                                                      );
-                                                    });
+                                                    changeTab(
+                                                      attendance: true,
+                                                      payroll: false,
+                                                      leave: false,
+                                                    );
                                                   },
-
                                                   child: TabbarCard(
                                                     cardenable:
-                                                        attendanceDetailsvar,
+                                                        attendanceDetailsTab,
                                                     label: "Attendance Details",
                                                   ),
                                                 ),
-
                                                 InkWell(
                                                   onTap: () {
-                                                    setState(() {
-                                                      changetabbar(
-                                                        false,
-                                                        true,
-                                                        false,
-                                                      );
-                                                    });
+                                                    changeTab(
+                                                      attendance: false,
+                                                      payroll: true,
+                                                      leave: false,
+                                                    );
                                                   },
                                                   child: TabbarCard(
                                                     cardenable:
-                                                        payrollDetailsvar,
+                                                        payrollDetailsTab,
                                                     label: "Payroll Details",
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    changeTab(
+                                                      attendance: false,
+                                                      payroll: false,
+                                                      leave: true,
+                                                    );
+                                                  },
+                                                  child: TabbarCard(
+                                                    cardenable: leaveRequestTab,
+                                                    label: "Leave Action",
                                                   ),
                                                 ),
                                               ],
@@ -159,15 +172,28 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                           ),
                                         ],
                                       ),
-                                      Visibility(
-                                        visible: payrollDetailsvar,
-                                        replacement: Expanded(
-                                          child: AttendanceDetailsCard()
-                                              .withPadding(
-                                                padding: EdgeInsets.all(07.sp),
-                                              ),
+                                      // Tab Content
+                                      Expanded(
+                                        child: Builder(
+                                          builder: (context) {
+                                            if (attendanceDetailsTab) {
+                                              return AttendanceDetailsCard()
+                                                  .withPadding(
+                                                    padding: EdgeInsets.all(
+                                                      07.sp,
+                                                    ),
+                                                  );
+                                            } else if (payrollDetailsTab) {
+                                              return PayrollDetails();
+                                            } else if (leaveRequestTab) {
+                                              return LeaveRequestAction();
+                                            } else {
+                                              return const Center(
+                                                child: Text("No tab selected"),
+                                              );
+                                            }
+                                          },
                                         ),
-                                        child: LeaveRequestCard(),
                                       ),
                                     ],
                                   ),

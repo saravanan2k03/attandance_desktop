@@ -1,10 +1,14 @@
 import 'package:act/Core/Constants/constant.dart';
+import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/Configuration/Bloc/ConfigurationBloc/configuration_bloc.dart';
+import 'package:act/Features/Configuration/Constants/configuration_constants.dart';
 import 'package:act/Features/Configuration/Models/list_department_model.dart';
+import 'package:act/Features/Configuration/Repository/configuration_repo.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
-import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class DepartmentSetting extends StatelessWidget {
@@ -12,13 +16,36 @@ class DepartmentSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ConfigurationBloc configurationBloc = ConfigurationBloc();
+    final ConfigurationRepo configurationRepo = ConfigurationRepo();
     List<DataRow> getDepartmentTableRows(DepartmentListModel departmentModel) {
       return departmentModel.departments?.map((department) {
             return DataRow(
               cells: [
                 DataCell(Text(department.id?.toString() ?? "-")),
                 DataCell(Text(department.departmentName ?? "-")),
-                DataCell(Text((department.isActive ?? false) ? "Yes" : "No")),
+                DataCell(
+                  InkWell(
+                    onTap: () {
+                      showAddOrUpdateDesignationDialog(
+                        title: "Department",
+                        context: context,
+                        id: department.id,
+                        initialDesignation: department.departmentName,
+                        onSubmit: (departmentName, id) {
+                          if (id != null) {
+                            configurationRepo
+                                .updateDeparmentApi(id, departmentName)
+                                .whenComplete(() {
+                                  configurationBloc.add(ListDepartment());
+                                });
+                          }
+                        },
+                      );
+                    },
+                    child: Icon(Icons.edit, color: Colors.black),
+                  ),
+                ),
               ],
             );
           }).toList() ??
@@ -37,39 +64,63 @@ class DepartmentSetting extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           07.sp.height,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomBorderTextForm(title: "Department"),
-              07.sp.width,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.red,
-                    child: Icon(Icons.close),
-                  ),
-                  07.width,
-                  CircleAvatar(
-                    backgroundColor: Colors.green,
-                    child: Icon(Icons.check),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          07.height,
           Expanded(
             child: Container(
               color: commonColor,
               child: Column(
                 children: [
-                  CustomTable(
-                    datacolumns: ['ID', 'Department', 'Active'],
-                    dataRow: getDepartmentTableRows(deparment),
+                  BlocConsumer<ConfigurationBloc, ConfigurationState>(
+                    bloc: configurationBloc..add(ListDepartment()),
+                    listener: (context, state) {},
+                    builder: (context, state) {
+                      if (state is DepartmentListDataState) {
+                        deparment = state.modelData;
+                        return CustomTable(
+                          datacolumns: ['ID', 'Depatment', 'Action'],
+                          dataRow: getDepartmentTableRows(deparment),
+                        );
+                      } else {
+                        return Center(child: Text("No Data Available!"));
+                      }
+                    },
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          showAddOrUpdateDesignationDialog(
+                            title: "Depatment",
+                            context: context,
+                            onSubmit: (values, id) async {
+                              final session = SessionManagerClass();
+                              await session.getlicence().then((value) {
+                                configurationRepo
+                                    .addDeparmentApi(value, values)
+                                    .whenComplete(() {
+                                      configurationBloc.add(ListDepartment());
+                                    });
+                              });
+                            },
+                          );
+                        },
+                        child: Container(
+                          height: 18.sp,
+                          width: 40.sp,
+                          decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(07.sp),
+                          ),
+                          child: Center(
+                            child: AppText.small("Add", fontSize: 17),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-              ),
+              ).withPadding(padding: EdgeInsets.all(07.sp)),
             ),
           ),
         ],

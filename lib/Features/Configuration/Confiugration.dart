@@ -1,6 +1,7 @@
 import 'package:act/Core/Presentation/Desktop/Screens/custom_drawer.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/Configuration/Models/configuration_list_model.dart';
 import 'package:act/Features/Configuration/Widgets/configuration_setting.dart';
 import 'package:act/Features/Configuration/Widgets/department_setting.dart';
 import 'package:act/Features/Configuration/Widgets/designation_setting.dart';

@@ -20,3 +20,15 @@ class EmployeeDataEvent extends EmployeeEvent {
     this.workShift,
   });
 }
+
+class EmployeeDetail extends EmployeeEvent {
+  final int employeeId;
+
+  const EmployeeDetail({required this.employeeId});
+}
+
+class EmployeeDashboardEvent extends EmployeeDataEvent {
+  final int employeeId;
+
+  const EmployeeDashboardEvent(this.employeeId);
+}

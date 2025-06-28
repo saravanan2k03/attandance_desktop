@@ -1,8 +1,14 @@
+import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
+import 'package:act/Features/HrManagement/Bloc/DeviceBloc/device_bloc.dart';
+import 'package:act/Features/HrManagement/Models/device_list_model.dart';
+import 'package:act/Features/HrManagement/Repository/hr_repository.dart';
+import 'package:act/Features/HrManagement/Widgets/add_or_update_device.dart';
 import 'package:flutter/material.dart';
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class DeviceInfoCard extends StatefulWidget {
@@ -13,48 +19,65 @@ class DeviceInfoCard extends StatefulWidget {
 }
 
 class _DeviceInfoCardState extends State<DeviceInfoCard> {
-  // final DateTime _currentDate = DateTime.now();
-  // final DateTime _currentDate2 = DateTime.now();
+  final DeviceBloc deviceBloc = DeviceBloc();
+  List<DataRow> buildDeviceDataRows(DeviceListModel deviceListModel) {
+    return deviceListModel.devices?.map((device) {
+          return DataRow(
+            cells: [
+              DataCell(Text(device.id?.toString() ?? '')),
+              DataCell(Text(device.deviceName ?? '')),
+              DataCell(
+                Icon(
+                  device.isActive == true ? Icons.check_circle : Icons.cancel,
+                  color: device.isActive == true ? Colors.green : Colors.red,
+                  size: 20,
+                ),
+              ),
+              DataCell(
+                InkWell(
+                  onTap: () async {
+                    final HrRepository hrRepository = HrRepository();
+                    final session = SessionManagerClass();
+                    await session.getlicence().then((value) async {
+                      final result =
+                          await DeviceDialogHelper.showUpdateDeviceDialog(
+                            context,
+                            licenseKey: value,
+                            deviceId: device.id!,
+                            initialDeviceName: device.deviceName!,
+                            initialDeviceIp: device.deviceIp!,
+                            initialLastSyncInterval: device.lastSyncInterval,
+                            onSubmit: ({
+                              required String licenseKey,
+                              int? deviceId,
+                              required String deviceName,
+                              required String deviceIp,
+                              String? lastSyncInterval,
+                            }) {
+                              return hrRepository.addOrUpdateDevice(
+                                licenseKey: licenseKey,
+                                deviceId: deviceId,
+                                deviceName: deviceName,
+                                deviceIp: deviceIp,
+                                lastSyncInterval: lastSyncInterval,
+                              );
+                            },
+                          );
+                    });
+
+                    /// call bloc
+                  },
+                  child: Icon(Icons.edit),
+                ),
+              ),
+            ],
+          );
+        }).toList() ??
+        [];
+  }
 
   @override
   Widget build(BuildContext context) {
-    //     final calendarCarousel = CalendarCarousel<Event>(
-    //       onDayPressed: (date, events) {},
-    //       weekendTextStyle: const TextStyle(
-    //         color: Colors.red,
-    //       ),
-    //       thisMonthDayBorderColor: Colors.grey,
-    // //          weekDays: null, /// for pass null when you do not want to render weekDays
-    //       headerText: "May",
-    //       weekFormat: false,
-    //       markedDatesMap: null,
-    //       height: 47.sp,
-    //       selectedDateTime: _currentDate2,
-    //       showIconBehindDayText: true,
-    //       // daysHaveCircularBorder: false,
-
-    //       /// null for not rendering any border, true for circular border, false for rectangular border
-    //       customGridViewPhysics: const NeverScrollableScrollPhysics(),
-    //       markedDateShowIcon: true,
-    //       markedDateIconMaxShown: 2,
-    //       selectedDayTextStyle: const TextStyle(
-    //         color: Colors.yellow,
-    //       ),
-    //       todayTextStyle: const TextStyle(
-    //         color: Colors.blue,
-    //       ),
-    //       markedDateIconBuilder: (event) {
-    //         return event.icon ?? const Icon(Icons.help_outline);
-    //       },
-    //       minSelectedDate: _currentDate.subtract(const Duration(days: 360)),
-    //       maxSelectedDate: _currentDate.add(const Duration(days: 360)),
-    //       todayButtonColor: Colors.transparent,
-    //       todayBorderColor: Colors.green,
-    //       markedDateMoreShowTotal:
-    //           true, // null for not showing hidden events indicator
-    // //          markedDateIconMargin: 9,
-    // //          markedDateIconOffset: 3,
-    //     );
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -65,16 +88,10 @@ class _DeviceInfoCardState extends State<DeviceInfoCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         // spacing: 07.sp,
         children: [
-          Container(
-            height: 45.sp,
-            width: calcSize(context).longestSide,
-            decoration: BoxDecoration(
-              color: cardsColors,
-              borderRadius: BorderRadius.circular(07.sp),
-            ),
-            child: Center(child: AppText.small("Calender", fontSize: 17)),
-          ),
-          07.height,
+          AppText.small(
+            "Device Details",
+            fontSize: 11.sp,
+          ).withPadding(padding: EdgeInsets.all(07.sp)),
           Expanded(
             child: Column(
               children: [
@@ -84,23 +101,71 @@ class _DeviceInfoCardState extends State<DeviceInfoCard> {
                       color: commonColor,
                       borderRadius: BorderRadius.circular(05.sp),
                     ),
-                    child: const Column(
-                      children: [
-                        CustomTable(datacolumns: ['Id', 'Status', "Time"]),
-                      ],
+                    child: BlocConsumer<DeviceBloc, DeviceState>(
+                      bloc: deviceBloc,
+                      listener: (context, state) {},
+                      builder: (context, state) {
+                        if (state is DeviceDataState) {
+                          return Column(
+                            children: [
+                              CustomTable(
+                                datacolumns: [
+                                  'Id',
+                                  'deviceName',
+                                  "isActive",
+                                  "Action",
+                                ],
+                                dataRow: buildDeviceDataRows(state.modelData),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return Center(
+                            child: AppText.small("No Data Available!"),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ),
                 07.height,
-                Container(
-                  height: 20.sp,
-                  width: calcSize(context).longestSide,
-                  decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(07.sp),
-                  ),
-                  child: Center(
-                    child: AppText.small("Add Device", fontSize: 17),
+                InkWell(
+                  onTap: () async {
+                    final HrRepository hrRepository = HrRepository();
+                    final session = SessionManagerClass();
+                    await session.getlicence().then((value) async {
+                      final result =
+                          await DeviceDialogHelper.showAddDeviceDialog(
+                            context,
+                            licenseKey: value,
+                            onSubmit: ({
+                              required String licenseKey,
+                              int? deviceId,
+                              required String deviceName,
+                              required String deviceIp,
+                              String? lastSyncInterval,
+                            }) {
+                              return hrRepository.addOrUpdateDevice(
+                                licenseKey: licenseKey,
+                                deviceId: deviceId,
+                                deviceName: deviceName,
+                                deviceIp: deviceIp,
+                                lastSyncInterval: lastSyncInterval,
+                              );
+                            },
+                          );
+                    });
+                  },
+                  child: Container(
+                    height: 20.sp,
+                    width: calcSize(context).longestSide,
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(07.sp),
+                    ),
+                    child: Center(
+                      child: AppText.small("Add Device", fontSize: 17),
+                    ),
                   ),
                 ),
               ],

@@ -7,7 +7,6 @@ import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/Configuration/confiugration.dart';
 import 'package:act/Features/Dashboard/Presentation/dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/add_employee_data.dart';
-import 'package:act/Features/EmployeeManagement/Screens/EmployeeDetails/employee_details.dart';
 import 'package:act/Features/EmployeeManagement/employee_management.dart';
 import 'package:act/Features/HrManagement/attendance_management.dart';
 import 'package:flutter/material.dart';
@@ -130,24 +129,24 @@ class CustomDrawer extends StatelessWidget {
                           pageIndex: 0,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EmployeeDetails(),
-                            ),
-                          );
-                        },
+                      // InkWell(
+                      //   onTap: () {
+                      //     Navigator.pushReplacement(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => const EmployeeDetails(),
+                      //       ),
+                      //     );
+                      //   },
 
-                        child: MenuCardsForDesktop(
-                          color: Colors.black,
-                          title: "Employee Details",
-                          enable: employeeDetails ?? false,
-                          icondata: Icons.account_circle,
-                          pageIndex: 0,
-                        ),
-                      ),
+                      //   child: MenuCardsForDesktop(
+                      //     color: Colors.black,
+                      //     title: "Employee Details",
+                      //     enable: employeeDetails ?? false,
+                      //     icondata: Icons.account_circle,
+                      //     pageIndex: 0,
+                      //   ),
+                      // ),
                     ],
                   ),
                   ExpansionMenuForDeskTop(

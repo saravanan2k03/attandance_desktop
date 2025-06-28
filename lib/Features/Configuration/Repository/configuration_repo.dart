@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:act/Core/Services/api_network_services.dart';
 import 'package:act/Core/Utils/urls.dart';
 import 'package:act/Features/Configuration/Models/configuration_add_or_update_model.dart';
@@ -13,24 +16,30 @@ import 'package:act/Features/Configuration/Models/list_department_model.dart';
 import 'package:act/Features/Configuration/Models/update_department_model.dart';
 
 class ConfigurationRepo {
-  Future<DepartmentaddModel> addDeparmentApi() async {
+  Future<DepartmentaddModel> addDeparmentApi(
+    String licence,
+    String name,
+  ) async {
     ///Url//
     String addDeparmentrepoUrl =
         "${ApiConstants.baseUrl}${ApiConstants.adddepartments}";
     final url = Uri.parse(addDeparmentrepoUrl);
     return postApiData(url, {
-      "license_key": "ORG-XYZ-1234",
-      "name": "Human Resourcess",
+      "license_key": licence,
+      "name": name,
     }, (json) => DepartmentaddModel.fromJson(json));
   }
 
-  Future<DepartmentupdateModel> updateDeparmentApi(int id) async {
+  Future<DepartmentupdateModel> updateDeparmentApi(
+    int id,
+    String departmentname,
+  ) async {
     ///Url//
     String updateDeparmentrepoUrl =
         "${ApiConstants.baseUrl}${ApiConstants.updatedepartment}$id/";
     final url = Uri.parse(updateDeparmentrepoUrl);
     return putApiData(url, {
-      "name": "Marketing",
+      "name": departmentname,
     }, (json) => DepartmentupdateModel.fromJson(json));
   }
 
@@ -42,24 +51,30 @@ class ConfigurationRepo {
     return fetchApiData(url, (json) => DepartmentListModel.fromJson(json));
   }
 
-  Future<DesignationaddModel> addDesignation() async {
+  Future<DesignationaddModel> addDesignation(
+    String name,
+    String licencekey,
+  ) async {
     ///Url//
     String addDesignationrepoUrl =
         "${ApiConstants.baseUrl}${ApiConstants.adddesignation}";
     final url = Uri.parse(addDesignationrepoUrl);
     return postApiData(url, {
-      "license_key": "ORG-XYZ-1234",
-      "designation_name": "Software Engineers",
+      "license_key": licencekey,
+      "designation_name": name,
     }, (json) => DesignationaddModel.fromJson(json));
   }
 
-  Future<DepartmentupdateModel> updateDesignationApi(int id) async {
+  Future<DepartmentupdateModel> updateDesignationApi(
+    int id,
+    String name,
+  ) async {
     ///Url//
     String updateDesignationrepoUrl =
         "${ApiConstants.baseUrl}${ApiConstants.updatedesination}$id/";
     final url = Uri.parse(updateDesignationrepoUrl);
     return putApiData(url, {
-      "designation_name": "Senior Software Engineer",
+      "designation_name": name,
     }, (json) => DepartmentupdateModel.fromJson(json));
   }
 
@@ -71,33 +86,28 @@ class ConfigurationRepo {
     return fetchApiData(url, (json) => DesingantionListModel.fromJson(json));
   }
 
-  Future<HolidayAddorUpdateModel> addOrUpdateHoliday({
-    required int id,
+  Future<HolidayResponseModel> addOrUpdateHoliday({
     required String licenseKey,
     required String leaveName,
-    required String leaveDate,
-    required int createdBy,
-    required bool isActive,
+    required String leaveDate, // "YYYY-MM-DD"
+    bool isActive = true,
+    int? id,
   }) async {
-    /// URL
-    String urlStr = "${ApiConstants.baseUrl}holidays/add-or-update/";
-    final url = Uri.parse(urlStr);
-
-    /// Body
+    final url = Uri.parse("${ApiConstants.baseUrl}holidays/add-or-update/");
     final body = {
-      "id": id,
       "license_key": licenseKey,
       "leave_name": leaveName,
       "leave_date": leaveDate,
-      "created_by": createdBy,
       "is_active": isActive,
     };
+    if (id != null) body["id"] = id;
 
-    /// Call API
+    log("Posting Holiday body: $body");
+
     return postApiData(
       url,
       body,
-      (json) => HolidayAddorUpdateModel.fromJson(json),
+      (json) => HolidayResponseModel.fromJson(jsonDecode(json)),
     );
   }
 
@@ -141,10 +151,19 @@ class ConfigurationRepo {
     );
   }
 
-  Future<ConfigurationListModel> listConfiguration(String licenseKey) async {
-    final url = Uri.parse(
-      "${ApiConstants.baseUrl}configurations/?license_key=$licenseKey",
-    );
+  Future<ConfigurationListModel> listConfiguration(
+    String licenseKey, {
+    String? workshift,
+  }) async {
+    // Build URL with optional workshift
+    String urlStr =
+        "${ApiConstants.baseUrl}configurations/?license_key=$licenseKey";
+
+    if (workshift != null && workshift.isNotEmpty) {
+      urlStr += "&workshift=$workshift";
+    }
+
+    final url = Uri.parse(urlStr);
 
     return fetchApiData(url, (json) => ConfigurationListModel.fromJson(json));
   }
@@ -153,6 +172,7 @@ class ConfigurationRepo {
     required String licenseKey,
     required String leaveType,
     required bool isActive,
+    int? id,
   }) async {
     final url = Uri.parse("${ApiConstants.baseUrl}leave-type/");
 
@@ -160,6 +180,7 @@ class ConfigurationRepo {
       "license_key": licenseKey,
       "leave_type": leaveType,
       "is_active": isActive,
+      if (id != null) "id": id, // include id only if present
     };
 
     return postApiData(url, body, (json) => LeaveTypeModel.fromJson(json));

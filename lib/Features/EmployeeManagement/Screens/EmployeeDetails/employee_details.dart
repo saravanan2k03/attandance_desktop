@@ -1,19 +1,22 @@
 import 'package:act/Core/Presentation/Desktop/Screens/custom_drawer.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
+import 'package:act/Features/EmployeeManagement/Bloc/bloc/employee_bloc.dart';
 import 'package:act/Features/EmployeeManagement/Constant/employee_management.dart';
+import 'package:act/Features/EmployeeManagement/Models/employee_dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Screens/EmployeeDetails/employee_info_card.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_dashboard_upper_widget.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_dashboard_lower_widget.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_tabbar.dart';
-import 'package:act/Features/EmployeeManagement/Screens/EmployeeLeaveRequest/employee_leave_request.dart';
 import 'package:flutter/material.dart';
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class EmployeeDetails extends StatefulWidget {
-  const EmployeeDetails({super.key});
+  final int employeeID;
+  const EmployeeDetails({super.key, required this.employeeID});
 
   @override
   State<EmployeeDetails> createState() => _EmployeeDetailsState();
@@ -97,7 +100,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                             children: [
                               const Expanded(
                                 flex: 2,
-                                child: EmployeeInfoCard(),
+                                child: EmployeeInfoCard(employeeId: ""),
                               ),
                               07.width,
                               Expanded(
@@ -141,23 +144,23 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                                   ),
                                                 ),
 
-                                                InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      changetabbar(
-                                                        employeeDashboardvar =
-                                                            false,
-                                                        employeeInformationvar =
-                                                            false,
-                                                        leaveRequestvar = true,
-                                                      );
-                                                    });
-                                                  },
-                                                  child: TabbarCard(
-                                                    cardenable: leaveRequestvar,
-                                                    label: "Leave Request",
-                                                  ),
-                                                ),
+                                                // InkWell(
+                                                //   onTap: () {
+                                                //     setState(() {
+                                                //       changetabbar(
+                                                //         employeeDashboardvar =
+                                                //             false,
+                                                //         employeeInformationvar =
+                                                //             false,
+                                                //         leaveRequestvar = true,
+                                                //       );
+                                                //     });
+                                                //   },
+                                                //   child: TabbarCard(
+                                                //     cardenable: leaveRequestvar,
+                                                //     label: "Leave Request",
+                                                //   ),
+                                                // ),
                                               ],
                                             ).withPadding(
                                               padding: EdgeInsets.all(07.sp),
@@ -168,14 +171,77 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                         ],
                                       ),
                                       Visibility(
-                                        visible: leaveRequestvar,
-                                        replacement: Expanded(
-                                          child: EmployeeDashboard()
-                                              .withPadding(
-                                                padding: EdgeInsets.all(07.sp),
-                                              ),
+                                        visible: true,
+                                        child: Expanded(
+                                          child: BlocConsumer<
+                                            EmployeeBloc,
+                                            EmployeeState
+                                          >(
+                                            bloc:
+                                                employeeBloc..add(
+                                                  EmployeeDashboardEvent(
+                                                    widget.employeeID,
+                                                  ),
+                                                ),
+                                            listener: (context, state) {},
+                                            builder: (context, state) {
+                                              if (state
+                                                  is EmployeehrDashboardDatastate) {
+                                                var modelData = state.modelData;
+                                                return EmployeeDashboard(
+                                                  absentinThisMonth:
+                                                      modelData
+                                                          .absentInThisMonth
+                                                          .toString(),
+                                                  attendanceThisMonth:
+                                                      modelData
+                                                          .attendanceThisMonth
+                                                          .toString(),
+                                                  clockIn: modelData.punchIn,
+                                                  lateLogins:
+                                                      modelData.lateLogins
+                                                          .toString(),
+                                                  leavesTaken:
+                                                      modelData.leavesTaken
+                                                          .toString(),
+                                                  monthlyAbsents:
+                                                      modelData.pieChart.absent,
+                                                  monthlyPresents:
+                                                      modelData
+                                                          .pieChart
+                                                          .present,
+                                                  overtimeWorking:
+                                                      modelData.overtimeWorking
+                                                          .toString(),
+                                                  pendingLeaveRequests:
+                                                      modelData
+                                                          .pendingLeaveRequests
+                                                          .toString(),
+                                                  pieleavesTaken:
+                                                      modelData.pieChart.leave,
+                                                  punchOut: modelData.punchOut,
+                                                  tableData:
+                                                      modelData.tableData,
+                                                );
+                                              } else if (state
+                                                  is EmployeeDetailLoadingState) {
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              } else {
+                                                return Center(
+                                                  child: AppText.small(
+                                                    "No Data Available!",
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ).withPadding(
+                                            padding: EdgeInsets.all(07.sp),
+                                          ),
                                         ),
-                                        child: EmployeeLeaveRequest(),
+                                        // child: EmployeeLeaveRequest(),
                                       ),
                                     ],
                                   ),
@@ -198,14 +264,54 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
 }
 
 class EmployeeDashboard extends StatelessWidget {
-  const EmployeeDashboard({super.key});
+  final double monthlyAbsents;
+  final double monthlyPresents;
+  final double pieleavesTaken;
+  final String attendanceThisMonth;
+  final String leavesTaken;
+  final String lateLogins;
+  final String pendingLeaveRequests;
+  final String absentinThisMonth;
+  final String overtimeWorking;
+  final String clockIn;
+  final String punchOut;
+  final List<AttendanceTableData> tableData;
+  const EmployeeDashboard({
+    super.key,
+    required this.monthlyAbsents,
+    required this.monthlyPresents,
+    required this.pieleavesTaken,
+    required this.attendanceThisMonth,
+    required this.leavesTaken,
+    required this.lateLogins,
+    required this.pendingLeaveRequests,
+    required this.absentinThisMonth,
+    required this.overtimeWorking,
+    required this.clockIn,
+    required this.punchOut,
+    required this.tableData,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        EmployeeDashboardUpperWidget(),
-        EmployeeDashboardLowerWidget(),
+        EmployeeDashboardUpperWidget(
+          attendanceThisMonth: attendanceThisMonth,
+          lateLogins: lateLogins,
+          leavesTaken: leavesTaken,
+          monthlyAbsents: monthlyAbsents,
+          monthlyPresents: monthlyPresents,
+          pendingLeaveRequests: pendingLeaveRequests,
+          pieleavesTaken: pieleavesTaken,
+        ),
+        EmployeeDashboardLowerWidget(
+          absentinThisMonth: absentinThisMonth,
+          clockIn: clockIn,
+          overtimeWorking: overtimeWorking,
+          punchOut: punchOut,
+          tableData: tableData,
+        ),
       ],
     );
   }

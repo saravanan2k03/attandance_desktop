@@ -1,31 +1,22 @@
-import 'dart:convert';
+class HolidayResponseModel {
+  final String message;
+  final int? leaveId;
+  final String? leaveName;
+  final String? leaveDate;
 
-class HolidayAddorUpdateModel {
-  String? message;
-  HolidayAddorUpdateModel({this.message});
-  HolidayAddorUpdateModel copyWith({String? message}) {
-    return HolidayAddorUpdateModel(message: message ?? this.message);
+  HolidayResponseModel({
+    required this.message,
+    this.leaveId,
+    this.leaveName,
+    this.leaveDate,
+  });
+
+  factory HolidayResponseModel.fromJson(Map<String, dynamic> json) {
+    return HolidayResponseModel(
+      message: json["message"] ?? "",
+      leaveId: json["leave_id"],
+      leaveName: json["leave_name"],
+      leaveDate: json["leave_date"],
+    );
   }
-
-  Map<String, dynamic> toMap() {
-    return {'message': message};
-  }
-
-  factory HolidayAddorUpdateModel.fromMap(Map<String, dynamic> map) {
-    return HolidayAddorUpdateModel(message: map['message']);
-  }
-  String toJson() => json.encode(toMap());
-  factory HolidayAddorUpdateModel.fromJson(String source) =>
-      HolidayAddorUpdateModel.fromMap(json.decode(source));
-  @override
-  String toString() => 'HolidayAddorUpdateModel(message: $message)';
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is HolidayAddorUpdateModel && other.message == message;
-  }
-
-  @override
-  int get hashCode => message.hashCode;
 }

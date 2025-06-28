@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class ForgotPasswordDialog extends StatefulWidget {
+  const ForgotPasswordDialog({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ForgotPasswordDialogState createState() => _ForgotPasswordDialogState();
 }
 

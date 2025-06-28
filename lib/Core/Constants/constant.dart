@@ -13,17 +13,20 @@ const mobileConstraints = 600;
 Color commonColor = Color(0xffd1e4ff);
 Color cardsColors = Color(0xfff5f5f5);
 var usertypeforappbar = "admin";
+var globallicenseKey = "";
 var gender = ['Male', "Female", "Other"];
+List<String> leaveAction = ["Pending", "Approved", "Rejected"];
 DepartmentListModel deparment = DepartmentListModel(departments: []);
 DesingantionListModel designation = DesingantionListModel(designations: []);
 HolidayListModel holidaylist = HolidayListModel();
 LeaveTypeListModel leaveTypeListModel = LeaveTypeListModel();
-
+var attandanceCategory = ["Present", "Absent", "Late", "On Early", "On Leave"];
 var workShift = ['Morning', 'Night', 'Evening'];
 
 Future<void> getuserType() async {
   final session = SessionManagerClass();
   usertypeforappbar = await session.getusertype();
+  globallicenseKey = await session.getlicence();
 }
 
 final ToasterService toasterService = ToasterService();

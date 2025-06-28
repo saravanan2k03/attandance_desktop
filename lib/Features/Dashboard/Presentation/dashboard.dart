@@ -5,7 +5,7 @@ import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/Dashboard/Presentation/Widgets/hr_dashboard_lower_widget.dart';
 import 'package:act/Features/Dashboard/Presentation/Widgets/hr_dashboard_upper_widget.dart';
-import 'package:act/Features/HrManagement/Bloc/bloc/hrdashboard_bloc.dart';
+import 'package:act/Features/HrManagement/Bloc/HrDashboardBloc/hrdashboard_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';

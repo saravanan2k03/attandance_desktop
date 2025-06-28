@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Presentation/Desktop/Screens/custom_drawer.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/EmployeeManagement/Bloc/bloc/employee_bloc.dart';
+import 'package:act/Features/EmployeeManagement/Constant/employee_management.dart';
 import 'package:act/Features/EmployeeManagement/Models/simple_employee_list.dart';
+import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/add_employee_data.dart';
+import 'package:act/Features/EmployeeManagement/Screens/EmployeeDetails/employee_details.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +33,6 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController searchController = TextEditingController();
     List<DataRow> getEmployeeDataRows(
       List<SimpleEmployeeModel> employeeData,
       String searchString,
@@ -61,6 +65,37 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
             DataCell(Text(employee.gender)),
             DataCell(Text(employee.workStatus ? "Active" : "Inactive")),
             DataCell(Text("N/A")), // Placeholder for Date of Joining
+            DataCell(
+              InkWell(
+                onTap: () {
+                  log(employee.id.toString());
+                  employeeBloc.add(EmployeeDetail(employeeId: employee.id));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddEmployeeData(),
+                    ),
+                  );
+                },
+                child: Icon(Icons.edit),
+              ),
+            ),
+            DataCell(
+              InkWell(
+                onTap: () {
+                  log(employee.id.toString());
+                  // employeeBloc.add(EmployeeDetail(employeeId: employee.id));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => EmployeeDetails(employeeID: employee.id),
+                    ),
+                  );
+                },
+                child: Icon(Icons.edit),
+              ),
+            ),
           ],
         );
       }).toList();
@@ -120,7 +155,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 AllEmployeeFilter(
-                                  searchController: searchController,
+                                  employeeBloc: employee,
                                 ).withPadding(padding: EdgeInsets.all(07.sp)),
                                 10.height,
                                 BlocConsumer<EmployeeBloc, EmployeeState>(
@@ -137,6 +172,8 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                           'Gender',
                                           'Work Shift',
                                           'Date of Joining',
+                                          'Action',
+                                          'Info',
                                         ],
                                         dataRow: getEmployeeDataRows(
                                           state.modelData,
@@ -210,10 +247,19 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
   }
 }
 
-class AllEmployeeFilter extends StatelessWidget {
-  final TextEditingController searchController;
-  const AllEmployeeFilter({super.key, required this.searchController});
+class AllEmployeeFilter extends StatefulWidget {
+  final EmployeeBloc employeeBloc;
+  const AllEmployeeFilter({super.key, required this.employeeBloc});
 
+  @override
+  State<AllEmployeeFilter> createState() => _AllEmployeeFilterState();
+}
+
+class _AllEmployeeFilterState extends State<AllEmployeeFilter> {
+  String? departmentController;
+  String? designationController;
+  String? genderController;
+  String? workShiftController;
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -232,6 +278,10 @@ class AllEmployeeFilter extends StatelessWidget {
           child: CustomBorderDropDownForm(
             hintText: "Gender",
             dropDownMenu: gender,
+            selectedItem: genderController,
+            onChanged: (value) {
+              genderController = value!;
+            },
           ),
         ),
         SizedBox(
@@ -243,6 +293,10 @@ class AllEmployeeFilter extends StatelessWidget {
                     .where((e) => e.isActive == true)
                     .map((e) => e.departmentName ?? "")
                     .toList(),
+            selectedItem: departmentController,
+            onChanged: (value) {
+              departmentController = value!;
+            },
           ),
         ),
         SizedBox(
@@ -253,6 +307,10 @@ class AllEmployeeFilter extends StatelessWidget {
                 designation.designations!
                     .map((e) => e.designationName ?? "")
                     .toList(),
+            selectedItem: designationController,
+            onChanged: (value) {
+              designationController = value!;
+            },
           ),
         ),
         SizedBox(
@@ -260,30 +318,56 @@ class AllEmployeeFilter extends StatelessWidget {
           child: CustomBorderDropDownForm(
             hintText: "Work shift",
             dropDownMenu: workShift,
+            selectedItem: workShiftController,
+            onChanged: (value) {
+              workShiftController = value!;
+            },
           ),
         ),
 
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Container(
-              height: 18.sp,
-              width: 40.sp,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(07.sp),
+            InkWell(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EmployeeManagement(),
+                  ),
+                );
+              },
+              child: Container(
+                height: 18.sp,
+                width: 40.sp,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(07.sp),
+                ),
+                child: Center(child: AppText.small("Clear", fontSize: 17)),
               ),
-              child: Center(child: AppText.small("Clear", fontSize: 17)),
             ),
             07.width,
-            Container(
-              height: 18.sp,
-              width: 40.sp,
-              decoration: BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.circular(07.sp),
+            InkWell(
+              onTap: () {
+                // widget.employeeBloc.add(
+                //   EmployeeDataEvent(
+                //     department: departmentController.value,
+                //     designation: designationController.value,
+                //     gender: genderController.value,
+                //     workShift: workShiftController.value,
+                //   ),
+                // );
+              },
+              child: Container(
+                height: 18.sp,
+                width: 40.sp,
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(07.sp),
+                ),
+                child: Center(child: AppText.small("Submit", fontSize: 17)),
               ),
-              child: Center(child: AppText.small("Submit", fontSize: 17)),
             ),
           ],
         ),

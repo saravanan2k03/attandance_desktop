@@ -1,6 +1,7 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Features/EmployeeManagement/Constant/employee_management.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/add_leave_diaglogue.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
@@ -20,6 +21,7 @@ class EmployeeProfileDetails extends StatefulWidget {
   final ValueNotifier<String?> workShiftController;
   final ValueNotifier<String?> userTypeController;
   final TextEditingController addressController;
+  final TextEditingController fingerprintcode;
   EmployeeProfileDetails({
     super.key,
     required this.userNameController,
@@ -31,6 +33,7 @@ class EmployeeProfileDetails extends StatefulWidget {
     required this.workShiftController,
     required this.userTypeController,
     required this.addressController,
+    required this.fingerprintcode,
   });
 
   @override
@@ -38,8 +41,6 @@ class EmployeeProfileDetails extends StatefulWidget {
 }
 
 class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
-  List<Map<String, dynamic>> leaveData = [];
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -65,6 +66,13 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                 child: CustomTextFormFieldwithcontroller(
                   title: "Password",
                   controller: widget.passwordController,
+                ),
+              ),
+              SizedBox(
+                width: 40.sp,
+                child: CustomTextFormFieldwithcontroller(
+                  title: "Finger Code",
+                  controller: widget.fingerprintcode,
                 ),
               ),
               SizedBox(
@@ -276,6 +284,15 @@ class TabToggleWidget extends StatefulWidget {
 
 class _TabToggleWidgetState extends State<TabToggleWidget> {
   String selected = "Applicable"; // Default selected tab
+  @override
+  void initState() {
+    if (gosiApplicable) {
+      selected = "Applicable";
+    } else {
+      selected = "Not Applicable";
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -288,6 +305,7 @@ class _TabToggleWidgetState extends State<TabToggleWidget> {
               setState(() {
                 selected = "Applicable";
               });
+              gosiApplicable = true;
               print("Selected: $selected");
             },
             child: Container(
@@ -313,6 +331,7 @@ class _TabToggleWidgetState extends State<TabToggleWidget> {
               setState(() {
                 selected = "Not Applicable";
               });
+              gosiApplicable = false;
               print("Selected: $selected");
             },
             child: Container(
