@@ -41,6 +41,30 @@ class EmployeeProfileDetails extends StatefulWidget {
 }
 
 class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
+  final activeDepartments =
+      deparment.departments!.where((e) => e.isActive == true).toList();
+  final activeDesignations = designation.designations!.toList();
+  int? selectedDepartmentId;
+  int? selectedDesignationId;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the designation if it was previously set
+    if (widget.designationController.value != null) {
+      try {
+        final designationId = int.parse(widget.designationController.value!);
+        final designation = activeDesignations.firstWhere(
+          (d) => d.id == designationId,
+          orElse: () => activeDesignations.first,
+        );
+        selectedDesignationId = designation.id;
+      } catch (e) {
+        print('Error initializing designation: $e');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -85,7 +109,11 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                           .map((e) => e.departmentName ?? "")
                           .toList(),
                   onChanged: (value) {
-                    widget.departmentController.value = value!;
+                    widget.departmentController.value =
+                        activeDepartments
+                            .firstWhere((dept) => dept.departmentName == value)
+                            .id
+                            .toString();
                   },
                   selectedItem: widget.departmentController.value,
                 ),
@@ -99,9 +127,34 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                           .map((e) => e.designationName ?? "")
                           .toList(),
                   onChanged: (value) {
-                    widget.designationController.value = value!;
+                    if (value != null) {
+                      try {
+                        final selectedDesignation = activeDesignations
+                            .firstWhere((d) => d.designationName == value);
+                        widget.designationController.value =
+                            selectedDesignation.id?.toString();
+                        selectedDesignationId = selectedDesignation.id;
+                        print(
+                          "Selected designation ID: ${selectedDesignation.id}",
+                        );
+                      } catch (e) {
+                        print('Error setting designation: $e');
+                        widget.designationController.value = null;
+                        selectedDesignationId = null;
+                      }
+                    }
                   },
-                  selectedItem: widget.designationController.value,
+                  selectedItem:
+                      widget.designationController.value != null
+                          ? activeDesignations
+                              .firstWhere(
+                                (d) =>
+                                    d.id?.toString() ==
+                                    widget.designationController.value,
+                                orElse: () => activeDesignations.first,
+                              )
+                              .designationName
+                          : null,
                 ),
               ),
               SizedBox(

@@ -45,6 +45,8 @@ class _CustomAppbarState extends State<CustomAppbar> {
                       );
                     });
                   });
+
+                  // getIt.get<LoginBloc>().add(LogOutEvent());
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -52,11 +54,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                     borderRadius: BorderRadius.circular(15.sp),
                   ),
                   child: Row(
-                    children: [
-                      AppText.small(usertypeforappbar, fontSize: 17),
-                      07.width,
-                      CircleAvatar(),
-                    ],
+                    children: [AppText.small("Logout", fontSize: 17)],
                   ).withPadding(padding: EdgeInsets.all(07.sp)),
                 ),
               ),

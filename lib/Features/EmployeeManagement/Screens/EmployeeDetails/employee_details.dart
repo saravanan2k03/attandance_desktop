@@ -33,8 +33,10 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
     leaveRequestvar = leaveRequest;
   }
 
+  final EmployeeBloc employee = EmployeeBloc();
   @override
   void initState() {
+    employee.add(EmployeeDashboardEvent(widget.employeeID));
     employeeDashboardvar = true;
     employeeInformationvar = false;
     leaveRequestvar = false;
@@ -98,9 +100,11 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                         Expanded(
                           child: Row(
                             children: [
-                              const Expanded(
+                              Expanded(
                                 flex: 2,
-                                child: EmployeeInfoCard(employeeId: ""),
+                                child: EmployeeInfoCard(
+                                  employeeId: widget.employeeID,
+                                ),
                               ),
                               07.width,
                               Expanded(
@@ -178,12 +182,16 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                             EmployeeState
                                           >(
                                             bloc:
-                                                employeeBloc..add(
+                                                employee..add(
                                                   EmployeeDashboardEvent(
                                                     widget.employeeID,
                                                   ),
                                                 ),
                                             listener: (context, state) {},
+                                            buildWhen:
+                                                (previous, current) =>
+                                                    current
+                                                        is EmployeehrDashboardDatastate,
                                             builder: (context, state) {
                                               if (state
                                                   is EmployeehrDashboardDatastate) {

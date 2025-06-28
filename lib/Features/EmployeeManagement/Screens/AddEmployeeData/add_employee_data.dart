@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:act/Core/Constants/constant.dart';
@@ -6,12 +7,14 @@ import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Core/Utils/urls.dart';
 import 'package:act/Features/EmployeeManagement/Bloc/bloc/employee_bloc.dart';
 import 'package:act/Features/EmployeeManagement/Constant/employee_management.dart';
 import 'package:act/Features/EmployeeManagement/Models/employee_detail_reponse.dart';
 import 'package:act/Features/EmployeeManagement/Repository/employee_repo.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/employee_personal_details.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/employee_profile_details.dart';
+import 'package:act/Features/EmployeeManagement/employee_management.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +22,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 
 class AddEmployeeData extends StatefulWidget {
-  const AddEmployeeData({super.key});
+  final int? employeeId;
+  const AddEmployeeData({super.key, this.employeeId});
 
   @override
   State<AddEmployeeData> createState() => _AddEmployeeDataState();
@@ -59,9 +63,13 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
     null,
   );
   final TextEditingController addressController = TextEditingController();
-
+  final EmployeeBloc employeeBloc = EmployeeBloc();
   @override
   void initState() {
+    if (widget.employeeId != null) {
+      employeeBloc.add(EmployeeDetail(employeeId: widget.employeeId!));
+    }
+
     super.initState();
   }
 
@@ -157,13 +165,77 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
             .toList();
   }
 
+  bool validateForm({String? employeeId}) {
+    String errorMessage = '';
+
+    if (firstNameController.text.trim().isEmpty) {
+      errorMessage += 'First Name is required\n';
+    }
+    if (lastNameController.text.trim().isEmpty) {
+      errorMessage += 'Last Name is required\n';
+    }
+    if (emailIdController.text.trim().isEmpty) {
+      errorMessage += 'Email is required\n';
+    }
+    if (dateOfBirthController.text.trim().isEmpty) {
+      errorMessage += 'Date of Birth is required\n';
+    }
+    if (genderController.value == null) errorMessage += 'Gender is required\n';
+    if (nationalityController.text.trim().isEmpty) {
+      errorMessage += 'Nationality is required\n';
+    }
+    if (iqamaNumberController.text.trim().isEmpty) {
+      errorMessage += 'Iqama Number is required\n';
+    }
+    if (mobileNoController.text.trim().isEmpty) {
+      errorMessage += 'Mobile Number is required\n';
+    }
+    if (joiningDateController.text.trim().isEmpty) {
+      errorMessage += 'Joining Date is required\n';
+    }
+    if (basicSalaryController.text.trim().isEmpty) {
+      errorMessage += 'Basic Salary is required\n';
+    }
+    if (departmentController.value == null) {
+      errorMessage += 'Department is required\n';
+    }
+    if (designationController.value == null) {
+      errorMessage += 'Designation is required\n';
+    }
+    if (addressController.text.trim().isEmpty) {
+      errorMessage += 'Address is required\n';
+    }
+    if (fingerprintcode.text.trim().isEmpty) {
+      errorMessage += 'Fingerprint Code is required\n';
+    }
+
+    // Only validate username and password for new employees
+    if (employeeId == null) {
+      if (userNameController.text.trim().isEmpty) {
+        errorMessage += 'Username is required\n';
+      }
+      if (passwordController.text.trim().isEmpty) {
+        errorMessage += 'Password is required\n';
+      }
+    }
+
+    if (errorMessage.isNotEmpty) {
+      log(errorMessage);
+      return false;
+    }
+    return true;
+  }
+
   Future<void> submitEmployeeForm({String? employeeId}) async {
+    if (!validateForm(employeeId: employeeId)) return;
+
     final EmployeeRepo employeeRepo = EmployeeRepo();
     try {
+      log("Designation${designationController.value.toString()}");
       final session = SessionManagerClass();
       var licencekey = await session.getlicence();
       final response = await employeeRepo.addOrUpdateEmployee(
-        licenseKey: licencekey, // You must have a license key value
+        licenseKey: licencekey,
         email: emailIdController.text.trim(),
         firstName: firstNameController.text.trim(),
         lastName: lastNameController.text.trim(),
@@ -173,13 +245,13 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
         iqamaNumber: iqamaNumberController.text.trim(),
         mobNo: mobileNoController.text.trim(),
         joiningDate: joiningDateController.text.trim(),
-        workStatus: 'true', // or derive from a toggle if present
+        workStatus: 'true',
         basicSalary: basicSalaryController.text.trim(),
-        gosiApplicable: gosiApplicable ? 'true' : 'false',
+        gosiApplicable: gosiApplicable,
         departmentId: departmentController.value ?? '',
         designationId: designationController.value ?? '',
         leaveDetails: leaveData,
-        filename: 'default.pdf', // or derive based on file upload if required
+        filename: 'default.pdf',
         address: addressController.text.trim(),
         fingerPrintCode: fingerprintcode.text.trim(),
 
@@ -208,6 +280,10 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
           context: context,
         );
         clearEmployeeFormFields();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const EmployeeManagement()),
+        );
       } else {
         toasterService.displayWarningMotionToast(context, "Fail!");
       }
@@ -333,7 +409,7 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
                                                 departmentController:
                                                     departmentController,
                                                 designationController:
-                                                    departmentController,
+                                                    designationController,
                                                 gosiDeductionController:
                                                     gosiDeductionController,
                                                 passwordController:
@@ -456,7 +532,7 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
                                                 departmentController:
                                                     departmentController,
                                                 designationController:
-                                                    departmentController,
+                                                    designationController,
                                                 gosiDeductionController:
                                                     gosiDeductionController,
                                                 passwordController:
@@ -586,10 +662,9 @@ class _ProfileUploadState extends State<ProfileUpload> {
     if (pickedImage != null) {
       return CircleAvatar(radius: 70, backgroundImage: FileImage(pickedImage!));
     } else if (widget.url != null && widget.url!.isNotEmpty) {
-      return CircleAvatar(
-        radius: 70,
-        backgroundImage: NetworkImage(widget.url!),
-      );
+      final fullUrl =
+          "${ApiConstants.baseUrl.substring(0, ApiConstants.baseUrl.length - 4)}${widget.url}";
+      return CircleAvatar(radius: 70, backgroundImage: NetworkImage(fullUrl));
     } else {
       return const CircleAvatar(
         radius: 70,

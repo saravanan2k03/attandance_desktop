@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:act/Core/Services/hive_services.dart';
+import 'package:act/Core/Services/service_locator.dart';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/urls.dart';
+import 'package:act/Features/Auth/Bloc/bloc/login_bloc.dart';
 import 'package:act/Features/Auth/Repository/auth_repo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -33,9 +35,7 @@ Future<bool> refreshToken() async {
       session.setAccessToken(responsdata['access']);
       return true;
     } else if (response.statusCode == 401) {
-      authRepo.logoutapi().whenComplete(() {
-        hiveServices.deleteallData().then((value) {});
-      });
+      getIt.get<LoginBloc>().add(LogOutEvent());
       return false;
     } else {
       throw HttpException('Failed to fetch data: ${response.statusCode}');
@@ -304,7 +304,7 @@ Future<T> postApiDataWithImage<T>(
   Uri url,
   XFile? image,
   XFile? document,
-  Map<String, String> fields,
+  Map<String, dynamic> fields,
   T Function(String) fromJson,
 ) async {
   try {

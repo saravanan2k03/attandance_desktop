@@ -1,3 +1,4 @@
+import 'package:act/Features/Auth/Repository/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -38,11 +39,10 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
       setState(() {
         _isLoading = true;
       });
-
+      final AuthRepo authRepo = AuthRepo();
       // Simulate API call
-      await Future.delayed(Duration(milliseconds: 800));
-
-      String email = _emailController.text.trim();
+      authRepo.forgotapi();
+      final String email = _emailController.text.trim();
       Navigator.of(context).pop(email);
     }
   }

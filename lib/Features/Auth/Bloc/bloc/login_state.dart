@@ -14,3 +14,7 @@ class LoginLoadingState extends LoginState {}
 class LoginError extends LoginState {}
 
 class LoginSuccessState extends LoginState {}
+
+class LogoutSucess extends LoginState {}
+
+class LogoutError extends LoginState {}

@@ -11,6 +11,7 @@ import 'package:act/Features/Auth/Bloc/bloc/login_bloc.dart';
 import 'package:act/Features/Auth/Presentation/Widgets/forogt_password_show_diaglue.dart';
 import 'package:act/Features/Auth/Presentation/Widgets/my_textfield.dart';
 import 'package:act/Features/Dashboard/Presentation/dashboard.dart';
+import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/new_leave_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -98,12 +99,24 @@ class _AuthState extends State<Auth> {
                       context: context,
                       content: Text("Login Successfully!"),
                     );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Dashboard(),
-                      ),
-                    );
+                    final session = SessionManagerClass();
+                    session.getusertype().then((value) {
+                      if (adminUserList.contains(value)) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Dashboard(),
+                          ),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Dashboard(),
+                          ),
+                        );
+                      }
+                    });
                   }
                   if (state is LoginError) {
                     toasterService.displayErrorMotionToast(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:act/Core/Services/api_network_services.dart';
 import 'package:act/Core/Utils/urls.dart';
@@ -30,7 +31,10 @@ class EmployeeRepo {
       "${ApiConstants.baseUrl}employees/list/",
     ).replace(queryParameters: queryParams);
 
-    return await fetchApiData(uri, SimpleEmployeeModel.listFromJson);
+    return await fetchApiData(
+      uri,
+      (json) => SimpleEmployeeModel.listFromJson(json),
+    );
   }
 
   Future<BaseResponseModel> addOrUpdateEmployee({
@@ -46,7 +50,7 @@ class EmployeeRepo {
     required String joiningDate,
     required String workStatus,
     required String basicSalary,
-    required String gosiApplicable,
+    required bool gosiApplicable,
     required String departmentId,
     required String designationId,
     required List<Map<String, dynamic>> leaveDetails,
@@ -63,7 +67,7 @@ class EmployeeRepo {
   }) async {
     final url = Uri.parse("${ApiConstants.baseUrl}employees/add-or-update/");
 
-    final Map<String, String> fields = {
+    final Map<String, dynamic> fields = {
       "license_key": licenseKey,
       "email": email,
       "first_name": firstName,
@@ -76,7 +80,7 @@ class EmployeeRepo {
       "joining_date": joiningDate,
       "work_status": workStatus,
       "basic_salary": basicSalary,
-      "gosi_applicable": gosiApplicable,
+      "gosi_applicable": gosiApplicable.toString(),
       "filename": filename,
       "address": address,
       "finger_print_code": fingerPrintCode,
@@ -93,7 +97,7 @@ class EmployeeRepo {
       fields["gosi_deduction_amount"] = gosiDeductionAmount;
     }
     if (overTimeSalary != null) fields["over_time_salary"] = overTimeSalary;
-
+    log(fields.toString());
     return postApiDataWithImage(
       url,
       profilePic,
@@ -143,8 +147,9 @@ class EmployeeRepo {
 
   Future<EmployeeDashboardModel> fetchEmployeeDashboard({
     required String employeeId,
+    required String licenceKey,
   }) async {
-    final queryParams = {'employee_id': employeeId};
+    final queryParams = {'employee_id': employeeId, "license_key": licenceKey};
     final uri = Uri.parse(
       "${ApiConstants.baseUrl}attendance/dashboard/",
     ).replace(queryParameters: queryParams);

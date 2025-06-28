@@ -1,5 +1,4 @@
 import 'package:act/Features/EmployeeManagement/Bloc/bloc/employee_bloc.dart';
-import 'package:act/Features/EmployeeManagement/Constant/employee_management.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_basic_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:act/Core/Utils/app_text.dart';
@@ -8,18 +7,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class EmployeeInfoCard extends StatelessWidget {
-  final String employeeId;
+  final int employeeId;
   const EmployeeInfoCard({super.key, required this.employeeId});
 
   @override
   Widget build(BuildContext context) {
+    final EmployeeBloc employee = EmployeeBloc();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(07.sp),
       ),
       child: BlocConsumer<EmployeeBloc, EmployeeState>(
-        bloc: employeeBloc,
+        bloc: employee..add(EmployeeDetail(employeeId: employeeId)),
         listener: (context, state) {},
         builder: (context, state) {
           if (state is EmployeeDetailDataState) {
@@ -41,7 +41,7 @@ class EmployeeInfoCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppText.small(
-                            modelData.data.filename,
+                            modelData.data.firstName,
                             textOverflow: TextOverflow.ellipsis,
                             fontSize: 18,
                           ),
@@ -81,7 +81,7 @@ class EmployeeInfoCard extends StatelessWidget {
                             ).withPadding(padding: EdgeInsets.only(top: 07.sp)),
                             EmployeeBasicCards(
                               label: "Work Shift",
-                              data: modelData.data.workshift,
+                              data: modelData.data.workshift ?? "",
                               customIcon: Icons.schedule,
                             ).withPadding(padding: EdgeInsets.only(top: 07.sp)),
                             EmployeeBasicCards(

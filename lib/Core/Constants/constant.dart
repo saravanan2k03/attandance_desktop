@@ -13,6 +13,7 @@ const mobileConstraints = 600;
 Color commonColor = Color(0xffd1e4ff);
 Color cardsColors = Color(0xfff5f5f5);
 var usertypeforappbar = "admin";
+var adminUserList = ["Hr", "Admin", "Super Admin"];
 var globallicenseKey = "";
 var gender = ['Male', "Female", "Other"];
 List<String> leaveAction = ["Pending", "Approved", "Rejected"];

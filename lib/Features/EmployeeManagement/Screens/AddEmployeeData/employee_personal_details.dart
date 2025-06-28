@@ -104,21 +104,21 @@ class EmployeePersonalDetails extends StatelessWidget {
                 width: 40.sp,
                 child: CustomTextFormFieldwithcontroller(
                   title: "Email id",
-                  controller: TextEditingController(),
+                  controller: emailIdController,
                 ),
               ),
               SizedBox(
                 width: 40.sp,
                 child: CustomTextFormFieldwithcontroller(
                   title: "Nationality",
-                  controller: TextEditingController(),
+                  controller: nationalityController,
                 ),
               ),
               SizedBox(
                 width: 40.sp,
                 child: CustomTextFormFieldwithcontroller(
                   title: "Iqama number",
-                  controller: TextEditingController(),
+                  controller: iqamaNumberController,
                 ),
               ),
             ],

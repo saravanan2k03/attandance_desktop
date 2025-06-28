@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Data/Repository/core_repo.dart';
 import 'package:act/Core/Services/misc.dart';
 import 'package:act/Core/Services/observer.dart';
+import 'package:act/Core/Services/service_locator.dart';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/Theme/theme.dart';
+import 'package:act/Features/Auth/Bloc/bloc/login_bloc.dart';
 import 'package:act/Features/Auth/Presentation/Screens/auth.dart';
 import 'package:act/Features/Dashboard/Presentation/dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/new_leave_request.dart';
@@ -23,6 +27,7 @@ Future<void> main() async {
 
   ///Hive initialization
   await Hive.initFlutter();
+  setupServiceLocator();
   runApp(const MyApp());
 }
 
@@ -76,9 +81,15 @@ class _MyAppState extends State<MyApp> {
         if (!licenseStatus.activated) {
           return Auth(); // Invalid license
         }
+        log(userType);
+        if (adminUserList.contains(userType)) {
+          return Dashboard();
+        } else {
+          return LeaveRequestScreen();
+        }
 
         // Everything is valid
-        return Dashboard(); // Replace with your actual dashboard screen
+        // Replace with your actual dashboard screen
       } catch (e) {
         return Auth(); // Any exception goes to auth screen
       }
@@ -91,16 +102,37 @@ class _MyAppState extends State<MyApp> {
           themeMode: ThemeMode.system,
           theme: TAppTheme.lightTheme,
           darkTheme: TAppTheme.darkTheme,
-          home: FutureBuilder<Widget>(
-            future: getInitialScreen(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasData) {
-                return snapshot.data!;
-              } else {
-                return Auth(); // fallback
+          home: BlocConsumer<LoginBloc, LoginState>(
+            bloc: getIt.get<LoginBloc>(),
+            listener: (context, state) {
+              if (state is LogoutSucess) {
+                Navigator.pushReplacement(
+                  // ignore: use_build_context_synchronously
+                  context,
+                  MaterialPageRoute(builder: (context) => const Auth()),
+                );
               }
+              if (state is LoginError) {
+                Navigator.pushReplacement(
+                  // ignore: use_build_context_synchronously
+                  context,
+                  MaterialPageRoute(builder: (context) => const Auth()),
+                );
+              }
+            },
+            builder: (context, state) {
+              return FutureBuilder<Widget>(
+                future: getInitialScreen(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else {
+                    return Auth(); // fallback
+                  }
+                },
+              );
             },
           ),
         );

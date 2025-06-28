@@ -35,7 +35,7 @@ class EmployeeData {
   final bool gosiApplicable;
   final double gosiDeductionAmount;
   final String filename;
-  final String workshift;
+  final String? workshift;
   final double overTimeSalary;
   final String userType;
   final String? profilePic;

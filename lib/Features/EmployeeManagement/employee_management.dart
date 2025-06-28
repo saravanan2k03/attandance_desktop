@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Presentation/Desktop/Screens/custom_drawer.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
@@ -27,7 +26,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
   final EmployeeBloc employee = EmployeeBloc();
   @override
   void initState() {
-    employee.add(EmployeeDataEvent());
+    // employee.add(EmployeeDataEvent());
     super.initState();
   }
 
@@ -55,7 +54,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                     .contains(lowerSearch);
           }).toList();
 
-      return filteredList.map((employee) {
+      return employeeData.map((employee) {
         return DataRow(
           cells: [
             DataCell(Text(employee.fullName)),
@@ -63,21 +62,25 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
             DataCell(Text(employee.department ?? '-')),
             DataCell(Text(employee.designation ?? '-')),
             DataCell(Text(employee.gender)),
+            DataCell(
+              Text(employee.dateOfJoin ?? "-"),
+            ), // Placeholder for Date of Joining
             DataCell(Text(employee.workStatus ? "Active" : "Inactive")),
-            DataCell(Text("N/A")), // Placeholder for Date of Joining
+
             DataCell(
               InkWell(
                 onTap: () {
                   log(employee.id.toString());
-                  employeeBloc.add(EmployeeDetail(employeeId: employee.id));
+                  // employeeBloc.add(EmployeeDetail(employeeId: employee.id));
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const AddEmployeeData(),
+                      builder:
+                          (context) => AddEmployeeData(employeeId: employee.id),
                     ),
                   );
                 },
-                child: Icon(Icons.edit),
+                child: Icon(Icons.edit, color: Colors.black),
               ),
             ),
             DataCell(
@@ -159,10 +162,11 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                 ).withPadding(padding: EdgeInsets.all(07.sp)),
                                 10.height,
                                 BlocConsumer<EmployeeBloc, EmployeeState>(
-                                  bloc: employee,
+                                  bloc: employee..add(EmployeeDataEvent()),
                                   listener: (context, state) {},
                                   builder: (context, state) {
                                     if (state is EmployeeDataState) {
+                                      log(state.modelData.toString());
                                       return CustomTable(
                                         datacolumns: [
                                           'Name',
@@ -170,8 +174,8 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                           'Department',
                                           'Designation',
                                           'Gender',
-                                          'Work Shift',
                                           'Date of Joining',
+                                          'Status',
                                           'Action',
                                           'Info',
                                         ],
@@ -260,6 +264,10 @@ class _AllEmployeeFilterState extends State<AllEmployeeFilter> {
   String? designationController;
   String? genderController;
   String? workShiftController;
+  String? selectedDepartmentName;
+  final activeDepartments =
+      deparment.departments!.where((e) => e.isActive == true).toList();
+  int? selectedDepartmentId;
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -289,30 +297,33 @@ class _AllEmployeeFilterState extends State<AllEmployeeFilter> {
           child: CustomBorderDropDownForm(
             hintText: "Department",
             dropDownMenu:
-                deparment.departments!
-                    .where((e) => e.isActive == true)
-                    .map((e) => e.departmentName ?? "")
-                    .toList(),
-            selectedItem: departmentController,
+                activeDepartments.map((e) => e.departmentName ?? "").toList(),
+            selectedItem: selectedDepartmentName,
             onChanged: (value) {
-              departmentController = value!;
+              setState(() {
+                selectedDepartmentName = value;
+                selectedDepartmentId =
+                    activeDepartments
+                        .firstWhere((dept) => dept.departmentName == value)
+                        .id;
+              });
             },
           ),
         ),
-        SizedBox(
-          width: 40.sp,
-          child: CustomBorderDropDownForm(
-            hintText: "Designation",
-            dropDownMenu:
-                designation.designations!
-                    .map((e) => e.designationName ?? "")
-                    .toList(),
-            selectedItem: designationController,
-            onChanged: (value) {
-              designationController = value!;
-            },
-          ),
-        ),
+        // SizedBox(
+        //   width: 40.sp,
+        //   child: CustomBorderDropDownForm(
+        //     hintText: "Designation",
+        //     dropDownMenu:
+        //         designation.designations!
+        //             .map((e) => e.designationName ?? "")
+        //             .toList(),
+        //     selectedItem: designationController,
+        //     onChanged: (value) {
+        //       designationController = value!;
+        //     },
+        //   ),
+        // ),
         SizedBox(
           width: 40.sp,
           child: CustomBorderDropDownForm(
@@ -350,14 +361,13 @@ class _AllEmployeeFilterState extends State<AllEmployeeFilter> {
             07.width,
             InkWell(
               onTap: () {
-                // widget.employeeBloc.add(
-                //   EmployeeDataEvent(
-                //     department: departmentController.value,
-                //     designation: designationController.value,
-                //     gender: genderController.value,
-                //     workShift: workShiftController.value,
-                //   ),
-                // );
+                widget.employeeBloc.add(
+                  EmployeeDataEvent(
+                    department: selectedDepartmentName,
+                    gender: genderController,
+                    workShift: workShiftController,
+                  ),
+                );
               },
               child: Container(
                 height: 18.sp,

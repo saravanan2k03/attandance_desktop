@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Features/EmployeeManagement/Models/employee_dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Models/employee_detail_reponse.dart';
@@ -13,6 +14,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
   EmployeeBloc() : super(EmployeeInitial()) {
     on<EmployeeDataEvent>(employeeevent);
     on<EmployeeDashboardEvent>(fetchEmployeeDetailhrData);
+    on<EmployeeDetail>(fetchEmployeeDetailData);
   }
 
   FutureOr<void> employeeevent(
@@ -25,9 +27,9 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
     try {
       final session = SessionManagerClass();
       var licenceKey = await session.getlicence();
-      List<SimpleEmployeeModel> employeeData = [];
+      // List<SimpleEmployeeModel> employeeData = [];
 
-      employeeData = await employeeRepo
+      await employeeRepo
           .getSimpleEmployeeList(
             licenseKey: licenceKey,
             department: event.department,
@@ -35,8 +37,8 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
             gender: event.gender,
             workShift: event.workShift,
           )
-          .whenComplete(() {
-            emit(EmployeeDataState(modelData: employeeData));
+          .then((value) {
+            emit(EmployeeDataState(modelData: value));
           });
     } catch (e) {
       emit(EmployeeError());
@@ -65,8 +67,13 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
     try {
       emit(EmployeehrDashboardLoading());
       final EmployeeRepo employeeRepo = EmployeeRepo();
+      final session = SessionManagerClass();
+      var licenceKey = await session.getlicence();
       await employeeRepo
-          .fetchEmployeeDashboard(employeeId: event.employeeId.toString())
+          .fetchEmployeeDashboard(
+            employeeId: event.employeeId.toString(),
+            licenceKey: licenceKey,
+          )
           .then((value) {
             emit(EmployeehrDashboardDatastate(modelData: value));
           });
