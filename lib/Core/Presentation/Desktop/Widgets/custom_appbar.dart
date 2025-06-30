@@ -4,6 +4,7 @@ import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/Auth/Presentation/Screens/auth.dart';
 import 'package:act/Features/Auth/Repository/auth_repo.dart';
+import 'package:act/main.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -38,10 +39,8 @@ class _CustomAppbarState extends State<CustomAppbar> {
                 onTap: () {
                   authRepo.logoutapi().whenComplete(() {
                     hiveServices.deleteallData().then((value) {
-                      Navigator.pushReplacement(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        MaterialPageRoute(builder: (context) => const Auth()),
+                      MyApp.navigatorKey.currentState?.pushReplacementNamed(
+                        '/login',
                       );
                     });
                   });

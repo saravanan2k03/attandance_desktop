@@ -34,12 +34,14 @@ class CustomBorderTextForm extends StatelessWidget {
   final bool? readOnly;
   final Function()? onTap;
   final String? initialValue;
+  final Function(String)? onChanged;
   const CustomBorderTextForm({
     super.key,
     this.title,
     this.readOnly,
     this.onTap,
     this.initialValue,
+    this.onChanged,
   });
 
   @override
@@ -54,6 +56,7 @@ class CustomBorderTextForm extends StatelessWidget {
         enable: true,
         readOnly: readOnly,
         onTap: onTap,
+        onChanged: onChanged,
       ),
     );
   }

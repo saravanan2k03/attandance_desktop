@@ -1,11 +1,10 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:act/Features/HrManagement/Models/payroll_list_model.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
-// import 'package:open_file/open_file.dart';
-// import 'package:permission_handler/permission_handler.dart';
+import 'package:open_file/open_file.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class PayrollPdfGenerator {
   static Future<void> generatePayrollPdf(PayrollListModel payrollData) async {
@@ -69,7 +68,7 @@ class PayrollPdfGenerator {
                 ),
                 pw.Text(
                   'Status: ${payrollData.status}',
-                  style: pw.TextStyle(fontSize: 12),
+                  style: const pw.TextStyle(fontSize: 12),
                 ),
               ],
             ),
@@ -78,11 +77,11 @@ class PayrollPdfGenerator {
               children: [
                 pw.Text(
                   'Generated: ${DateTime.now().toString().split('.')[0]}',
-                  style: pw.TextStyle(fontSize: 10),
+                  style: const pw.TextStyle(fontSize: 10),
                 ),
                 pw.Text(
                   'Total Records: ${payrollData.payrollRecords.length}',
-                  style: pw.TextStyle(fontSize: 10),
+                  style: const pw.TextStyle(fontSize: 10),
                 ),
               ],
             ),
@@ -129,15 +128,15 @@ class PayrollPdfGenerator {
             children: [
               _buildSummaryItem(
                 'Total Basic Salary',
-                '₹${totalBasicSalary.toStringAsFixed(2)}',
+                'Rs ${totalBasicSalary.toStringAsFixed(2)}',
               ),
               _buildSummaryItem(
                 'Total Net Salary',
-                '₹${totalNetSalary.toStringAsFixed(2)}',
+                'Rs ${totalNetSalary.toStringAsFixed(2)}',
               ),
               _buildSummaryItem(
                 'Total Overtime',
-                '₹${totalOvertimeSalary.toStringAsFixed(2)}',
+                'Rs ${totalOvertimeSalary.toStringAsFixed(2)}',
               ),
               _buildSummaryItem(
                 'Generated',
@@ -155,7 +154,7 @@ class PayrollPdfGenerator {
       children: [
         pw.Text(
           label,
-          style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
+          style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
         ),
         pw.Text(
           value,
@@ -211,13 +210,13 @@ class PayrollPdfGenerator {
                       _buildTableCell(record.department),
                       _buildTableCell(record.month),
                       _buildTableCell(
-                        '₹${record?.basicSalary.toStringAsFixed(0)}',
+                        'Rs ${record.basicSalary.toStringAsFixed(0)}',
                       ),
                       _buildTableCell(
                         '${record.presentDays.toStringAsFixed(1)}/${record.totalDays}',
                       ),
                       _buildTableCell(
-                        '₹${record.netSalary.toStringAsFixed(2)}',
+                        'Rs ${record.netSalary.toStringAsFixed(2)}',
                       ),
                       _buildTableCell(
                         record.payrollGenerated ? '✓' : '✗',
@@ -258,12 +257,12 @@ class PayrollPdfGenerator {
   static Future<void> _savePdf(pw.Document pdf, String fileName) async {
     try {
       // Request storage permission
-      // if (Platform.isAndroid) {
-      //   var status = await Permission.storage.status;
-      //   if (!status.isGranted) {
-      //     await Permission.storage.request();
-      //   }
-      // }
+      if (Platform.isAndroid) {
+        var status = await Permission.storage.status;
+        if (!status.isGranted) {
+          await Permission.storage.request();
+        }
+      }
 
       // Get directory path
       Directory? directory;
@@ -283,7 +282,7 @@ class PayrollPdfGenerator {
         print('PDF saved to: $path');
 
         // Open the PDF
-        // await OpenFile.open(path);
+        await OpenFile.open(path);
       }
     } catch (e) {
       print('Error saving PDF: $e');
@@ -347,7 +346,7 @@ class PayrollPdfGenerator {
                   ),
                   pw.Text(
                     'Month: ${employee.month}',
-                    style: pw.TextStyle(fontSize: 12),
+                    style: const pw.TextStyle(fontSize: 12),
                   ),
                 ],
               ),
@@ -356,11 +355,11 @@ class PayrollPdfGenerator {
                 children: [
                   pw.Text(
                     'Employee ID: ${employee.employeeId}',
-                    style: pw.TextStyle(fontSize: 12),
+                    style: const pw.TextStyle(fontSize: 12),
                   ),
                   pw.Text(
                     'Generated: ${DateTime.now().toString().split(' ')[0]}',
-                    style: pw.TextStyle(fontSize: 10),
+                    style: const pw.TextStyle(fontSize: 10),
                   ),
                 ],
               ),
@@ -388,12 +387,12 @@ class PayrollPdfGenerator {
 
           // Salary Details
           _buildPayslipSection('SALARY DETAILS', [
-            ['Basic Salary', '₹${employee.basicSalary.toStringAsFixed(2)}'],
+            ['Basic Salary', 'Rs ${employee.basicSalary.toStringAsFixed(2)}'],
             [
               'Overtime Salary',
-              '₹${employee.overtimeSalary.toStringAsFixed(2)}',
+              'Rs ${employee.overtimeSalary.toStringAsFixed(2)}',
             ],
-            ['Net Salary', '₹${employee.netSalary.toStringAsFixed(2)}'],
+            ['Net Salary', 'Rs ${employee.netSalary.toStringAsFixed(2)}'],
           ]),
 
           pw.Spacer(),
@@ -434,7 +433,10 @@ class PayrollPdfGenerator {
                         child: pw.Row(
                           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                           children: [
-                            pw.Text(row[0], style: pw.TextStyle(fontSize: 12)),
+                            pw.Text(
+                              row[0],
+                              style: const pw.TextStyle(fontSize: 12),
+                            ),
                             pw.Text(
                               row[1],
                               style: pw.TextStyle(

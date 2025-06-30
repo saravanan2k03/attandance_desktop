@@ -11,10 +11,14 @@ import 'package:sizer/sizer.dart';
 class AttendanceFilter extends StatefulWidget {
   final TextEditingController searchController;
   final AttendanceBloc attendanceBloc;
+  final String searchvalue;
+  final Function(String)? onChanged;
   const AttendanceFilter({
     super.key,
     required this.searchController,
     required this.attendanceBloc,
+    required this.searchvalue,
+    this.onChanged,
   });
 
   @override
@@ -24,6 +28,7 @@ class AttendanceFilter extends StatefulWidget {
 class _AttendanceFilterState extends State<AttendanceFilter> {
   final TextEditingController fromDateController = TextEditingController();
   final TextEditingController toDateController = TextEditingController();
+
   // Added controller for search
 
   // Separate variables for each dropdown
@@ -33,13 +38,30 @@ class _AttendanceFilterState extends State<AttendanceFilter> {
   final activeDepartments =
       deparment.departments!.where((e) => e.isActive == true).toList();
   int? selectedDepartmentId;
+
+  @override
+  void initState() {
+    if (widget.searchvalue.isEmpty) {
+      widget.attendanceBloc.add(AttendanceListEvent());
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 07.sp,
       runSpacing: 07.sp,
       children: [
-        SizedBox(width: 40.sp, child: CustomBorderTextForm(title: "Search")),
+        SizedBox(
+          width: 40.sp,
+          child: CustomTextFormField(
+            title: "Search",
+            initialValue: widget.searchvalue,
+            enable: true,
+            onChanged: widget.onChanged,
+          ),
+        ),
         SizedBox(
           width: 40.sp,
           child: CustomTextFormFieldwithcontroller(

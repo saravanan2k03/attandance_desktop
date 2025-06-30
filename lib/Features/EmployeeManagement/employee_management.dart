@@ -26,10 +26,11 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
   final EmployeeBloc employee = EmployeeBloc();
   @override
   void initState() {
-    // employee.add(EmployeeDataEvent());
+    employee.add(EmployeeDataEvent());
     super.initState();
   }
 
+  String? searchvalue;
   @override
   Widget build(BuildContext context) {
     List<DataRow> getEmployeeDataRows(
@@ -54,7 +55,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                     .contains(lowerSearch);
           }).toList();
 
-      return employeeData.map((employee) {
+      return filteredList.map((employee) {
         return DataRow(
           cells: [
             DataCell(Text(employee.fullName)),
@@ -87,7 +88,6 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
               InkWell(
                 onTap: () {
                   log(employee.id.toString());
-                  // employeeBloc.add(EmployeeDetail(employeeId: employee.id));
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -96,7 +96,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                     ),
                   );
                 },
-                child: Icon(Icons.edit),
+                child: Icon(Icons.info, color: Colors.black),
               ),
             ),
           ],
@@ -159,10 +159,16 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                               children: [
                                 AllEmployeeFilter(
                                   employeeBloc: employee,
+                                  searchvalue: searchvalue ?? "",
+                                  onChanged: (value) {
+                                    setState(() {
+                                      searchvalue = value;
+                                    });
+                                  },
                                 ).withPadding(padding: EdgeInsets.all(07.sp)),
                                 10.height,
                                 BlocConsumer<EmployeeBloc, EmployeeState>(
-                                  bloc: employee..add(EmployeeDataEvent()),
+                                  bloc: employee,
                                   listener: (context, state) {},
                                   builder: (context, state) {
                                     if (state is EmployeeDataState) {
@@ -181,7 +187,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                         ],
                                         dataRow: getEmployeeDataRows(
                                           state.modelData,
-                                          searchController.text,
+                                          searchvalue ?? "",
                                         ),
                                       );
                                     } else {
@@ -253,7 +259,14 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
 
 class AllEmployeeFilter extends StatefulWidget {
   final EmployeeBloc employeeBloc;
-  const AllEmployeeFilter({super.key, required this.employeeBloc});
+  final String searchvalue;
+  final Function(String)? onChanged;
+  const AllEmployeeFilter({
+    super.key,
+    required this.employeeBloc,
+    required this.searchvalue,
+    this.onChanged,
+  });
 
   @override
   State<AllEmployeeFilter> createState() => _AllEmployeeFilterState();
@@ -269,6 +282,14 @@ class _AllEmployeeFilterState extends State<AllEmployeeFilter> {
       deparment.departments!.where((e) => e.isActive == true).toList();
   int? selectedDepartmentId;
   @override
+  void initState() {
+    if (widget.searchvalue.isEmpty) {
+      widget.employeeBloc.add(EmployeeDataEvent());
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 07.sp,
@@ -276,9 +297,11 @@ class _AllEmployeeFilterState extends State<AllEmployeeFilter> {
       children: [
         SizedBox(
           width: 40.sp,
-          child: CustomTextFormFieldwithcontroller(
+          child: CustomTextFormField(
             title: "Search",
-            controller: searchController,
+            initialValue: widget.searchvalue,
+            enable: true,
+            onChanged: widget.onChanged,
           ),
         ),
         SizedBox(
@@ -341,12 +364,25 @@ class _AllEmployeeFilterState extends State<AllEmployeeFilter> {
           children: [
             InkWell(
               onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EmployeeManagement(),
-                  ),
-                );
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const EmployeeManagement(),
+                //   ),
+                // );
+                setState(() {
+                  selectedDepartmentId = null;
+                  selectedDepartmentName = null;
+                  workShiftController = null;
+                  genderController = null;
+                  widget.employeeBloc.add(
+                    EmployeeDataEvent(
+                      department: selectedDepartmentName,
+                      gender: genderController,
+                      workShift: workShiftController,
+                    ),
+                  );
+                });
               },
               child: Container(
                 height: 18.sp,

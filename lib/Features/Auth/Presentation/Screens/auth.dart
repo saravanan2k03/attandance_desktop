@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Data/Repository/core_repo.dart';
 import 'package:act/Core/Services/session_manager.dart';
@@ -99,24 +101,25 @@ class _AuthState extends State<Auth> {
                       context: context,
                       content: Text("Login Successfully!"),
                     );
-                    final session = SessionManagerClass();
-                    session.getusertype().then((value) {
-                      if (adminUserList.contains(value)) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Dashboard(),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Dashboard(),
-                          ),
-                        );
-                      }
-                    });
+                    var userType = state.userType;
+                    if (adminUserList.contains(userType)) {
+                      log(userType);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Dashboard(),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  LeaveRequestScreen(userId: state.userId),
+                        ),
+                      );
+                    }
                   }
                   if (state is LoginError) {
                     toasterService.displayErrorMotionToast(

@@ -63,6 +63,7 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
     null,
   );
   final TextEditingController addressController = TextEditingController();
+  // final TextEditingController addressController = TextEditingController();
   final EmployeeBloc employeeBloc = EmployeeBloc();
   @override
   void initState() {
@@ -152,7 +153,7 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
     designationController.value = employee.designationId.toString();
     workShiftController.value = employee.workshift;
     userTypeController.value = employee.userType;
-
+    log("department:${employee.departmentName.toString()}");
     // Set optional image URL (for profile preview)
     url = employee.profilePic;
 
@@ -246,6 +247,7 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
         mobNo: mobileNoController.text.trim(),
         joiningDate: joiningDateController.text.trim(),
         workStatus: 'true',
+        workshift: workShiftController.value ?? "Morning",
         basicSalary: basicSalaryController.text.trim(),
         gosiApplicable: gosiApplicable,
         departmentId: departmentController.value ?? '',
@@ -422,6 +424,8 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
                                                     workShiftController,
                                                 addressController:
                                                     addressController,
+                                                overTimeSalaryController:
+                                                    overTimeSalaryController,
                                               ),
                                               10.height,
                                               Row(
@@ -545,6 +549,8 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
                                                     workShiftController,
                                                 addressController:
                                                     addressController,
+                                                overTimeSalaryController:
+                                                    overTimeSalaryController,
                                               ),
                                               10.height,
                                               Row(

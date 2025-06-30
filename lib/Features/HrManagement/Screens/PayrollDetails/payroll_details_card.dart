@@ -6,17 +6,47 @@ import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/HrManagement/Bloc/bloc/payroll_bloc.dart';
 import 'package:act/Features/HrManagement/Models/payroll_list_model.dart';
 import 'package:act/Features/HrManagement/Screens/PayrollDetails/payroll_filter.dart';
+import 'package:act/Features/Report/payroll_genrater_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-class PayrollDetails extends StatelessWidget {
+class PayrollDetails extends StatefulWidget {
   const PayrollDetails({super.key});
 
   @override
+  State<PayrollDetails> createState() => _PayrollDetailsState();
+}
+
+class _PayrollDetailsState extends State<PayrollDetails> {
+  String? searchvalue;
+  @override
+  void initState() {
+    payrollBloc.add(PayrollListEvent());
+    super.initState();
+  }
+
+  final PayrollBloc payrollBloc = PayrollBloc();
+
+  @override
   Widget build(BuildContext context) {
-    List<DataRow> getPayrollTableRows(PayrollListModel model) {
-      return model.payrollRecords.map((payroll) {
+    List<DataRow> getPayrollTableRows(
+      PayrollListModel model, {
+      String? employeeNameFilter,
+    }) {
+      // filter if employeeNameFilter is provided and not empty
+      final filteredRecords =
+          (employeeNameFilter != null && employeeNameFilter.isNotEmpty)
+              ? model.payrollRecords
+                  .where(
+                    (payroll) => payroll.employeeName.toLowerCase().contains(
+                      employeeNameFilter.toLowerCase(),
+                    ),
+                  )
+                  .toList()
+              : model.payrollRecords;
+
+      return filteredRecords.map((payroll) {
         return DataRow(
           cells: [
             DataCell(Text(payroll.employeeId.toString())),
@@ -25,17 +55,24 @@ class PayrollDetails extends StatelessWidget {
             DataCell(Text(payroll.month)),
             DataCell(Text(payroll.netSalary.toStringAsFixed(2))),
             DataCell(Text(payroll.totalDays.toString())),
-            DataCell(Icon(Icons.edit, color: Colors.blue)),
+            // DataCell(Icon(Icons.edit, color: Colors.blue)),
           ],
         );
       }).toList();
     }
 
-    final PayrollBloc payrollBloc = PayrollBloc();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        payrollfilter(payrollBloc: payrollBloc),
+        payrollfilter(
+          payrollBloc: payrollBloc,
+          searchvalue: searchvalue ?? "",
+          onChanged: (value) {
+            setState(() {
+              searchvalue = value;
+            });
+          },
+        ),
         Expanded(
           child: Container(
             decoration: BoxDecoration(
@@ -43,7 +80,7 @@ class PayrollDetails extends StatelessWidget {
               borderRadius: BorderRadius.circular(05.sp),
             ),
             child: BlocConsumer<PayrollBloc, PayrollState>(
-              bloc: payrollBloc..add(PayrollListEvent()),
+              bloc: payrollBloc,
               listener: (context, state) {},
               builder: (context, state) {
                 if (state is PayrollDataState) {
@@ -57,9 +94,41 @@ class PayrollDetails extends StatelessWidget {
                           "Month",
                           "Net Salary",
                           "Total Days",
-                          "Action",
+                          // "Action",
                         ],
-                        dataRow: getPayrollTableRows(state.modelData),
+                        dataRow: getPayrollTableRows(
+                          state.modelData,
+                          employeeNameFilter: searchvalue,
+                        ),
+                      ),
+                      Center(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => PayrollPdfScreen(
+                                      payrollData: state.modelData,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 15.sp,
+                            width: 35.sp,
+                            decoration: BoxDecoration(
+                              color: Colors.amberAccent,
+                              borderRadius: BorderRadius.circular(07.sp),
+                            ),
+                            child: Center(
+                              child: AppText.small(
+                                "Payroll Generated",
+                                fontSize: 11.sp,
+                              ),
+                            ),
+                          ).withPadding(padding: EdgeInsets.all(07.sp)),
+                        ),
                       ),
                     ],
                   );

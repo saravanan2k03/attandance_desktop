@@ -1,21 +1,35 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
+import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
 import 'package:act/Features/HrManagement/Bloc/AttendanceBloc/attendance_bloc.dart';
 import 'package:act/Features/HrManagement/Models/attendance_list_model.dart';
 import 'package:act/Features/HrManagement/Screens/AttendanceDetails/attendance_filter.dart';
 import 'package:act/Features/HrManagement/Widgets/update_attendance_dialgue.dart';
+import 'package:act/Features/Report/attendance_generated_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-class AttendanceDetailsCard extends StatelessWidget {
+class AttendanceDetailsCard extends StatefulWidget {
   const AttendanceDetailsCard({super.key});
 
   @override
+  State<AttendanceDetailsCard> createState() => _AttendanceDetailsCardState();
+}
+
+class _AttendanceDetailsCardState extends State<AttendanceDetailsCard> {
+  @override
+  void initState() {
+    attendanceBloc.add(AttendanceListEvent());
+    super.initState();
+  }
+
+  final AttendanceBloc attendanceBloc = AttendanceBloc();
+  final TextEditingController searchController = TextEditingController();
+  String? searchvalue;
+  @override
   Widget build(BuildContext context) {
-    final AttendanceBloc attendanceBloc = AttendanceBloc();
-    final TextEditingController searchController = TextEditingController();
     List<DataRow> buildAttendanceDataRows(
       List<AttendanceRecord> records, {
       String? searchQuery,
@@ -45,7 +59,9 @@ class AttendanceDetailsCard extends StatelessWidget {
                   showUpdateAttendanceDialog(
                     context: context,
                     recordId: record.attendanceId,
-                    onSuccess: () {},
+                    onSuccess: () {
+                      attendanceBloc.add(AttendanceListEvent());
+                    },
                   );
                 },
                 child: Icon(Icons.edit, color: Colors.black),
@@ -62,6 +78,12 @@ class AttendanceDetailsCard extends StatelessWidget {
         AttendanceFilter(
           searchController: searchController,
           attendanceBloc: attendanceBloc,
+          searchvalue: searchvalue ?? "",
+          onChanged: (value) {
+            setState(() {
+              searchvalue = value;
+            });
+          },
         ),
         Expanded(
           child: Container(
@@ -70,7 +92,7 @@ class AttendanceDetailsCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(05.sp),
             ),
             child: BlocConsumer<AttendanceBloc, AttendanceState>(
-              bloc: attendanceBloc..add(AttendanceListEvent()),
+              bloc: attendanceBloc,
               listener: (context, state) {},
               builder: (context, state) {
                 if (state is AttendanceDataState) {
@@ -87,7 +109,37 @@ class AttendanceDetailsCard extends StatelessWidget {
                         ],
                         dataRow: buildAttendanceDataRows(
                           state.modelData.records,
-                          searchQuery: searchController.text,
+                          searchQuery: searchvalue,
+                        ),
+                      ),
+                      Center(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => AttendancePdfScreen(
+                                      attendanceData: state.modelData,
+                                      organizationName: "",
+                                    ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 15.sp,
+                            width: 35.sp,
+                            decoration: BoxDecoration(
+                              color: Colors.amberAccent,
+                              borderRadius: BorderRadius.circular(07.sp),
+                            ),
+                            child: Center(
+                              child: AppText.small(
+                                "Payroll Generated",
+                                fontSize: 11.sp,
+                              ),
+                            ),
+                          ).withPadding(padding: EdgeInsets.all(07.sp)),
                         ),
                       ),
                     ],

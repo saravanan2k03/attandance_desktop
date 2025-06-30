@@ -1,6 +1,5 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_dropdown.dart';
-import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
 import 'package:act/Features/HrManagement/Bloc/LeaveRequestResultBloc/leave_request_filter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:act/Core/Utils/app_text.dart';
@@ -10,10 +9,14 @@ import 'package:sizer/sizer.dart';
 class LeaveRequestActionFilter extends StatefulWidget {
   final TextEditingController searchController;
   final LeaveRequestFilterBloc leaveRequestFilterBloc;
+  final String searchvalue;
+  final Function(String)? onChanged;
   const LeaveRequestActionFilter({
     super.key,
     required this.searchController,
     required this.leaveRequestFilterBloc,
+    required this.searchvalue,
+    this.onChanged,
   });
 
   @override
@@ -35,7 +38,15 @@ class _LeaveRequestActionFilterState extends State<LeaveRequestActionFilter> {
       spacing: 07.sp,
       runSpacing: 07.sp,
       children: [
-        SizedBox(width: 40.sp, child: CustomBorderTextForm(title: "Search")),
+        SizedBox(
+          width: 40.sp,
+          child: CustomTextFormField(
+            title: "Search",
+            initialValue: widget.searchvalue,
+            enable: true,
+            onChanged: widget.onChanged,
+          ),
+        ),
         SizedBox(
           width: 40.sp,
           child: CustomTextFormFieldwithcontroller(

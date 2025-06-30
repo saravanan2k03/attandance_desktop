@@ -11,15 +11,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-class LeaveRequestAction extends StatelessWidget {
+class LeaveRequestAction extends StatefulWidget {
   const LeaveRequestAction({super.key});
 
   @override
+  State<LeaveRequestAction> createState() => _LeaveRequestActionState();
+}
+
+class _LeaveRequestActionState extends State<LeaveRequestAction> {
+  final LeaveRequestFilterBloc leaveRequestFilterBloc =
+      LeaveRequestFilterBloc();
+  @override
+  void initState() {
+    leaveRequestFilterBloc.add(LeaveRequestFilterDataEvent());
+    super.initState();
+  }
+
+  String? searchvalue;
+  @override
   Widget build(BuildContext context) {
-    final LeaveRequestFilterBloc leaveRequestFilterBloc =
-        LeaveRequestFilterBloc();
     final TextEditingController searchController = TextEditingController();
     final HrRepository hrRepo = HrRepository();
+
     List<DataRow> buildLeaveDataRows(
       List<LeaveRequest> leaveRequests, {
       String searchQuery = '',
@@ -51,14 +64,19 @@ class LeaveRequestAction extends StatelessWidget {
                                 required int leaveId,
                                 required String action,
                               }) async {
-                                await hrRepo.approveOrRejectLeave(
-                                  leaveId: leaveId,
-                                  action: action,
-                                );
+                                await hrRepo
+                                    .approveOrRejectLeave(
+                                      leaveId: leaveId,
+                                      action: action,
+                                    )
+                                    .then((value) {
+                                      leaveRequestFilterBloc.add(
+                                        LeaveRequestFilterDataEvent(),
+                                      );
+                                    });
                               },
                             ),
                       );
-                      leaveRequestFilterBloc.add(LeaveRequestFilterDataEvent());
                     },
                     child: Icon(Icons.edit, color: Colors.black),
                   ),
@@ -75,6 +93,12 @@ class LeaveRequestAction extends StatelessWidget {
         LeaveRequestActionFilter(
           searchController: searchController,
           leaveRequestFilterBloc: leaveRequestFilterBloc,
+          searchvalue: searchvalue ?? "",
+          onChanged: (value) {
+            setState(() {
+              searchvalue = value;
+            });
+          },
         ),
         Expanded(
           child: Container(
@@ -84,9 +108,7 @@ class LeaveRequestAction extends StatelessWidget {
             ),
             child:
                 BlocConsumer<LeaveRequestFilterBloc, LeaveRequestFilterState>(
-                  bloc:
-                      leaveRequestFilterBloc
-                        ..add(LeaveRequestFilterDataEvent()),
+                  bloc: leaveRequestFilterBloc,
                   listener: (context, state) {},
                   builder: (context, state) {
                     if (state is LeaveRequestFilterData) {
@@ -104,7 +126,7 @@ class LeaveRequestAction extends StatelessWidget {
                             ],
                             dataRow: buildLeaveDataRows(
                               state.modelData.leaveRequests,
-                              searchQuery: searchController.text,
+                              searchQuery: searchvalue ?? "",
                             ),
                           ),
                         ],

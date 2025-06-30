@@ -1,7 +1,6 @@
 import 'package:act/Core/Presentation/Desktop/Screens/custom_drawer.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_tabbar.dart';
-import 'package:act/Features/HrManagement/Constants/hr_management_constant.dart';
 import 'package:act/Features/HrManagement/Screens/AttendanceDetails/attendance_details_card.dart';
 import 'package:act/Features/HrManagement/Screens/LeaveRequestAction/leave_request_action.dart';
 import 'package:act/Features/HrManagement/Screens/PayrollDetails/payroll_details_card.dart';

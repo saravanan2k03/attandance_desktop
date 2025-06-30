@@ -8,6 +8,6 @@ bool employeeInformationvar = true;
 bool leaveRequestvar = true;
 File? pickedImage;
 bool gosiApplicable = false;
-List<Map<String, dynamic>> leaveData = [];
+List<Map<String, Object>> leaveData = [];
 TextEditingController searchController = TextEditingController();
 EmployeeBloc employeeBloc = EmployeeBloc();

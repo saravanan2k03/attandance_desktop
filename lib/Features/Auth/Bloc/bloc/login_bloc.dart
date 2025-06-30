@@ -31,7 +31,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       if (loginData.tokens != null && loginData.user != null) {
         setUserSessionFromLoginModel(loginData);
-        emit(LoginSuccessState());
+        emit(
+          LoginSuccessState(
+            loginData.user!.id ?? 0,
+            userType: loginData.user?.userType ?? "employee",
+          ),
+        );
       } else {
         emit(LoginError());
       }

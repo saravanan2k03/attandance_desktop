@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:act/Core/Services/api_network_services.dart';
 import 'package:act/Core/Utils/urls.dart';
@@ -130,8 +131,8 @@ class HrRepository {
     required String licenseKey,
     String? checkInTime,
     String? checkOutTime,
-    String? presentOne,
-    String? presentTwo,
+    bool? presentOne,
+    bool? presentTwo,
     String? workHours,
     String? overtimeHours,
     bool? isOvertime,
@@ -140,7 +141,8 @@ class HrRepository {
       "${ApiConstants.baseUrl}attendance/update/$attendanceId/",
     );
 
-    Map<String, String?> updatedData = {
+    // Prepare data map
+    Map<String, dynamic> updatedData = {
       "license_key": licenseKey,
       "check_in_time": checkInTime,
       "check_out_time": checkOutTime,
@@ -148,17 +150,23 @@ class HrRepository {
       "present_two": presentTwo,
       "work_hours": workHours,
       "overtime_hours": overtimeHours,
-      "is_overtime": isOvertime?.toString(), // convert bool to string
+      "is_overtime": isOvertime, // "true" or "false"
     };
 
-    // Remove null values
+    // Remove nulls so only sent fields are updated
     updatedData.removeWhere((key, value) => value == null);
 
-    return await patchApiData<BaseResponseModel>(
-      url,
-      updatedData,
-      BaseResponseModel.fromJson,
-    );
+    try {
+      final response = await patchApiData<BaseResponseModel>(
+        url,
+        updatedData,
+        BaseResponseModel.fromJson,
+      );
+      return response;
+    } catch (e, stack) {
+      log("Error updating attendance: $e", stackTrace: stack);
+      rethrow;
+    }
   }
 
   Future<BaseResponseModel> addOrUpdateEmployeeLeave({
@@ -233,7 +241,7 @@ class HrRepository {
   }) async {
     final url = Uri.parse("${ApiConstants.baseUrl}leaves/action/");
     final body = {"leave_id": leaveId, "action": action};
-
+    log("leave::${body.toString()}");
     return postApiData(url, body, BaseResponseModel.fromJson);
   }
 

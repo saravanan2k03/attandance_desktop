@@ -1,3 +1,5 @@
+import 'package:act/Core/Services/session_manager.dart';
+import 'package:act/Features/HrManagement/Repository/hr_repository.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showUpdateAttendanceDialog({
@@ -210,21 +212,49 @@ Future<void> showUpdateAttendanceDialog({
                               onPressed: () async {
                                 try {
                                   // Uncomment and use your API call
-                                  // await updateAttendanceRecord(
-                                  //   licenseKey: licenseKey,
-                                  //   employeeId: employeeId,
-                                  //   date: dateStr,
-                                  //   checkInTime: checkInTime != null ? _formatTimeOfDayToString(checkInTime!) : null,
-                                  //   checkOutTime: checkOutTime != null ? _formatTimeOfDayToString(checkOutTime!) : null,
-                                  //   workHours: workHoursController.text.trim().isEmpty ? null : workHoursController.text.trim(),
-                                  //   overtimeHours: overtimeHoursController.text.trim().isEmpty ? null : overtimeHoursController.text.trim(),
-                                  //   presentOne: presentOne,
-                                  //   presentTwo: presentTwo,
-                                  //   isOvertime: isOvertime,
-                                  // );
+                                  HrRepository repository = HrRepository();
+                                  final session = SessionManagerClass();
 
-                                  Navigator.pop(context);
-                                  onSuccess();
+                                  session.getlicence().then((value) async {
+                                    await repository
+                                        .updateAttendanceById(
+                                          licenseKey: value,
+                                          checkInTime:
+                                              checkInTime != null
+                                                  ? _formatTimeOfDayToString(
+                                                    checkInTime!,
+                                                  )
+                                                  : null,
+                                          checkOutTime:
+                                              checkOutTime != null
+                                                  ? _formatTimeOfDayToString(
+                                                    checkOutTime!,
+                                                  )
+                                                  : null,
+                                          workHours:
+                                              workHoursController.text
+                                                      .trim()
+                                                      .isEmpty
+                                                  ? null
+                                                  : workHoursController.text
+                                                      .trim(),
+                                          overtimeHours:
+                                              overtimeHoursController.text
+                                                      .trim()
+                                                      .isEmpty
+                                                  ? null
+                                                  : overtimeHoursController.text
+                                                      .trim(),
+                                          presentOne: presentOne,
+                                          presentTwo: presentTwo,
+                                          isOvertime: isOvertime,
+                                          attendanceId: recordId,
+                                        )
+                                        .whenComplete(() {
+                                          Navigator.pop(context);
+                                          onSuccess();
+                                        });
+                                  });
 
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

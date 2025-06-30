@@ -13,7 +13,12 @@ class LoginLoadingState extends LoginState {}
 
 class LoginError extends LoginState {}
 
-class LoginSuccessState extends LoginState {}
+class LoginSuccessState extends LoginState {
+  final String userType;
+  final int userId;
+
+  const LoginSuccessState(this.userId, {required this.userType});
+}
 
 class LogoutSucess extends LoginState {}
 

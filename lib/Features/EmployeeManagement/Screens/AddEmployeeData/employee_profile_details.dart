@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
@@ -15,13 +17,13 @@ class EmployeeProfileDetails extends StatefulWidget {
   final ValueNotifier<String?> departmentController;
   final ValueNotifier<String?> designationController;
   final TextEditingController basicSalaryController;
-  final TextEditingController overTimeSalaryController =
-      TextEditingController();
+  final TextEditingController overTimeSalaryController;
   final TextEditingController gosiDeductionController;
   final ValueNotifier<String?> workShiftController;
   final ValueNotifier<String?> userTypeController;
   final TextEditingController addressController;
   final TextEditingController fingerprintcode;
+
   EmployeeProfileDetails({
     super.key,
     required this.userNameController,
@@ -34,6 +36,7 @@ class EmployeeProfileDetails extends StatefulWidget {
     required this.userTypeController,
     required this.addressController,
     required this.fingerprintcode,
+    required this.overTimeSalaryController,
   });
 
   @override
@@ -49,6 +52,7 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
 
   @override
   void initState() {
+    log("workShift:${widget.workShiftController.toString()}");
     super.initState();
     // Initialize the designation if it was previously set
     if (widget.designationController.value != null) {
@@ -62,6 +66,18 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
       } catch (e) {
         print('Error initializing designation: $e');
       }
+    }
+  }
+
+  String? _getDepartmentName(String? id) {
+    if (id == null) return null;
+    try {
+      return activeDepartments
+          .firstWhere((dept) => dept.id?.toString() == id)
+          .departmentName;
+    } catch (e) {
+      debugPrint('Department not found for ID: $id');
+      return null;
     }
   }
 
@@ -104,18 +120,25 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                 child: CustomBorderDropDownForm(
                   hintText: "Department",
                   dropDownMenu:
-                      deparment.departments!
-                          .where((e) => e.isActive == true)
+                      activeDepartments
                           .map((e) => e.departmentName ?? "")
                           .toList(),
                   onChanged: (value) {
-                    widget.departmentController.value =
-                        activeDepartments
-                            .firstWhere((dept) => dept.departmentName == value)
-                            .id
-                            .toString();
+                    if (value != null) {
+                      try {
+                        final dept = activeDepartments.firstWhere(
+                          (dept) => dept.departmentName == value,
+                        );
+                        widget.departmentController.value = dept.id?.toString();
+                      } catch (e) {
+                        debugPrint('Error selecting department: $e');
+                        widget.departmentController.value = null;
+                      }
+                    }
                   },
-                  selectedItem: widget.departmentController.value,
+                  selectedItem: _getDepartmentName(
+                    widget.departmentController.value,
+                  ),
                 ),
               ),
               SizedBox(
@@ -193,9 +216,11 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                 width: 40.sp,
                 child: CustomBorderDropDownForm(
                   hintText: "User Type",
-                  dropDownMenu: ["Admin", "Employee", "Hr"],
+                  dropDownMenu: const ["Admin", "employee", "Hr"],
                   onChanged: (value) {
-                    widget.userTypeController.value = value!;
+                    if (value != null) {
+                      widget.userTypeController.value = value;
+                    }
                   },
                   selectedItem: widget.userTypeController.value,
                 ),
@@ -260,14 +285,17 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                             builder:
                                 (context) => AddLeaveDialog(
                                   leaveTypes:
-                                      designation.designations!
-                                          .map((e) => e.designationName ?? "")
+                                      leaveTypeListModel.leaveTypes!
+                                          .map((e) => e.leaveType ?? "")
                                           .toList(),
                                   onSubmit: (selectedLeave, count) {
+                                    print(selectedLeave + count.toString());
                                     setState(() {
                                       leaveData.add({
-                                        "leave_type": selectedLeave,
-                                        "leave_count": count,
+                                        "leave_type":
+                                            selectedLeave.toString() as Object,
+                                        "leave_count":
+                                            count.toString() as Object,
                                       });
                                     });
                                   },
@@ -297,7 +325,7 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                               return DataRow(
                                 cells: [
                                   DataCell(Text('${index + 1}')),
-                                  DataCell(Text(item['leave_type'])),
+                                  DataCell(Text(item['leave_type'] as String)),
                                   DataCell(Text('${item['leave_count']}')),
                                   DataCell(
                                     IconButton(
