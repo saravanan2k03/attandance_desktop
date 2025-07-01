@@ -38,7 +38,7 @@ class EmployeePersonalDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText.medium("Employee Personal Details", fontSize: 17),
+          AppText.medium("Employee Personal Details", fontSize: 11.sp),
           10.height,
           Wrap(
             spacing: 10.sp,

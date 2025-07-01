@@ -180,7 +180,7 @@ class _AuthState extends State<Auth> {
                                 child: AppText.medium(
                                   "Forgot Password",
                                   color: Colors.blue,
-                                  fontSize: 15,
+                                  fontSize: 11.sp,
                                 ).withPadding(
                                   padding: EdgeInsets.only(top: 05.sp),
                                 ),

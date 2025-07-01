@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Presentation/Desktop/Screens/custom_drawer.dart';
 import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
+import 'package:act/Core/Services/misc.dart';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
@@ -221,7 +222,7 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
     }
 
     if (errorMessage.isNotEmpty) {
-      log(errorMessage);
+      toasterService.displayWarningMotionToast(context, errorMessage);
       return false;
     }
     return true;
@@ -325,7 +326,7 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
                                 children: [
                                   AppText.small(
                                     "Employee Management",
-                                    fontSize: 18,
+                                    fontSize: 11.sp,
                                   ),
                                   07.sp.width,
                                   const Icon(
@@ -334,294 +335,330 @@ class _AddEmployeeDataState extends State<AddEmployeeData> {
                                     size: 15,
                                   ),
                                   07.sp.width,
-                                  AppText.small("Add Employee", fontSize: 18),
+                                  AppText.small(
+                                    "Add Employee",
+                                    fontSize: 11.sp,
+                                  ),
                                 ],
                               ),
-                              AppText.medium("Add Employee", fontSize: 18),
+                              AppText.medium("Add Employee", fontSize: 11.sp),
                               07.sp.width,
                             ],
                           ),
                         ),
                         15.height,
-                        Expanded(
-                          child: Container(
-                            height: calcSize(context).longestSide,
-                            width: calcSize(context).longestSide,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: BlocConsumer<EmployeeBloc, EmployeeState>(
-                              bloc: employeeBloc,
-                              listener: (context, state) {
-                                if (state is EmployeeDetailErrorState) {
-                                  toasterService.displayErrorMotionToast(
-                                    context: context,
-                                    content: Text(state.e),
-                                  );
-                                }
-                              },
-                              builder: (context, state) {
-                                if (state is EmployeeDetailLoadingState) {
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                                if (state is EmployeeDetailDataState) {
-                                  setEmployeeFormFieldsFromModel(
-                                    state.modelData.data,
-                                  );
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      10.height,
-                                      ProfileUpload(url: url),
-                                      15.height,
-                                      Expanded(
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              EmployeePersonalDetails(
-                                                dateOfBirthController:
-                                                    dateOfBirthController,
-                                                emailIdController:
-                                                    emailIdController,
-                                                firstNameController:
-                                                    firstNameController,
-                                                genderController:
-                                                    genderController,
-                                                iqamaNumberController:
-                                                    iqamaNumberController,
-                                                joiningDateController:
-                                                    joiningDateController,
-                                                lastNameController:
-                                                    lastNameController,
-                                                mobileNoController:
-                                                    mobileNoController,
-                                                nationalityController:
-                                                    nationalityController,
-                                              ),
-                                              10.height,
-                                              EmployeeProfileDetails(
-                                                fingerprintcode:
-                                                    fingerprintcode,
-                                                basicSalaryController:
-                                                    basicSalaryController,
-                                                departmentController:
-                                                    departmentController,
-                                                designationController:
-                                                    designationController,
-                                                gosiDeductionController:
-                                                    gosiDeductionController,
-                                                passwordController:
-                                                    passwordController,
-                                                userNameController:
-                                                    userNameController,
-                                                userTypeController:
-                                                    userTypeController,
-                                                workShiftController:
-                                                    workShiftController,
-                                                addressController:
-                                                    addressController,
-                                                overTimeSalaryController:
-                                                    overTimeSalaryController,
-                                              ),
-                                              10.height,
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        clearEmployeeFormFields();
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      height: 17.sp,
-                                                      width: 30.sp,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.red,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              07.sp,
-                                                            ),
-                                                      ),
-                                                      child: Center(
-                                                        child: AppText.small(
-                                                          "Clear",
-                                                          fontSize: 17,
-                                                        ),
-                                                      ),
+                        FutureBuilder(
+                          future: fetchDepartmentsAndDesignations(),
+                          builder: (context, asyncSnapshot) {
+                            if (asyncSnapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Expanded(
+                                child: Container(
+                                  height: calcSize(context).longestSide,
+                                  width: calcSize(context).longestSide,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: BlocConsumer<
+                                    EmployeeBloc,
+                                    EmployeeState
+                                  >(
+                                    bloc: employeeBloc,
+                                    listener: (context, state) {
+                                      if (state is EmployeeDetailErrorState) {
+                                        toasterService.displayErrorMotionToast(
+                                          context: context,
+                                          content: Text(state.e),
+                                        );
+                                      }
+                                    },
+                                    builder: (context, state) {
+                                      if (state is EmployeeDetailLoadingState) {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      if (state is EmployeeDetailDataState) {
+                                        setEmployeeFormFieldsFromModel(
+                                          state.modelData.data,
+                                        );
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            10.height,
+                                            ProfileUpload(url: url),
+                                            15.height,
+                                            Expanded(
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    EmployeePersonalDetails(
+                                                      dateOfBirthController:
+                                                          dateOfBirthController,
+                                                      emailIdController:
+                                                          emailIdController,
+                                                      firstNameController:
+                                                          firstNameController,
+                                                      genderController:
+                                                          genderController,
+                                                      iqamaNumberController:
+                                                          iqamaNumberController,
+                                                      joiningDateController:
+                                                          joiningDateController,
+                                                      lastNameController:
+                                                          lastNameController,
+                                                      mobileNoController:
+                                                          mobileNoController,
+                                                      nationalityController:
+                                                          nationalityController,
                                                     ),
-                                                  ),
-                                                  10.width,
-                                                  InkWell(
-                                                    onTap: () {
-                                                      submitEmployeeForm(
-                                                        employeeId:
-                                                            state
-                                                                .modelData
-                                                                .data
-                                                                .id
-                                                                .toString(),
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      height: 17.sp,
-                                                      width: 30.sp,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.amberAccent,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              07.sp,
-                                                            ),
-                                                      ),
-                                                      child: Center(
-                                                        child: AppText.small(
-                                                          "Submit",
-                                                          fontSize: 17,
-                                                        ),
-                                                      ),
+                                                    10.height,
+                                                    EmployeeProfileDetails(
+                                                      fingerprintcode:
+                                                          fingerprintcode,
+                                                      basicSalaryController:
+                                                          basicSalaryController,
+                                                      departmentController:
+                                                          departmentController,
+                                                      designationController:
+                                                          designationController,
+                                                      gosiDeductionController:
+                                                          gosiDeductionController,
+                                                      passwordController:
+                                                          passwordController,
+                                                      userNameController:
+                                                          userNameController,
+                                                      userTypeController:
+                                                          userTypeController,
+                                                      workShiftController:
+                                                          workShiftController,
+                                                      addressController:
+                                                          addressController,
+                                                      overTimeSalaryController:
+                                                          overTimeSalaryController,
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                } else {
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      10.height,
-                                      ProfileUpload(url: url),
-                                      15.height,
-                                      Expanded(
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              EmployeePersonalDetails(
-                                                dateOfBirthController:
-                                                    dateOfBirthController,
-                                                emailIdController:
-                                                    emailIdController,
-                                                firstNameController:
-                                                    firstNameController,
-                                                genderController:
-                                                    genderController,
-                                                iqamaNumberController:
-                                                    iqamaNumberController,
-                                                joiningDateController:
-                                                    joiningDateController,
-                                                lastNameController:
-                                                    lastNameController,
-                                                mobileNoController:
-                                                    mobileNoController,
-                                                nationalityController:
-                                                    nationalityController,
-                                              ),
-                                              10.height,
-                                              EmployeeProfileDetails(
-                                                fingerprintcode:
-                                                    fingerprintcode,
-                                                basicSalaryController:
-                                                    basicSalaryController,
-                                                departmentController:
-                                                    departmentController,
-                                                designationController:
-                                                    designationController,
-                                                gosiDeductionController:
-                                                    gosiDeductionController,
-                                                passwordController:
-                                                    passwordController,
-                                                userNameController:
-                                                    userNameController,
-                                                userTypeController:
-                                                    userTypeController,
-                                                workShiftController:
-                                                    workShiftController,
-                                                addressController:
-                                                    addressController,
-                                                overTimeSalaryController:
-                                                    overTimeSalaryController,
-                                              ),
-                                              10.height,
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder:
-                                                              (context) =>
-                                                                  const AddEmployeeData(),
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      height: 17.sp,
-                                                      width: 30.sp,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.red,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              07.sp,
+                                                    10.height,
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              clearEmployeeFormFields();
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            height: 17.sp,
+                                                            width: 30.sp,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                  color:
+                                                                      Colors
+                                                                          .red,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        07.sp,
+                                                                      ),
+                                                                ),
+                                                            child: Center(
+                                                              child:
+                                                                  AppText.small(
+                                                                    "Clear",
+                                                                    fontSize:
+                                                                        11.sp,
+                                                                  ),
                                                             ),
-                                                      ),
-                                                      child: Center(
-                                                        child: AppText.small(
-                                                          "Clear",
-                                                          fontSize: 17,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  10.width,
-                                                  InkWell(
-                                                    onTap: () {
-                                                      submitEmployeeForm();
-                                                    },
-                                                    child: Container(
-                                                      height: 17.sp,
-                                                      width: 30.sp,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.amberAccent,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              07.sp,
+                                                        10.width,
+                                                        InkWell(
+                                                          onTap: () {
+                                                            submitEmployeeForm(
+                                                              employeeId:
+                                                                  state
+                                                                      .modelData
+                                                                      .data
+                                                                      .id
+                                                                      .toString(),
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            height: 17.sp,
+                                                            width: 30.sp,
+                                                            decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors
+                                                                      .amberAccent,
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    07.sp,
+                                                                  ),
                                                             ),
-                                                      ),
-                                                      child: Center(
-                                                        child: AppText.small(
-                                                          "Submit",
-                                                          fontSize: 17,
+                                                            child: Center(
+                                                              child:
+                                                                  AppText.small(
+                                                                    "Submit",
+                                                                    fontSize:
+                                                                        11.sp,
+                                                                  ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }
-                              },
-                            ).withPadding(padding: EdgeInsets.all(10.sp)),
-                          ),
+                                            ),
+                                          ],
+                                        );
+                                      } else {
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            10.height,
+                                            ProfileUpload(url: url),
+                                            15.height,
+                                            Expanded(
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    EmployeePersonalDetails(
+                                                      dateOfBirthController:
+                                                          dateOfBirthController,
+                                                      emailIdController:
+                                                          emailIdController,
+                                                      firstNameController:
+                                                          firstNameController,
+                                                      genderController:
+                                                          genderController,
+                                                      iqamaNumberController:
+                                                          iqamaNumberController,
+                                                      joiningDateController:
+                                                          joiningDateController,
+                                                      lastNameController:
+                                                          lastNameController,
+                                                      mobileNoController:
+                                                          mobileNoController,
+                                                      nationalityController:
+                                                          nationalityController,
+                                                    ),
+                                                    10.height,
+                                                    EmployeeProfileDetails(
+                                                      fingerprintcode:
+                                                          fingerprintcode,
+                                                      basicSalaryController:
+                                                          basicSalaryController,
+                                                      departmentController:
+                                                          departmentController,
+                                                      designationController:
+                                                          designationController,
+                                                      gosiDeductionController:
+                                                          gosiDeductionController,
+                                                      passwordController:
+                                                          passwordController,
+                                                      userNameController:
+                                                          userNameController,
+                                                      userTypeController:
+                                                          userTypeController,
+                                                      workShiftController:
+                                                          workShiftController,
+                                                      addressController:
+                                                          addressController,
+                                                      overTimeSalaryController:
+                                                          overTimeSalaryController,
+                                                    ),
+                                                    10.height,
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        const AddEmployeeData(),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            height: 17.sp,
+                                                            width: 30.sp,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                  color:
+                                                                      Colors
+                                                                          .red,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        07.sp,
+                                                                      ),
+                                                                ),
+                                                            child: Center(
+                                                              child:
+                                                                  AppText.small(
+                                                                    "Clear",
+                                                                    fontSize:
+                                                                        11.sp,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        10.width,
+                                                        InkWell(
+                                                          onTap: () {
+                                                            submitEmployeeForm();
+                                                          },
+                                                          child: Container(
+                                                            height: 17.sp,
+                                                            width: 30.sp,
+                                                            decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors
+                                                                      .amberAccent,
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    07.sp,
+                                                                  ),
+                                                            ),
+                                                            child: Center(
+                                                              child:
+                                                                  AppText.small(
+                                                                    "Submit",
+                                                                    fontSize:
+                                                                        11.sp,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    },
+                                  ).withPadding(padding: EdgeInsets.all(10.sp)),
+                                ),
+                              );
+                            } else {
+                              return Expanded(
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ).withPadding(padding: EdgeInsets.all(10.sp)),

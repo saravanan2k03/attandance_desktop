@@ -76,7 +76,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                 children: [
                                   AppText.small(
                                     "Employee Management",
-                                    fontSize: 18,
+                                    fontSize: 11.sp,
                                   ),
                                   07.sp.width,
                                   const Icon(
@@ -87,11 +87,14 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                   07.sp.width,
                                   AppText.small(
                                     "Employee Details",
-                                    fontSize: 18,
+                                    fontSize: 11.sp,
                                   ),
                                 ],
                               ),
-                              AppText.medium("Employee Details", fontSize: 18),
+                              AppText.medium(
+                                "Employee Details",
+                                fontSize: 11.sp,
+                              ),
                               07.sp.width,
                             ],
                           ),

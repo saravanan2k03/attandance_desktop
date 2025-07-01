@@ -1,4 +1,5 @@
 import 'package:act/Core/Constants/constant.dart';
+import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Features/Configuration/Models/designation_list_model.dart';
 import 'package:act/Features/Configuration/Models/holiday_list_model.dart';
 import 'package:act/Features/Configuration/Models/leave_type_list_model.dart';
@@ -6,9 +7,11 @@ import 'package:act/Features/Configuration/Models/list_department_model.dart';
 import 'package:act/Features/Configuration/Repository/configuration_repo.dart';
 import 'package:flutter/foundation.dart';
 
-Future<void> fetchDepartmentsAndDesignations(String licenseKey) async {
+Future<void> fetchDepartmentsAndDesignations() async {
   final ConfigurationRepo configurationRepo = ConfigurationRepo();
   try {
+    final session = SessionManagerClass();
+    var licenseKey = await session.getlicence();
     // Fetch departments
     DepartmentListModel fetchedDepartments = await configurationRepo
         .listDeparmentApi(licenseKey);

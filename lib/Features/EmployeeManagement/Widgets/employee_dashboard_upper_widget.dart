@@ -45,7 +45,7 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                     children: [
                       AppText.small(
                         "Monthly Employee Attendance Overview",
-                        fontSize: 17,
+                        fontSize: 11.sp,
                       ),
                     ],
                   ),
@@ -80,7 +80,10 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                             backgroundColor: Color(0xff9dbdff),
                           ),
                           07.sp.width,
-                          AppText.small("Absent in This Month", fontSize: 16),
+                          AppText.small(
+                            "Absent in This Month",
+                            fontSize: 11.sp,
+                          ),
                         ],
                       ),
                       Row(
@@ -90,7 +93,10 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                             backgroundColor: Color(0xffffd09b),
                           ),
                           07.sp.width,
-                          AppText.small("Present in This Month", fontSize: 17),
+                          AppText.small(
+                            "Present in This Month",
+                            fontSize: 11.sp,
+                          ),
                         ],
                       ),
                       Row(
@@ -100,7 +106,7 @@ class EmployeeDashboardUpperWidget extends StatelessWidget {
                             backgroundColor: Color(0xfffd8b51),
                           ),
                           07.sp.width,
-                          AppText.small("Leaves Taken", fontSize: 17),
+                          AppText.small("Leaves Taken", fontSize: 11.sp),
                         ],
                       ),
                     ],

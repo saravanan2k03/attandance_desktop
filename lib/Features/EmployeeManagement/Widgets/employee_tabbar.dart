@@ -96,7 +96,7 @@ class TabbarCard extends StatelessWidget {
       ),
       child: AppText.small(
         label,
-        fontSize: 17,
+        fontSize: 11.sp,
       ).withPadding(padding: EdgeInsets.all(07.sp)),
     );
   }

@@ -90,7 +90,7 @@ class EmployeeDashboardLowerWidget extends StatelessWidget {
                 children: [
                   AppText.small(
                     "This Month's Attendance Log",
-                    fontSize: 17,
+                    fontSize: 11.sp,
                   ).withPadding(padding: EdgeInsets.all(07.sp)),
                   07.sp.height,
                   Expanded(

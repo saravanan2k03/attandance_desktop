@@ -130,7 +130,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                 children: [
                                   AppText.small(
                                     "Employee Management",
-                                    fontSize: 18,
+                                    fontSize: 11.sp,
                                   ),
                                   07.sp.width,
                                   const Icon(
@@ -139,10 +139,13 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                     size: 15,
                                   ),
                                   07.sp.width,
-                                  AppText.small("All Employee", fontSize: 18),
+                                  AppText.small(
+                                    "All Employee",
+                                    fontSize: 11.sp,
+                                  ),
                                 ],
                               ),
-                              AppText.medium("All Employee", fontSize: 18),
+                              AppText.medium("All Employee", fontSize: 11.sp),
                               07.sp.width,
                             ],
                           ),

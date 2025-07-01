@@ -164,7 +164,7 @@ class _DeviceInfoCardState extends State<DeviceInfoCard> {
                       borderRadius: BorderRadius.circular(07.sp),
                     ),
                     child: Center(
-                      child: AppText.small("Add Device", fontSize: 17),
+                      child: AppText.small("Add Device", fontSize: 11.sp),
                     ),
                   ),
                 ),

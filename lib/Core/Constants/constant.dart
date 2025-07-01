@@ -61,7 +61,7 @@ class CustomTextFormField extends StatelessWidget {
       onChanged: onChanged,
       readOnly: readOnly ?? false,
       decoration: InputDecoration(
-        label: AppText.small(title, fontSize: 17),
+        label: AppText.small(title, fontSize: 11.sp),
         enabledBorder: const OutlineInputBorder(),
         focusedBorder: const OutlineInputBorder(),
         errorBorder: const OutlineInputBorder(),

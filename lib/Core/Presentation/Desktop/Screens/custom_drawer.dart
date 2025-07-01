@@ -235,7 +235,7 @@ class DashboardCard extends StatelessWidget {
         color: isSelected ? Colors.blue : Colors.white,
         borderRadius: BorderRadius.circular(07.sp),
       ),
-      child: AppText.small(title, fontSize: 17),
+      child: AppText.small(title, fontSize: 11.sp),
     );
   }
 }

@@ -88,7 +88,7 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText.medium("Employee Profile Details", fontSize: 17),
+          AppText.medium("Employee Profile Details", fontSize: 11.sp),
           10.height,
           Wrap(
             spacing: 10.sp,
@@ -236,7 +236,7 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AppText.small("Gosi Applicable", fontSize: 17),
+                      AppText.small("Gosi Applicable", fontSize: 11.sp),
                       10.height,
                       Container(
                         height: 20.sp,
@@ -310,7 +310,7 @@ class _EmployeeProfileDetailsState extends State<EmployeeProfileDetails> {
                             borderRadius: BorderRadius.circular(07.sp),
                           ),
                           child: Center(
-                            child: AppText.small("ADD", fontSize: 17),
+                            child: AppText.small("ADD", fontSize: 11.sp),
                           ),
                         ),
                       ),
@@ -399,7 +399,7 @@ class _TabToggleWidgetState extends State<TabToggleWidget> {
               child: Center(
                 child: AppText.small(
                   "Applicable",
-                  fontSize: 17,
+                  fontSize: 11.sp,
                   color: selected == "Applicable" ? Colors.white : Colors.black,
                 ),
               ),
@@ -427,7 +427,7 @@ class _TabToggleWidgetState extends State<TabToggleWidget> {
               child: Center(
                 child: AppText.small(
                   "Not Applicable",
-                  fontSize: 17,
+                  fontSize: 11.sp,
                   color:
                       selected == "Not Applicable"
                           ? Colors.white

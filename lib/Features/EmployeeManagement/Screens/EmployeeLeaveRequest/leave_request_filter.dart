@@ -23,7 +23,7 @@ class LeaveRequestFilter extends StatelessWidget {
               child: Center(
                 child: AppText.small(
                   "Leave Request",
-                  fontSize: 18,
+                  fontSize: 11.sp,
                 ).withPadding(padding: EdgeInsets.all(10.sp)),
               ),
             ),
@@ -52,7 +52,7 @@ class LeaveRequestFilter extends StatelessWidget {
                   color: commonColor,
                   borderRadius: BorderRadius.circular(07.sp),
                 ),
-                child: Center(child: AppText.small("Search", fontSize: 17)),
+                child: Center(child: AppText.small("Search", fontSize: 11.sp)),
               ),
             ],
           ),

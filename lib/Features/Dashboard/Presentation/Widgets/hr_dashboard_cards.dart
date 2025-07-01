@@ -31,8 +31,8 @@ class HrDashboardCards extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AppText.small(aggregatedString, fontSize: 25),
-                AppText.large(aggregationCount, fontSize: 25),
+                AppText.small(aggregatedString, fontSize: 11.sp),
+                AppText.large(aggregationCount, fontSize: 11.sp),
               ],
             ),
           ),
@@ -49,7 +49,7 @@ class HrDashboardCards extends StatelessWidget {
                   Expanded(
                     child: AppText.small(
                       title,
-                      fontSize: 17,
+                      fontSize: 11.sp,
                       textOverflow: TextOverflow.ellipsis,
                     ),
                   ),

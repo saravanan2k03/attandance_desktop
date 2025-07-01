@@ -15,7 +15,7 @@ class FillingForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText.medium("Fill the Employee Name", fontSize: 18),
+          AppText.medium("Fill the Employee Name", fontSize: 11.sp),
           Wrap(
             spacing: 10.sp,
             children: const [

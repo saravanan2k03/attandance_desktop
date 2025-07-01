@@ -76,102 +76,104 @@ class ConfigurationSetting extends StatelessWidget {
                 populateConfigurationControllers(
                   configs.isNotEmpty ? configs.first : null,
                 );
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    10.height, // spacing
-                    CustomBorderDropDownForm(
-                      hintText: "Work shift",
-                      dropDownMenu: workShift,
-                      selectedItem: workshiftvar,
-                      onChanged: (value) {
-                        workshiftvar = value!;
-                        configurationBloc.add(
-                          ConfigurationSettingEventFetch(
-                            workshift: workshiftvar,
-                          ),
-                        );
-                      },
-                    ),
-                    10.height, // spacing
-                    CustomTextFormFieldwithcontroller(
-                      title: "Punch In Start Time",
-                      controller: punchInStartTimeController,
-                      readOnly: true,
-                      onTap: () async {
-                        final selectedTime = await selectTime(context);
-                        punchInStartTimeController.text = selectedTime;
-                      },
-                    ),
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      10.height, // spacing
+                      CustomBorderDropDownForm(
+                        hintText: "Work shift",
+                        dropDownMenu: workShift,
+                        selectedItem: workshiftvar,
+                        onChanged: (value) {
+                          workshiftvar = value!;
+                          configurationBloc.add(
+                            ConfigurationSettingEventFetch(
+                              workshift: workshiftvar,
+                            ),
+                          );
+                        },
+                      ),
+                      10.height, // spacing
+                      CustomTextFormFieldwithcontroller(
+                        title: "Punch In Start Time",
+                        controller: punchInStartTimeController,
+                        readOnly: true,
+                        onTap: () async {
+                          final selectedTime = await selectTime(context);
+                          punchInStartTimeController.text = selectedTime;
+                        },
+                      ),
 
-                    10.height,
+                      10.height,
 
-                    CustomTextFormFieldwithcontroller(
-                      title: "Punch In End Time",
-                      controller: punchInEndTimeController,
-                      readOnly: true,
-                      onTap: () async {
-                        final selectedTime = await selectTime(context);
-                        punchInEndTimeController.text = selectedTime;
-                      },
-                    ),
-                    10.height,
+                      CustomTextFormFieldwithcontroller(
+                        title: "Punch In End Time",
+                        controller: punchInEndTimeController,
+                        readOnly: true,
+                        onTap: () async {
+                          final selectedTime = await selectTime(context);
+                          punchInEndTimeController.text = selectedTime;
+                        },
+                      ),
+                      10.height,
 
-                    CustomTextFormFieldwithcontroller(
-                      title: "Punch In Start Late Time",
-                      controller: punchInStartLateTimeController,
-                      readOnly: true,
-                      onTap: () async {
-                        final selectedTime = await selectTime(context);
-                        punchInStartLateTimeController.text = selectedTime;
-                      },
-                    ),
-                    10.height,
+                      CustomTextFormFieldwithcontroller(
+                        title: "Punch In Start Late Time",
+                        controller: punchInStartLateTimeController,
+                        readOnly: true,
+                        onTap: () async {
+                          final selectedTime = await selectTime(context);
+                          punchInStartLateTimeController.text = selectedTime;
+                        },
+                      ),
+                      10.height,
 
-                    CustomTextFormFieldwithcontroller(
-                      title: "Punch In End Late Time",
-                      controller: punchInEndLateTime,
-                      readOnly: true,
-                      onTap: () async {
-                        final selectedTime = await selectTime(context);
-                        punchInEndLateTime.text = selectedTime;
-                      },
-                    ),
-                    10.height,
+                      CustomTextFormFieldwithcontroller(
+                        title: "Punch In End Late Time",
+                        controller: punchInEndLateTime,
+                        readOnly: true,
+                        onTap: () async {
+                          final selectedTime = await selectTime(context);
+                          punchInEndLateTime.text = selectedTime;
+                        },
+                      ),
+                      10.height,
 
-                    CustomTextFormFieldwithcontroller(
-                      title: "Punch Out Start Time",
-                      controller: punchOutStartTime,
-                      readOnly: true,
-                      onTap: () async {
-                        final selectedTime = await selectTime(context);
-                        punchOutStartTime.text = selectedTime;
-                      },
-                    ),
-                    10.height,
+                      CustomTextFormFieldwithcontroller(
+                        title: "Punch Out Start Time",
+                        controller: punchOutStartTime,
+                        readOnly: true,
+                        onTap: () async {
+                          final selectedTime = await selectTime(context);
+                          punchOutStartTime.text = selectedTime;
+                        },
+                      ),
+                      10.height,
 
-                    CustomTextFormFieldwithcontroller(
-                      title: "Punch Out End Time",
-                      controller: punchOutEndTime,
-                      readOnly: true,
-                      onTap: () async {
-                        final selectedTime = await selectTime(context);
-                        punchOutEndTime.text = selectedTime;
-                      },
-                    ),
-                    10.height,
+                      CustomTextFormFieldwithcontroller(
+                        title: "Punch Out End Time",
+                        controller: punchOutEndTime,
+                        readOnly: true,
+                        onTap: () async {
+                          final selectedTime = await selectTime(context);
+                          punchOutEndTime.text = selectedTime;
+                        },
+                      ),
+                      10.height,
 
-                    CustomTextFormFieldwithcontroller(
-                      title: "Over Time Working End Time",
-                      controller: overTimeWorkingEndTime,
-                      readOnly: true,
-                      onTap: () async {
-                        final selectedTime = await selectTime(context);
-                        overTimeWorkingEndTime.text = selectedTime;
-                      },
-                    ),
-                    10.height,
-                  ],
+                      CustomTextFormFieldwithcontroller(
+                        title: "Over Time Working End Time",
+                        controller: overTimeWorkingEndTime,
+                        readOnly: true,
+                        onTap: () async {
+                          final selectedTime = await selectTime(context);
+                          overTimeWorkingEndTime.text = selectedTime;
+                        },
+                      ),
+                      10.height,
+                    ],
+                  ),
                 );
               } else if (state is ConfigurationLoadingState) {
                 return Center(child: CircularProgressIndicator());
@@ -194,7 +196,7 @@ class ConfigurationSetting extends StatelessWidget {
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(07.sp),
                   ),
-                  child: Center(child: AppText.small("Reset", fontSize: 17)),
+                  child: Center(child: AppText.small("Reset", fontSize: 11.sp)),
                 ),
               ),
               07.width,
@@ -230,7 +232,9 @@ class ConfigurationSetting extends StatelessWidget {
                     color: Colors.amber,
                     borderRadius: BorderRadius.circular(07.sp),
                   ),
-                  child: Center(child: AppText.small("Submit", fontSize: 17)),
+                  child: Center(
+                    child: AppText.small("Submit", fontSize: 11.sp),
+                  ),
                 ),
               ),
             ],

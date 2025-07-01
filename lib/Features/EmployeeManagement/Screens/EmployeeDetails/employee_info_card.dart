@@ -43,12 +43,12 @@ class EmployeeInfoCard extends StatelessWidget {
                           AppText.small(
                             modelData.data.firstName,
                             textOverflow: TextOverflow.ellipsis,
-                            fontSize: 18,
+                            fontSize: 11.sp,
                           ),
                           AppText.small(
                             modelData.data.designationName,
                             textOverflow: TextOverflow.ellipsis,
-                            fontSize: 18,
+                            fontSize: 11.sp,
                           ),
                         ],
                       ),
@@ -63,7 +63,7 @@ class EmployeeInfoCard extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AppText.medium("Personal Info", fontSize: 18),
+                            AppText.medium("Personal Info", fontSize: 11.sp),
                             EmployeeBasicCards(
                               label: "Nationality",
                               data: modelData.data.nationality,
@@ -114,7 +114,7 @@ class EmployeeInfoCard extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AppText.medium("Contact Info", fontSize: 18),
+                            AppText.medium("Contact Info", fontSize: 11.sp),
                             EmployeeBasicCards(
                               label: "Mobile no",
                               data: modelData.data.mobNo,

@@ -35,7 +35,7 @@ class HrDashboardUpperWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText.small("Monthly Attendance Overview", fontSize: 17),
+                AppText.small("Monthly Attendance Overview", fontSize: 11.sp),
                 MonthlyAttendanceOverview(
                   monthlyAttendanceChart: monthlyAttendanceChart,
                 ),

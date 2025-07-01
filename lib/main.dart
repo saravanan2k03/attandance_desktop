@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
 
 import 'Core/Constants/constant.dart';
@@ -12,7 +13,6 @@ import 'Core/Services/observer.dart';
 import 'Core/Services/service_locator.dart';
 import 'Core/Services/session_manager.dart';
 import 'Core/Utils/Theme/theme.dart';
-import 'Features/Auth/Bloc/bloc/login_bloc.dart';
 import 'Features/Auth/Presentation/Screens/auth.dart';
 import 'Features/Dashboard/Presentation/dashboard.dart';
 import 'Features/EmployeeManagement/Screens/AddEmployeeData/new_leave_request.dart';
@@ -20,10 +20,9 @@ import 'Features/EmployeeManagement/Screens/AddEmployeeData/new_leave_request.da
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyGlobalObserver();
-
+  final appDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDir.path);
   await dotenv.load(fileName: "dotenv");
-
-  await Hive.initFlutter();
   setupServiceLocator();
 
   runApp(const MyApp());
@@ -45,7 +44,6 @@ class _MyAppState extends State<MyApp> {
     final licenseRepo = LicenseRepo();
     var licenseKey1 = await session.getlicence();
     await getuserType();
-    fetchDepartmentsAndDesignations(licenseKey1);
 
     try {
       final accessToken = await session.getAccessToken();
@@ -55,7 +53,6 @@ class _MyAppState extends State<MyApp> {
       final email = await session.getemail();
       final userType = await session.getusertype();
       final licenseKey = await session.getlicence();
-
       final allFieldsExist =
           accessToken.isNotEmpty &&
           refreshToken.isNotEmpty &&
@@ -72,6 +69,8 @@ class _MyAppState extends State<MyApp> {
       final licenseStatus = await licenseRepo.checkLicenseStatus(licenseKey);
       if (!licenseStatus.activated) {
         return Auth();
+      } else {
+        await fetchDepartmentsAndDesignations();
       }
 
       log(userType);
@@ -101,7 +100,10 @@ class _MyAppState extends State<MyApp> {
             future: getInitialScreen(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return Container(
+                  color: Colors.white,
+                  child: const Center(child: CircularProgressIndicator()),
+                );
               } else if (snapshot.hasData) {
                 return snapshot.data!;
               } else {

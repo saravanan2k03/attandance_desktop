@@ -37,12 +37,12 @@ class EmployeeBasicCards extends StatelessWidget {
               AppText.medium(
                 data,
                 textOverflow: TextOverflow.ellipsis,
-                fontSize: 15,
+                fontSize: 11.sp,
               ),
               AppText.small(
                 label,
                 textOverflow: TextOverflow.ellipsis,
-                fontSize: 17,
+                fontSize: 11.sp,
               ),
             ],
           ),

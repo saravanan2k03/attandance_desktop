@@ -71,7 +71,10 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                             children: [
                               Row(
                                 children: [
-                                  AppText.small("HR Management", fontSize: 18),
+                                  AppText.small(
+                                    "HR Management",
+                                    fontSize: 11.sp,
+                                  ),
                                   07.sp.width,
                                   const Icon(
                                     Icons.arrow_forward_ios_rounded,
@@ -81,13 +84,13 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                                   07.sp.width,
                                   AppText.small(
                                     "Attendance Details",
-                                    fontSize: 18,
+                                    fontSize: 11.sp,
                                   ),
                                 ],
                               ),
                               AppText.medium(
                                 "Attendance Details",
-                                fontSize: 18,
+                                fontSize: 11.sp,
                               ),
                               07.sp.width,
                             ],

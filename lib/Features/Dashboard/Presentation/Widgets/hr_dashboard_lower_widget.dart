@@ -104,7 +104,7 @@ class HrDashboardLowerWidget extends StatelessWidget {
               children: [
                 AppText.small(
                   "Employees on Leave Today",
-                  fontSize: 17,
+                  fontSize: 11.sp,
                 ).withPadding(padding: EdgeInsets.all(07.sp)),
                 Expanded(
                   child: Container(

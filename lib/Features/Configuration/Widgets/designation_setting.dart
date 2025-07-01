@@ -172,7 +172,7 @@ class DesignationSetting extends StatelessWidget {
                             borderRadius: BorderRadius.circular(07.sp),
                           ),
                           child: Center(
-                            child: AppText.small("Add", fontSize: 17),
+                            child: AppText.small("Add", fontSize: 11.sp),
                           ),
                         ),
                       ),

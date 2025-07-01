@@ -53,7 +53,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                     borderRadius: BorderRadius.circular(15.sp),
                   ),
                   child: Row(
-                    children: [AppText.small("Logout", fontSize: 17)],
+                    children: [AppText.small("Logout", fontSize: 11.sp)],
                   ).withPadding(padding: EdgeInsets.all(07.sp)),
                 ),
               ),
