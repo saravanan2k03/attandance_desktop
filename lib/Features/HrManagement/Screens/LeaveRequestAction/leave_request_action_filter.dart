@@ -1,6 +1,7 @@
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/custom_dropdown.dart';
 import 'package:act/Features/HrManagement/Bloc/LeaveRequestResultBloc/leave_request_filter_bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
@@ -118,10 +119,13 @@ class _LeaveRequestActionFilterState extends State<LeaveRequestActionFilter> {
             InkWell(
               onTap: () {
                 // Add your submit logic here
-                print("Search: ${widget.searchController.text}");
-                print("From: ${fromDateController.text}");
-                print("To: ${toDateController.text}");
-                print("Work Shift: $selectedleaveaction");
+                if (kDebugMode) {
+                  print("Search: ${widget.searchController.text}");
+                  print("From: ${fromDateController.text}");
+                  print("To: ${toDateController.text}");
+                  print("Work Shift: $selectedleaveaction");
+                }
+
                 widget.leaveRequestFilterBloc.add(
                   LeaveRequestFilterDataEvent(
                     startDate:

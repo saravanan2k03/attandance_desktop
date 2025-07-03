@@ -96,7 +96,7 @@ class EmployeeDashboardLowerWidget extends StatelessWidget {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration().withBorderRadius(
-                        color: commonColor,
+                        color: cardsColors,
                         borderRadius: BorderRadius.circular(07.sp),
                       ),
                       child: Column(

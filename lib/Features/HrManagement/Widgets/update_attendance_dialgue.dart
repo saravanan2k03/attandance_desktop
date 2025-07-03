@@ -251,6 +251,7 @@ Future<void> showUpdateAttendanceDialog({
                                           attendanceId: recordId,
                                         )
                                         .whenComplete(() {
+                                          // ignore: use_build_context_synchronously
                                           Navigator.pop(context);
                                           onSuccess();
                                         });

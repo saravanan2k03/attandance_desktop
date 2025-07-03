@@ -39,30 +39,30 @@ class _DeviceInfoCardState extends State<DeviceInfoCard> {
                     final HrRepository hrRepository = HrRepository();
                     final session = SessionManagerClass();
                     await session.getlicence().then((value) async {
-                      final result =
-                          await DeviceDialogHelper.showUpdateDeviceDialog(
-                            context,
-                            licenseKey: value,
-                            deviceId: device.id!,
-                            initialDeviceName: device.deviceName!,
-                            initialDeviceIp: device.deviceIp!,
-                            initialLastSyncInterval: device.lastSyncInterval,
-                            onSubmit: ({
-                              required String licenseKey,
-                              int? deviceId,
-                              required String deviceName,
-                              required String deviceIp,
-                              String? lastSyncInterval,
-                            }) {
-                              return hrRepository.addOrUpdateDevice(
-                                licenseKey: licenseKey,
-                                deviceId: deviceId,
-                                deviceName: deviceName,
-                                deviceIp: deviceIp,
-                                lastSyncInterval: lastSyncInterval,
-                              );
-                            },
+                      final _ = await DeviceDialogHelper.showUpdateDeviceDialog(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        licenseKey: value,
+                        deviceId: device.id!,
+                        initialDeviceName: device.deviceName!,
+                        initialDeviceIp: device.deviceIp!,
+                        initialLastSyncInterval: device.lastSyncInterval,
+                        onSubmit: ({
+                          required String licenseKey,
+                          int? deviceId,
+                          required String deviceName,
+                          required String deviceIp,
+                          String? lastSyncInterval,
+                        }) {
+                          return hrRepository.addOrUpdateDevice(
+                            licenseKey: licenseKey,
+                            deviceId: deviceId,
+                            deviceName: deviceName,
+                            deviceIp: deviceIp,
+                            lastSyncInterval: lastSyncInterval,
                           );
+                        },
+                      );
                     });
 
                     /// call bloc
@@ -134,26 +134,26 @@ class _DeviceInfoCardState extends State<DeviceInfoCard> {
                     final HrRepository hrRepository = HrRepository();
                     final session = SessionManagerClass();
                     await session.getlicence().then((value) async {
-                      final result =
-                          await DeviceDialogHelper.showAddDeviceDialog(
-                            context,
-                            licenseKey: value,
-                            onSubmit: ({
-                              required String licenseKey,
-                              int? deviceId,
-                              required String deviceName,
-                              required String deviceIp,
-                              String? lastSyncInterval,
-                            }) {
-                              return hrRepository.addOrUpdateDevice(
-                                licenseKey: licenseKey,
-                                deviceId: deviceId,
-                                deviceName: deviceName,
-                                deviceIp: deviceIp,
-                                lastSyncInterval: lastSyncInterval,
-                              );
-                            },
+                      final _ = await DeviceDialogHelper.showAddDeviceDialog(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        licenseKey: value,
+                        onSubmit: ({
+                          required String licenseKey,
+                          int? deviceId,
+                          required String deviceName,
+                          required String deviceIp,
+                          String? lastSyncInterval,
+                        }) {
+                          return hrRepository.addOrUpdateDevice(
+                            licenseKey: licenseKey,
+                            deviceId: deviceId,
+                            deviceName: deviceName,
+                            deviceIp: deviceIp,
+                            lastSyncInterval: lastSyncInterval,
                           );
+                        },
+                      );
                     });
                   },
                   child: Container(

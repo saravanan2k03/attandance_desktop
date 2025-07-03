@@ -6,10 +6,10 @@ class LeaveStatusDialog extends StatefulWidget {
   onSubmit;
 
   const LeaveStatusDialog({
-    Key? key,
+    super.key,
     required this.leaveId,
     required this.onSubmit,
-  }) : super(key: key);
+  });
 
   @override
   State<LeaveStatusDialog> createState() => _LeaveStatusDialogState();

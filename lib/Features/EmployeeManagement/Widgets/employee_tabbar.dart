@@ -1,86 +1,7 @@
-import 'package:act/Core/Constants/constant.dart';
-import 'package:act/Features/EmployeeManagement/Constant/employee_management.dart';
 import 'package:flutter/material.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:sizer/sizer.dart';
-
-class EmployeeTabbar extends StatefulWidget {
-  const EmployeeTabbar({super.key});
-
-  @override
-  State<EmployeeTabbar> createState() => _EmployeeTabbarState();
-}
-
-class _EmployeeTabbarState extends State<EmployeeTabbar> {
-  void changetabbar(
-    bool employeeDashboard,
-    bool employeeInformation,
-    bool leaveRequest,
-  ) {
-    employeeDashboardvar = employeeDashboard;
-    employeeInformationvar = employeeInformation;
-    leaveRequestvar = leaveRequest;
-  }
-
-  @override
-  void initState() {
-    employeeDashboardvar = true;
-    employeeInformationvar = false;
-    leaveRequestvar = false;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: cardsColors,
-            borderRadius: BorderRadius.circular(07.sp),
-          ),
-          child: Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    changetabbar(
-                      employeeDashboardvar = true,
-                      employeeInformationvar = false,
-                      leaveRequestvar = false,
-                    );
-                  });
-                },
-
-                child: TabbarCard(
-                  cardenable: employeeDashboardvar,
-                  label: "Employee Dashboard",
-                ),
-              ),
-
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    changetabbar(
-                      employeeDashboardvar = false,
-                      employeeInformationvar = false,
-                      leaveRequestvar = true,
-                    );
-                  });
-                },
-                child: TabbarCard(
-                  cardenable: leaveRequestvar,
-                  label: "Leave Request",
-                ),
-              ),
-            ],
-          ).withPadding(padding: EdgeInsets.all(07.sp)),
-        ).withPadding(padding: EdgeInsets.all(07.sp)),
-      ],
-    );
-  }
-}
 
 class TabbarCard extends StatelessWidget {
   final bool cardenable;
@@ -91,12 +12,13 @@ class TabbarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: cardenable ? commonColor : null,
+        color: cardenable ? Color(0xff2196f3) : null,
         borderRadius: BorderRadius.circular(07.sp),
       ),
       child: AppText.small(
         label,
         fontSize: 11.sp,
+        color: cardenable ? Colors.white : Colors.black,
       ).withPadding(padding: EdgeInsets.all(07.sp)),
     );
   }

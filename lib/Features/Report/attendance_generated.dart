@@ -1,6 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:act/Core/gen/assets.gen.dart';
 import 'package:act/Features/HrManagement/Models/attendance_list_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
@@ -8,12 +10,17 @@ import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AttendancePdfGenerator {
-  static Future<void> generateAttendanceReport(
+  Future<Uint8List> loadLogo() async {
+    final data = await rootBundle.load(Assets.images.hourlyDotLogocropped.path);
+    return data.buffer.asUint8List();
+  }
+
+  Future<void> generateAttendanceReport(
     AttendanceListModel attendanceData,
     String organizationName,
   ) async {
     final pdf = pw.Document();
-
+    final logoBytes = await loadLogo();
     // Add pages to PDF
     pdf.addPage(
       pw.MultiPage(
@@ -23,7 +30,7 @@ class AttendancePdfGenerator {
         build: (pw.Context context) {
           return [
             // Header
-            _buildHeader(attendanceData, organizationName),
+            _buildHeader(attendanceData, organizationName, logoBytes),
             pw.SizedBox(height: 15),
 
             // Summary Section
@@ -51,6 +58,7 @@ class AttendancePdfGenerator {
   static pw.Widget _buildHeader(
     AttendanceListModel attendanceData,
     String organizationName,
+    Uint8List bytes,
   ) {
     // Get date range from records
     String dateRange = '';
@@ -68,6 +76,8 @@ class AttendancePdfGenerator {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
+        pw.Image(pw.MemoryImage(bytes), width: 80, height: 100),
+        pw.SizedBox(height: 10),
         pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
@@ -256,7 +266,7 @@ class AttendancePdfGenerator {
                     ),
                   ],
                 );
-              }).toList(),
+              }),
             ],
           ),
         ],
@@ -331,7 +341,7 @@ class AttendancePdfGenerator {
             ...records.map((record) {
               bool isPresent =
                   record.presentOne == '1' || record.presentTwo == '1';
-              String status = isPresent ? '✓' : '✗';
+              String status = isPresent ? 'Yes' : 'No';
               PdfColor statusColor =
                   isPresent ? PdfColors.green : PdfColors.red;
 
@@ -352,7 +362,7 @@ class AttendancePdfGenerator {
                   _buildTableCell(status, color: statusColor),
                 ],
               );
-            }).toList(),
+            }),
           ],
         ),
       ],
@@ -381,12 +391,12 @@ class AttendancePdfGenerator {
   }
 
   // Individual Employee Attendance Sheet
-  static Future<void> generateEmployeeAttendanceSheet(
+  Future<void> generateEmployeeAttendanceSheet(
     List<AttendanceRecord> employeeRecords,
     String organizationName,
   ) async {
     if (employeeRecords.isEmpty) return;
-
+    final logoBytes = await loadLogo();
     final pdf = pw.Document();
     final employee = employeeRecords.first;
 
@@ -400,6 +410,7 @@ class AttendancePdfGenerator {
               employee,
               organizationName,
               employeeRecords.length,
+              logoBytes,
             ),
             pw.SizedBox(height: 20),
             _buildEmployeeStats(employeeRecords),
@@ -416,14 +427,17 @@ class AttendancePdfGenerator {
     );
   }
 
-  static pw.Widget _buildEmployeeSheetHeader(
+  pw.Widget _buildEmployeeSheetHeader(
     AttendanceRecord employee,
     String organizationName,
     int recordCount,
+    Uint8List bytes,
   ) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
+        pw.Image(pw.MemoryImage(bytes), width: 80, height: 100),
+        pw.SizedBox(height: 10),
         pw.Center(
           child: pw.Text(
             'INDIVIDUAL ATTENDANCE SHEET',
@@ -652,7 +666,7 @@ class AttendancePdfGenerator {
                   _buildTableCell(status, color: statusColor),
                 ],
               );
-            }).toList(),
+            }),
           ],
         ),
       ],
@@ -684,25 +698,27 @@ class AttendancePdfGenerator {
         // Save PDF
         await file.writeAsBytes(await pdf.save());
 
-        print('PDF saved to: $path');
+        if (kDebugMode) {
+          print('PDF saved to: $path');
+        }
 
         // Open the PDF
         await OpenFile.open(path);
       }
     } catch (e) {
-      print('Error saving PDF: $e');
       throw Exception('Failed to save PDF: $e');
     }
   }
 
   // Generate monthly attendance summary
-  static Future<void> generateMonthlyAttendanceSummary(
+  Future<void> generateMonthlyAttendanceSummary(
     AttendanceListModel attendanceData,
     String organizationName,
     String month,
     String year,
   ) async {
     final pdf = pw.Document();
+    final logoBytes = await loadLogo();
 
     // Group by employee
     Map<int, List<AttendanceRecord>> employeeGroups = {};
@@ -724,6 +740,7 @@ class AttendancePdfGenerator {
               month,
               year,
               employeeGroups.length,
+              logoBytes,
             ),
             pw.SizedBox(height: 20),
             _buildMonthlySummaryTable(employeeGroups),
@@ -738,15 +755,18 @@ class AttendancePdfGenerator {
     );
   }
 
-  static pw.Widget _buildMonthlySummaryHeader(
+  pw.Widget _buildMonthlySummaryHeader(
     String organizationName,
     String month,
     String year,
     int employeeCount,
+    Uint8List bytes,
   ) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
+        pw.Image(pw.MemoryImage(bytes), width: 80, height: 100),
+        pw.SizedBox(height: 10),
         pw.Center(
           child: pw.Text(
             'MONTHLY ATTENDANCE SUMMARY',
@@ -847,7 +867,7 @@ class AttendancePdfGenerator {
               _buildTableCell('${totalOTHours.toStringAsFixed(1)}h'),
             ],
           );
-        }).toList(),
+        }),
       ],
     );
   }

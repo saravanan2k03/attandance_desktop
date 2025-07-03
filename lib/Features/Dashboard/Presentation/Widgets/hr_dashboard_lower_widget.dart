@@ -110,7 +110,7 @@ class HrDashboardLowerWidget extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(07.sp),
-                      color: commonColor,
+                      // color: commonColor,
                     ),
                     child: Column(
                       children: [

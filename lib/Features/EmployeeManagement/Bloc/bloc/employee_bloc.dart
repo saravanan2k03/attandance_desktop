@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Features/EmployeeManagement/Models/employee_dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Models/employee_detail_reponse.dart';

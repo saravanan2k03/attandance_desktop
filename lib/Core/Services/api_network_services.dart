@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:act/Core/Services/hive_services.dart';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/urls.dart';
-import 'package:act/Features/Auth/Repository/auth_repo.dart';
 import 'package:act/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;

@@ -2,7 +2,6 @@ import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Services/hive_services.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
-import 'package:act/Features/Auth/Presentation/Screens/auth.dart';
 import 'package:act/Features/Auth/Repository/auth_repo.dart';
 import 'package:act/main.dart';
 import 'package:flutter/material.dart';

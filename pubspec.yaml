@@ -35,7 +35,7 @@ dependencies:
   crypto:
   equatable: ^2.0.5
   sizer: ^3.0.5
-  flutter_svg: ^2.0.10+1
+  flutter_svg:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   cached_network_image: ^3.4.1
@@ -93,8 +93,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    # - assets/images/
+    - assets/icons/
     - assets/lotties/
+    - assets/images/
     - dotenv
   #   - images/a_dot_ham.jpeg
 

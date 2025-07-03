@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'package:act/Core/gen/assets.gen.dart';
 import 'package:act/Features/HrManagement/Models/payroll_list_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
@@ -7,7 +10,14 @@ import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PayrollPdfGenerator {
-  static Future<void> generatePayrollPdf(PayrollListModel payrollData) async {
+  Future<Uint8List> loadLogo() async {
+    final data = await rootBundle.load(Assets.images.hourlyDotLogocropped.path);
+    return data.buffer.asUint8List();
+  }
+
+  Future<void> generatePayrollPdf(PayrollListModel payrollData) async {
+    final logoBytes = await loadLogo();
+
     final pdf = pw.Document();
 
     // Add pages to PDF
@@ -18,7 +28,7 @@ class PayrollPdfGenerator {
         build: (pw.Context context) {
           return [
             // Header
-            _buildHeader(payrollData),
+            _buildHeader(payrollData, logoBytes),
             pw.SizedBox(height: 20),
 
             // Summary Section
@@ -39,10 +49,12 @@ class PayrollPdfGenerator {
     );
   }
 
-  static pw.Widget _buildHeader(PayrollListModel payrollData) {
+  static pw.Widget _buildHeader(PayrollListModel payrollData, Uint8List bytes) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
+        pw.Image(pw.MemoryImage(bytes), width: 80, height: 100),
+        pw.SizedBox(height: 10),
         pw.Text(
           'PAYROLL REPORT',
           style: pw.TextStyle(
@@ -219,7 +231,7 @@ class PayrollPdfGenerator {
                         'Rs ${record.netSalary.toStringAsFixed(2)}',
                       ),
                       _buildTableCell(
-                        record.payrollGenerated ? '✓' : '✗',
+                        record.payrollGenerated ? 'Yes' : 'No',
                         color:
                             record.payrollGenerated
                                 ? PdfColors.green
@@ -228,6 +240,7 @@ class PayrollPdfGenerator {
                     ],
                   ),
                 )
+                // ignore: unnecessary_to_list_in_spreads
                 .toList(),
           ],
         ),
@@ -279,29 +292,34 @@ class PayrollPdfGenerator {
         // Save PDF
         await file.writeAsBytes(await pdf.save());
 
-        print('PDF saved to: $path');
+        if (kDebugMode) {
+          print('PDF saved to: $path');
+        }
 
         // Open the PDF
         await OpenFile.open(path);
       }
     } catch (e) {
-      print('Error saving PDF: $e');
+      if (kDebugMode) {
+        print('Error saving PDF: $e');
+      }
       throw Exception('Failed to save PDF: $e');
     }
   }
 
   // Alternative method to generate individual employee payslip
-  static Future<void> generateEmployeePayslip(
+  Future<void> generateEmployeePayslip(
     PayrollRecord employee,
     String organization,
   ) async {
     final pdf = pw.Document();
+    final logoBytes = await loadLogo();
 
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return _buildPayslipContent(employee, organization);
+          return _buildPayslipContent(employee, organization, logoBytes);
         },
       ),
     );
@@ -315,12 +333,15 @@ class PayrollPdfGenerator {
   static pw.Widget _buildPayslipContent(
     PayrollRecord employee,
     String organization,
+    Uint8List bytes,
   ) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(32),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
+          pw.Image(pw.MemoryImage(bytes), width: 80, height: 100),
+          pw.SizedBox(height: 10),
           // Payslip Header
           pw.Center(
             child: pw.Text(

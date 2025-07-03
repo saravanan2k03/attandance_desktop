@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/app_text.dart';
@@ -51,7 +53,7 @@ class _payrollfilterState extends State<payrollfilter> {
           width: 40.sp,
           child: CustomTextFormField(
             title: "Search",
-            initialValue: widget.searchvalue ?? "",
+            initialValue: widget.searchvalue,
             enable: true,
             onChanged: widget.onChanged,
           ),

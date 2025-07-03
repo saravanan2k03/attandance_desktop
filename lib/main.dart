@@ -1,7 +1,10 @@
 import 'dart:developer';
+import 'package:act/Core/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
@@ -42,7 +45,6 @@ class _MyAppState extends State<MyApp> {
   Future<Widget> getInitialScreen() async {
     final session = SessionManagerClass();
     final licenseRepo = LicenseRepo();
-    var licenseKey1 = await session.getlicence();
     await getuserType();
 
     try {
@@ -100,10 +102,7 @@ class _MyAppState extends State<MyApp> {
             future: getInitialScreen(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  color: Colors.white,
-                  child: const Center(child: CircularProgressIndicator()),
-                );
+                return SplashScreen();
               } else if (snapshot.hasData) {
                 return snapshot.data!;
               } else {
@@ -113,6 +112,18 @@ class _MyAppState extends State<MyApp> {
           ),
         );
       },
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Center(child: SvgPicture.asset(Assets.icons.hourlyDotSplashIcon)),
     );
   }
 }

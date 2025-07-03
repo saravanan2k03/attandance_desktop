@@ -5,7 +5,6 @@ import 'package:act/Core/Presentation/Desktop/Widgets/custom_appbar.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/EmployeeManagement/Bloc/bloc/employee_bloc.dart';
-import 'package:act/Features/EmployeeManagement/Constant/employee_management.dart';
 import 'package:act/Features/EmployeeManagement/Models/simple_employee_list.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/add_employee_data.dart';
 import 'package:act/Features/EmployeeManagement/Screens/EmployeeDetails/employee_details.dart';

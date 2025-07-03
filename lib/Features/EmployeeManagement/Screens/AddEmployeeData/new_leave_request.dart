@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously, deprecated_member_use
+
 import 'package:act/Core/Services/hive_services.dart';
 import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Features/Auth/Repository/auth_repo.dart';
@@ -5,6 +7,7 @@ import 'package:act/Features/EmployeeManagement/Models/employee_leave_detail_mod
 import 'package:act/Features/EmployeeManagement/Repository/employee_repo.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/my_leave_request_ui.dart';
 import 'package:act/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LeaveType {
@@ -81,7 +84,9 @@ class _LeaveRequestScreenState extends State<LeaveRequestScreen>
           )
           .whenComplete(() {});
     } catch (e) {
-      print("❌ Exception: $e");
+      if (kDebugMode) {
+        print("❌ Exception: $e");
+      }
     }
   }
 
@@ -148,6 +153,7 @@ class RequestLeaveForm extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _RequestLeaveFormState createState() => _RequestLeaveFormState();
 }
 

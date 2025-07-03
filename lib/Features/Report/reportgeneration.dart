@@ -1,14 +1,20 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:act/Core/gen/assets.gen.dart';
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
 
 class EmployeeReportGenerator {
-  static Future<File> generateEmployeeReport(Map<String, dynamic> data) async {
-    final pdf = pw.Document();
+  Future<Uint8List> loadLogo() async {
+    final data = await rootBundle.load(Assets.images.hourlyDotLogocropped.path);
+    return data.buffer.asUint8List();
+  }
 
+  Future<File> generateEmployeeReport(Map<String, dynamic> data) async {
+    final pdf = pw.Document();
+    final logoBytes = await loadLogo();
     // Extract data from JSON
     final attendanceReports = data['attendance_reports'] as List<dynamic>;
     final salarySheets = data['salary_sheets'] as List<dynamic>;
@@ -27,7 +33,7 @@ class EmployeeReportGenerator {
         margin: const pw.EdgeInsets.all(40),
         build: (pw.Context context) {
           return [
-            _buildMinimalistHeader(employeeName),
+            _buildMinimalistHeader(employeeName, logoBytes),
             pw.SizedBox(height: 40),
 
             _buildAttendanceCard(attendanceReports),
@@ -57,10 +63,14 @@ class EmployeeReportGenerator {
     return file;
   }
 
-  static pw.Widget _buildMinimalistHeader(String employeeName) {
+  static pw.Widget _buildMinimalistHeader(
+    String employeeName,
+    Uint8List bytes,
+  ) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
+        pw.Image(pw.MemoryImage(bytes), width: 80, height: 100),
         pw.Text(
           'Employee Report',
           style: pw.TextStyle(
@@ -415,7 +425,7 @@ class EmployeeReportGenerator {
         ),
         pw.SizedBox(height: 4),
         pw.Text(
-          '${isNegative ? '-' : ''}\$${value}',
+          '${isNegative ? '-' : ''}\$$value',
           style: pw.TextStyle(
             fontSize: 14,
             fontWeight: pw.FontWeight.normal,
@@ -492,75 +502,75 @@ class EmployeeReportGenerator {
 }
 
 // Usage example
-class EmployeeReportService {
-  static Future<void> generateAndSaveReport(
-    Map<String, dynamic> jsonData,
-  ) async {
-    try {
-      final file = await EmployeeReportGenerator.generateEmployeeReport(
-        jsonData,
-      );
-      debugPrint(' Beautiful PDF generated at: ${file.path}');
+// class EmployeeReportService {
+//   static Future<void> generateAndSaveReport(
+//     Map<String, dynamic> jsonData,
+//   ) async {
+//     try {
+//       final file = await EmployeeReportGenerator.generateEmployeeReport(
+//         jsonData,
+//       );
+//       debugPrint(' Beautiful PDF generated at: ${file.path}');
 
-      // You can also share or open the PDF file here
-      // For example, using the share_plus package:
-      // await Share.shareXFiles([XFile(file.path)]);
-    } catch (e) {
-      debugPrint(' Error generating PDF: $e');
-    }
-  }
-}
+//       // You can also share or open the PDF file here
+//       // For example, using the share_plus package:
+//       // await Share.shareXFiles([XFile(file.path)]);
+//     } catch (e) {
+//       debugPrint(' Error generating PDF: $e');
+//     }
+//   }
+// }
 
 // Sample usage in your widget
 
-void generateBeautifulReport() async {
-  final jsonData = {
-    "attendance_reports": [
-      {
-        "employee_id__full_name": "John Doe",
-        "date": "2025-06-25",
-        "present_one": "Present",
-        "present_two": "Present",
-        "check_in_time": "09:00:00",
-        "check_out_time": "18:00:00",
-        "work_hours": 8.0,
-        "is_overtime": false,
-        "overtime_hours": 0,
-      },
-    ],
-    "salary_sheets": [
-      {
-        "employee_id__full_name": "John Doe",
-        "month": "2025-06-01",
-        "basic_salary": 3000.0,
-        "allowance": 500.0,
-        "deduction": 200.0,
-        "net_salary": 3300.0,
-        "present_days": 26,
-        "absent_days": 2,
-        "over_time_salary": 150.0,
-      },
-    ],
-    "leave_summary": [
-      {
-        "employee_id__full_name": "John Doe",
-        "leave_type__leave_type": "SICK",
-        "start_date": "2025-06-15",
-        "end_date": "2025-06-17",
-        "leave_days": 3,
-        "status": "Approved",
-        "remarks": "Flu",
-      },
-    ],
-    "gosi_summary": [
-      {
-        "full_name": "John Doe",
-        "iqama_number": "123456789",
-        "basic_salary": 3000.0,
-        "gosi_deduction_amount": 270.0,
-      },
-    ],
-  };
+// void generateBeautifulReport() async {
+//   final jsonData = {
+//     "attendance_reports": [
+//       {
+//         "employee_id__full_name": "John Doe",
+//         "date": "2025-06-25",
+//         "present_one": "Present",
+//         "present_two": "Present",
+//         "check_in_time": "09:00:00",
+//         "check_out_time": "18:00:00",
+//         "work_hours": 8.0,
+//         "is_overtime": false,
+//         "overtime_hours": 0,
+//       },
+//     ],
+//     "salary_sheets": [
+//       {
+//         "employee_id__full_name": "John Doe",
+//         "month": "2025-06-01",
+//         "basic_salary": 3000.0,
+//         "allowance": 500.0,
+//         "deduction": 200.0,
+//         "net_salary": 3300.0,
+//         "present_days": 26,
+//         "absent_days": 2,
+//         "over_time_salary": 150.0,
+//       },
+//     ],
+//     "leave_summary": [
+//       {
+//         "employee_id__full_name": "John Doe",
+//         "leave_type__leave_type": "SICK",
+//         "start_date": "2025-06-15",
+//         "end_date": "2025-06-17",
+//         "leave_days": 3,
+//         "status": "Approved",
+//         "remarks": "Flu",
+//       },
+//     ],
+//     "gosi_summary": [
+//       {
+//         "full_name": "John Doe",
+//         "iqama_number": "123456789",
+//         "basic_salary": 3000.0,
+//         "gosi_deduction_amount": 270.0,
+//       },
+//     ],
+//   };
 
-  await EmployeeReportService.generateAndSaveReport(jsonData);
-}
+//   await EmployeeReportService.generateAndSaveReport(jsonData);
+// }

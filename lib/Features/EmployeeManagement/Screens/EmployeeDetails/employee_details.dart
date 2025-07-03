@@ -121,62 +121,44 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                   ),
                                   child: Column(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: cardsColors,
-                                              borderRadius:
-                                                  BorderRadius.circular(07.sp),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      changetabbar(
-                                                        employeeDashboardvar =
-                                                            true,
-                                                        employeeInformationvar =
-                                                            false,
-                                                        leaveRequestvar = false,
-                                                      );
-                                                    });
-                                                  },
+                                      // Row(
+                                      //   children: [
+                                      //     Container(
+                                      //       decoration: BoxDecoration(
+                                      //         color: cardsColors,
+                                      //         borderRadius:
+                                      //             BorderRadius.circular(07.sp),
+                                      //       ),
+                                      //       child: Row(
+                                      //         children: [
+                                      //           InkWell(
+                                      //             onTap: () {
+                                      //               setState(() {
+                                      //                 changetabbar(
+                                      //                   employeeDashboardvar =
+                                      //                       true,
+                                      //                   employeeInformationvar =
+                                      //                       false,
+                                      //                   leaveRequestvar = false,
+                                      //                 );
+                                      //               });
+                                      //             },
 
-                                                  child: TabbarCard(
-                                                    cardenable:
-                                                        employeeDashboardvar,
-                                                    label: "Employee Dashboard",
-                                                  ),
-                                                ),
-
-                                                // InkWell(
-                                                //   onTap: () {
-                                                //     setState(() {
-                                                //       changetabbar(
-                                                //         employeeDashboardvar =
-                                                //             false,
-                                                //         employeeInformationvar =
-                                                //             false,
-                                                //         leaveRequestvar = true,
-                                                //       );
-                                                //     });
-                                                //   },
-                                                //   child: TabbarCard(
-                                                //     cardenable: leaveRequestvar,
-                                                //     label: "Leave Request",
-                                                //   ),
-                                                // ),
-                                              ],
-                                            ).withPadding(
-                                              padding: EdgeInsets.all(07.sp),
-                                            ),
-                                          ).withPadding(
-                                            padding: EdgeInsets.all(07.sp),
-                                          ),
-                                        ],
-                                      ),
+                                      //             child: TabbarCard(
+                                      //               cardenable:
+                                      //                   employeeDashboardvar,
+                                      //               label: "Employee Dashboard",
+                                      //             ),
+                                      //           ),
+                                      //         ],
+                                      //       ).withPadding(
+                                      //         padding: EdgeInsets.all(07.sp),
+                                      //       ),
+                                      //     ).withPadding(
+                                      //       padding: EdgeInsets.all(07.sp),
+                                      //     ),
+                                      //   ],
+                                      // ),
                                       Visibility(
                                         visible: true,
                                         child: Expanded(
@@ -239,6 +221,13 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                                 return Center(
                                                   child:
                                                       CircularProgressIndicator(),
+                                                );
+                                              } else if (state
+                                                  is EmployeeDetailErrorState) {
+                                                return Center(
+                                                  child: AppText.small(
+                                                    "Something Went Wrong!",
+                                                  ),
                                                 );
                                               } else {
                                                 return Center(

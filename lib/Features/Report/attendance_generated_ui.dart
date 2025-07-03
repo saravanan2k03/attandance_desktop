@@ -15,6 +15,7 @@ class AttendancePdfScreen extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _AttendancePdfScreenState createState() => _AttendancePdfScreenState();
 }
 
@@ -269,7 +270,7 @@ class _AttendancePdfScreenState extends State<AttendancePdfScreen>
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -295,7 +296,7 @@ class _AttendancePdfScreenState extends State<AttendancePdfScreen>
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            ...recentRecords.map((record) => _buildRecordTile(record)).toList(),
+            ...recentRecords.map((record) => _buildRecordTile(record)),
           ],
         ),
       ),
@@ -348,7 +349,7 @@ class _AttendancePdfScreenState extends State<AttendancePdfScreen>
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                record.workHours + 'h',
+                '${record.workHours}h',
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               if (record.isOvertime)
@@ -401,8 +402,7 @@ class _AttendancePdfScreenState extends State<AttendancePdfScreen>
                             'All',
                             ...widget.attendanceData.records
                                 .map((r) => r.department)
-                                .toSet()
-                                .toList(),
+                                .toSet(),
                           ]
                           .map(
                             (dept) => DropdownMenuItem(
@@ -749,7 +749,8 @@ class _AttendancePdfScreenState extends State<AttendancePdfScreen>
     });
 
     try {
-      await AttendancePdfGenerator.generateAttendanceReport(
+      final generator = AttendancePdfGenerator();
+      await generator.generateAttendanceReport(
         widget.attendanceData,
         widget.organizationName,
       );
@@ -775,7 +776,8 @@ class _AttendancePdfScreenState extends State<AttendancePdfScreen>
     });
 
     try {
-      await AttendancePdfGenerator.generateMonthlyAttendanceSummary(
+      final generator = AttendancePdfGenerator();
+      await generator.generateMonthlyAttendanceSummary(
         widget.attendanceData,
         widget.organizationName,
         selectedMonth,
@@ -794,7 +796,8 @@ class _AttendancePdfScreenState extends State<AttendancePdfScreen>
 
   Future<void> _generateEmployeePdf(List<AttendanceRecord> records) async {
     try {
-      await AttendancePdfGenerator.generateEmployeeAttendanceSheet(
+      final generator = AttendancePdfGenerator();
+      await generator.generateEmployeeAttendanceSheet(
         records,
         widget.organizationName,
       );

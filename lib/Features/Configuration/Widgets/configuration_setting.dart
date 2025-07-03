@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
+// ignore: must_be_immutable
 class ConfigurationSetting extends StatelessWidget {
   ConfigurationSetting({
     super.key,
@@ -28,7 +29,7 @@ class ConfigurationSetting extends StatelessWidget {
   final TextEditingController punchOutStartTime;
   final TextEditingController punchOutEndTime;
   final TextEditingController overTimeWorkingEndTime;
-  var workshiftvar;
+  String? workshiftvar;
   void populateConfigurationControllers(Configurations? config) {
     punchInStartTimeController.text = config?.punchInStartTime ?? '';
     punchInEndTimeController.text = config?.punchInEndTime ?? '';
@@ -206,7 +207,7 @@ class ConfigurationSetting extends StatelessWidget {
                     configurationRepo
                         .addOrUpdateConfig(
                           licenseKey: globallicenseKey,
-                          workshift: workshiftvar,
+                          workshift: workshiftvar ?? "",
                           punchInStartTime: punchInStartTimeController.text,
                           punchInEndTime: punchInEndTimeController.text,
                           punchInStartLateTime:

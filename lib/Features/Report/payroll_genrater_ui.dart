@@ -8,6 +8,7 @@ class PayrollPdfScreen extends StatefulWidget {
   const PayrollPdfScreen({super.key, required this.payrollData});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PayrollPdfScreenState createState() => _PayrollPdfScreenState();
 }
 
@@ -181,7 +182,8 @@ class _PayrollPdfScreenState extends State<PayrollPdfScreen> {
     });
 
     try {
-      await PayrollPdfGenerator.generatePayrollPdf(widget.payrollData);
+      final generator = PayrollPdfGenerator();
+      await generator.generatePayrollPdf(widget.payrollData);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -211,7 +213,8 @@ class _PayrollPdfScreenState extends State<PayrollPdfScreen> {
 
   Future<void> _generateIndividualPayslip(PayrollRecord record) async {
     try {
-      await PayrollPdfGenerator.generateEmployeePayslip(
+      final generator = PayrollPdfGenerator();
+      await generator.generateEmployeePayslip(
         record,
         widget.payrollData.organization,
       );
@@ -278,6 +281,8 @@ class _PayrollPdfScreenState extends State<PayrollPdfScreen> {
 
 // Example usage in your main app
 class PayrollApp extends StatelessWidget {
+  const PayrollApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

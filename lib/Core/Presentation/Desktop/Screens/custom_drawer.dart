@@ -4,6 +4,7 @@ import 'package:act/Core/Presentation/Desktop/Widgets/expansion_menu_widget.dart
 import 'package:act/Core/Presentation/Desktop/Widgets/menu_card.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
+import 'package:act/Core/gen/assets.gen.dart';
 import 'package:act/Features/Configuration/confiugration.dart';
 import 'package:act/Features/Dashboard/Presentation/dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/add_employee_data.dart';
@@ -48,11 +49,14 @@ class CustomDrawer extends StatelessWidget {
           Container(
             height: 23.sp,
             width: MediaQuery.of(context).size.longestSide,
-            decoration: BoxDecoration(
-              border: BorderDirectional(
-                bottom: BorderSide(width: 1, color: Colors.grey),
-              ),
-            ),
+            // decoration: BoxDecoration(
+            //   border: BorderDirectional(
+            //     bottom: BorderSide(width: 1, color: Colors.grey),
+            //   ),
+            // ),
+            child: Assets.images.hourlyDotLogocropped
+                .image(fit: BoxFit.fill)
+                .withPadding(padding: EdgeInsets.all(07.sp)),
           ),
           07.sp.height,
           Expanded(

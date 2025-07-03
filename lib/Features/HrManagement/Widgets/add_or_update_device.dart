@@ -18,14 +18,14 @@ class DeviceDialog extends StatefulWidget {
   onSubmit;
 
   const DeviceDialog({
-    Key? key,
+    super.key,
     required this.licenseKey,
     this.deviceId,
     this.initialDeviceName,
     this.initialDeviceIp,
     this.initialLastSyncInterval,
     required this.onSubmit,
-  }) : super(key: key);
+  });
 
   @override
   State<DeviceDialog> createState() => _DeviceDialogState();
