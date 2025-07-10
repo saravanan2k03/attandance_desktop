@@ -100,7 +100,13 @@ class _AttendanceManagementState extends State<AttendanceManagement> {
                         Expanded(
                           child: Row(
                             children: [
-                              const Expanded(flex: 3, child: DeviceInfoCard()),
+                              Visibility(
+                                visible: false,
+                                child: Expanded(
+                                  flex: 3,
+                                  child: DeviceInfoCard(),
+                                ),
+                              ),
                               07.width,
                               Expanded(
                                 flex: 10,

@@ -127,19 +127,23 @@ class _AttendanceDetailsCardState extends State<AttendanceDetailsCard> {
                             );
                           },
                           child: Container(
-                            height: 15.sp,
-                            width: 35.sp,
+                            // height: 15.sp,
+                            // width: 35.sp,
                             decoration: BoxDecoration(
                               color: Colors.amberAccent,
                               borderRadius: BorderRadius.circular(07.sp),
                             ),
-                            child: Center(
-                              child: AppText.small(
-                                "Payroll Generated",
-                                fontSize: 11.sp,
-                              ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                AppText.small(
+                                  "Attendance Report Generated",
+                                  fontSize: 11.sp,
+                                ).withPadding(padding: EdgeInsets.all(10.sp)),
+                              ],
                             ),
-                          ).withPadding(padding: EdgeInsets.all(07.sp)),
+                          ).withPadding(padding: EdgeInsets.all(10.sp)),
                         ),
                       ),
                     ],

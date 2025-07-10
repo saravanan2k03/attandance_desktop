@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:developer';
 import 'package:act/Core/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +11,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:win32/win32.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'Core/Constants/constant.dart';
 import 'Core/Data/Repository/core_repo.dart';
@@ -23,12 +28,47 @@ import 'Features/EmployeeManagement/Screens/AddEmployeeData/new_leave_request.da
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyGlobalObserver();
-  final appDir = await getApplicationDocumentsDirectory();
-  Hive.init(appDir.path);
+  // Initialize the window_manager plugin
+  await windowManager.ensureInitialized();
+
+  // Future.delayed(const Duration(milliseconds: 300), () async {
+  //   await windowManager.setFullScreen(true);
+  //   await _customizeWindow();
+  // });
+  if (!kIsWeb) {
+    final appDir = await getApplicationDocumentsDirectory();
+    Hive.init(appDir.path);
+  } else {
+    Hive.initFlutter(); // Use this for web platform
+  }
+
   await dotenv.load(fileName: "dotenv");
   setupServiceLocator();
 
   runApp(const MyApp());
+}
+
+Future<void> _customizeWindow() async {
+  if (!Platform.isWindows) return;
+
+  final hwnd = GetForegroundWindow();
+
+  final currentStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
+
+  // Remove Maximize box and system menu (close), but keep Minimize box
+  final newStyle = currentStyle & ~WS_MAXIMIZEBOX; // keeps Minimize intact
+
+  SetWindowLongPtr(hwnd, GWL_STYLE, newStyle);
+
+  SetWindowPos(
+    hwnd,
+    0,
+    0,
+    0,
+    0,
+    0,
+    SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED,
+  );
 }
 
 class MyApp extends StatefulWidget {

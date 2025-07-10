@@ -87,25 +87,29 @@ class ConfigurationSetting extends StatelessWidget {
                         dropDownMenu: workShift,
                         selectedItem: workshiftvar,
                         onChanged: (value) {
-                          workshiftvar = value!;
-                          configurationBloc.add(
-                            ConfigurationSettingEventFetch(
-                              workshift: workshiftvar,
-                            ),
-                          );
+                          if (value != null && value.isNotEmpty) {
+                            workshiftvar = value;
+                            configurationBloc.add(
+                              ConfigurationSettingEventFetch(
+                                workshift: workshiftvar,
+                              ),
+                            );
+                          }
                         },
                       ),
                       10.height, // spacing
+
                       CustomTextFormFieldwithcontroller(
                         title: "Punch In Start Time",
                         controller: punchInStartTimeController,
                         readOnly: true,
                         onTap: () async {
                           final selectedTime = await selectTime(context);
-                          punchInStartTimeController.text = selectedTime;
+                          if (selectedTime != null && selectedTime.isNotEmpty) {
+                            punchInStartTimeController.text = selectedTime;
+                          }
                         },
                       ),
-
                       10.height,
 
                       CustomTextFormFieldwithcontroller(
@@ -114,7 +118,9 @@ class ConfigurationSetting extends StatelessWidget {
                         readOnly: true,
                         onTap: () async {
                           final selectedTime = await selectTime(context);
-                          punchInEndTimeController.text = selectedTime;
+                          if (selectedTime != null && selectedTime.isNotEmpty) {
+                            punchInEndTimeController.text = selectedTime;
+                          }
                         },
                       ),
                       10.height,
@@ -125,7 +131,9 @@ class ConfigurationSetting extends StatelessWidget {
                         readOnly: true,
                         onTap: () async {
                           final selectedTime = await selectTime(context);
-                          punchInStartLateTimeController.text = selectedTime;
+                          if (selectedTime != null && selectedTime.isNotEmpty) {
+                            punchInStartLateTimeController.text = selectedTime;
+                          }
                         },
                       ),
                       10.height,
@@ -136,7 +144,9 @@ class ConfigurationSetting extends StatelessWidget {
                         readOnly: true,
                         onTap: () async {
                           final selectedTime = await selectTime(context);
-                          punchInEndLateTime.text = selectedTime;
+                          if (selectedTime != null && selectedTime.isNotEmpty) {
+                            punchInEndLateTime.text = selectedTime;
+                          }
                         },
                       ),
                       10.height,
@@ -147,7 +157,9 @@ class ConfigurationSetting extends StatelessWidget {
                         readOnly: true,
                         onTap: () async {
                           final selectedTime = await selectTime(context);
-                          punchOutStartTime.text = selectedTime;
+                          if (selectedTime != null && selectedTime.isNotEmpty) {
+                            punchOutStartTime.text = selectedTime;
+                          }
                         },
                       ),
                       10.height,
@@ -158,7 +170,9 @@ class ConfigurationSetting extends StatelessWidget {
                         readOnly: true,
                         onTap: () async {
                           final selectedTime = await selectTime(context);
-                          punchOutEndTime.text = selectedTime;
+                          if (selectedTime != null && selectedTime.isNotEmpty) {
+                            punchOutEndTime.text = selectedTime;
+                          }
                         },
                       ),
                       10.height,
@@ -169,9 +183,12 @@ class ConfigurationSetting extends StatelessWidget {
                         readOnly: true,
                         onTap: () async {
                           final selectedTime = await selectTime(context);
-                          overTimeWorkingEndTime.text = selectedTime;
+                          if (selectedTime != null && selectedTime.isNotEmpty) {
+                            overTimeWorkingEndTime.text = selectedTime;
+                          }
                         },
                       ),
+
                       10.height,
                     ],
                   ),
