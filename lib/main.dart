@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:developer';
 import 'package:act/Core/gen/assets.gen.dart';
@@ -11,9 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:win32/win32.dart';
 import 'package:window_manager/window_manager.dart';
-
 import 'Core/Constants/constant.dart';
 import 'Core/Data/Repository/core_repo.dart';
 import 'Core/Services/misc.dart';
@@ -48,28 +44,28 @@ void main() async {
   runApp(const MyApp());
 }
 
-Future<void> _customizeWindow() async {
-  if (!Platform.isWindows) return;
+// Future<void> _customizeWindow() async {
+//   if (!Platform.isWindows) return;
 
-  final hwnd = GetForegroundWindow();
+//   final hwnd = GetForegroundWindow();
 
-  final currentStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
+//   final currentStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
 
-  // Remove Maximize box and system menu (close), but keep Minimize box
-  final newStyle = currentStyle & ~WS_MAXIMIZEBOX; // keeps Minimize intact
+//   // Remove Maximize box and system menu (close), but keep Minimize box
+//   final newStyle = currentStyle & ~WS_MAXIMIZEBOX; // keeps Minimize intact
 
-  SetWindowLongPtr(hwnd, GWL_STYLE, newStyle);
+//   SetWindowLongPtr(hwnd, GWL_STYLE, newStyle);
 
-  SetWindowPos(
-    hwnd,
-    0,
-    0,
-    0,
-    0,
-    0,
-    SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED,
-  );
-}
+//   SetWindowPos(
+//     hwnd,
+//     0,
+//     0,
+//     0,
+//     0,
+//     0,
+//     SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED,
+//   );
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
