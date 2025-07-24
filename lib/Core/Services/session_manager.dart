@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:act/Core/Services/encryption_repo.dart';
 import 'package:act/Core/Services/hive_services.dart';
 
@@ -186,4 +185,6 @@ class SessionManagerClass {
       throw HttpException("Error In getusertype:::${e.toString()}").toString();
     }
   }
+
+  
 }

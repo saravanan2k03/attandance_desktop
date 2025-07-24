@@ -26,4 +26,16 @@ class HiveServices {
     var box = await _box;
     await box.clear();
   }
+
+
+    Future<void> deleteAllExceptLicenceKey() async {
+    var box = await _box;
+    final allKeys = box.keys;
+
+    for (var key in allKeys) {
+      if (key != 'licencekey') {
+        await box.delete(key);
+      }
+    }
+  }
 }

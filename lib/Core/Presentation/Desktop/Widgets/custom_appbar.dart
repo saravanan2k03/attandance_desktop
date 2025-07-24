@@ -37,7 +37,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
               InkWell(
                 onTap: () {
                   authRepo.logoutapi().whenComplete(() {
-                    hiveServices.deleteallData().then((value) {
+                    hiveServices.deleteAllExceptLicenceKey().then((value) {
                       MyApp.navigatorKey.currentState?.pushReplacementNamed(
                         '/login',
                       );

@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
-
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Data/Repository/core_repo.dart';
 import 'package:act/Core/Services/session_manager.dart';
@@ -39,7 +37,7 @@ class _AuthState extends State<Auth> {
   void submit() async {
     final session = SessionManagerClass();
     final licenseKey = await session.getlicence();
-
+    print("licenseKey::$licenseKey");
     if (licenseKey.isEmpty) {
       toasterService.displayErrorMotionToast(
         context: context,

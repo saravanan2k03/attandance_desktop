@@ -3,7 +3,7 @@ import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 
 import 'package:act/Features/EmployeeManagement/Widgets/custom_table.dart';
-import 'package:act/Features/HrManagement/Bloc/bloc/payroll_bloc.dart';
+import 'package:act/Features/HrManagement/Bloc/PayrollBloc/payroll_bloc.dart';
 import 'package:act/Features/HrManagement/Models/payroll_list_model.dart';
 import 'package:act/Features/HrManagement/Screens/PayrollDetails/payroll_filter.dart';
 import 'package:act/Features/Report/payroll_genrater_ui.dart';

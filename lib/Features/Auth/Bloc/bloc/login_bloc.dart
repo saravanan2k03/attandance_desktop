@@ -1,6 +1,7 @@
 import 'dart:async';
-
+import 'dart:developer';
 import 'package:act/Core/Services/hive_services.dart';
+import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Services/set_session_user.dart';
 import 'package:act/Features/Auth/Data/Models/login_model.dart';
 import 'package:act/Features/Auth/Repository/auth_repo.dart';
@@ -51,11 +52,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     final AuthRepo authrepo = AuthRepo();
     final HiveServices hiveServices = HiveServices();
+    final session = SessionManagerClass();
+    await session.getlicence().then((value){
+      log(value);
+    });
     authrepo.logoutapi().whenComplete(() {
-      hiveServices.deleteallData().then((value) {
+      hiveServices.deleteAllExceptLicenceKey().then((value) {
         emit(LogoutSucess());
       });
     });
+    
     try {} catch (e) {
       emit(LogoutError());
     }

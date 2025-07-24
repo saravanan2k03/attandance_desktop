@@ -5,7 +5,7 @@ import 'package:act/Core/Services/session_manager.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/filling_form.dart';
-import 'package:act/Features/HrManagement/Bloc/bloc/payroll_bloc.dart';
+import 'package:act/Features/HrManagement/Bloc/PayrollBloc/payroll_bloc.dart';
 import 'package:act/Features/HrManagement/Repository/hr_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
