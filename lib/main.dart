@@ -31,6 +31,7 @@ void main() async {
   //   await windowManager.setFullScreen(true);
   //   await _customizeWindow();
   // });
+  await dotenv.load(fileName: "dotenv");
   if (!kIsWeb) {
     final appDir = await getApplicationDocumentsDirectory();
     Hive.init(appDir.path);
@@ -38,7 +39,7 @@ void main() async {
     Hive.initFlutter(); // Use this for web platform
   }
 
-  await dotenv.load(fileName: "dotenv");
+  
   setupServiceLocator();
 
   runApp(const MyApp());
@@ -128,7 +129,7 @@ class _MyAppState extends State<MyApp> {
     return Sizer(
       builder: (context, orientation, screenType) {
         return MaterialApp(
-          title: 'ACT',
+          title: 'HourlyDots',
           themeMode: ThemeMode.system,
           theme: TAppTheme.lightTheme,
           darkTheme: TAppTheme.darkTheme,

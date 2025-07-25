@@ -1,0 +1,4 @@
+BasKey = "J2BgG2VNgjPmMoKTiXdcLw+5Kfa8wluEmwjFNAatfy0="
+IvKey = "VJVaOifmD602zhe6gBQwVw=="
+prodbaseUrl = "http://46.202.160.182/api/"
+baseUrl = "http://127.0.0.1:8000/api/"

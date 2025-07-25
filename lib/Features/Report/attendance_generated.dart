@@ -76,7 +76,7 @@ class AttendancePdfGenerator {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Image(pw.MemoryImage(bytes), width: 80, height: 100),
+        pw.Image(pw.MemoryImage(bytes), width: 100, height: 150),
         pw.SizedBox(height: 10),
         pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,

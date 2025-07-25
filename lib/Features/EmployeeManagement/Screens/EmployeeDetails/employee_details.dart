@@ -6,7 +6,6 @@ import 'package:act/Features/EmployeeManagement/Models/employee_dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Screens/EmployeeDetails/employee_info_card.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_dashboard_upper_widget.dart';
 import 'package:act/Features/EmployeeManagement/Widgets/employee_dashboard_lower_widget.dart';
-import 'package:act/Features/EmployeeManagement/Widgets/employee_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:act/Core/Constants/constant.dart';
 import 'package:act/Core/Utils/app_text.dart';
