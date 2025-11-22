@@ -38,15 +38,16 @@ jobs:
             echo "prodbaseUrl=${{ secrets.PROD_BASE_URL }}" >> dotenv
             echo "Secrets file 'dotenv' created."
 
+            echo "Running clean..."
+            flutter clean
             # --- STEP 4: BUILD SEQUENCE ---
             echo "Running pub get..."
-            /opt/flutter/bin/flutter pub get
+            flutter pub get
 
-            echo "Running clean..."
-            /opt/flutter/bin/flutter clean
+
 
             echo "Building Web App..."
             # --base-href is required because we host at /hourlydotapp/
-            /opt/flutter/bin/flutter build web --release --base-href "/hourlydotapp/"
+            flutter build web --release --base-href "/hourlydotapp/"
 
             echo "Deployment Complete. Nginx is serving the new files."
