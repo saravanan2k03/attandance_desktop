@@ -39,7 +39,6 @@ void main() async {
     Hive.initFlutter(); // Use this for web platform
   }
 
-  
   setupServiceLocator();
 
   runApp(const MyApp());
@@ -112,8 +111,14 @@ class _MyAppState extends State<MyApp> {
         await fetchDepartmentsAndDesignations();
       }
 
-      log(userType);
-      if (adminUserList.contains(userType)) {
+      log("User Type received: '$userType'");
+      String normalizedUserType = userType.trim().toLowerCase();
+
+      bool isAdmin = adminUserList.any(
+        (role) => role.toLowerCase() == normalizedUserType,
+      );
+
+      if (isAdmin) {
         return Dashboard();
       } else {
         int number = int.parse(userId);

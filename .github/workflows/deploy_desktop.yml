@@ -1,0 +1,52 @@
+name: Deploy Flutter Desktop to Web
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH Connect and Build
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # --- CONFIGURATION ---
+            REPO_URL="https://github.com/saravanan2k03/attandance_desktop.git"
+            TARGET_DIR="/root/attandance_desktop"
+            
+            # --- STEP 1: CHECK & CLONE ---
+            if [ ! -d "$TARGET_DIR" ]; then
+              echo "Folder does not exist. Cloning repo..."
+              git clone $REPO_URL $TARGET_DIR
+            else
+              echo "Folder exists. Pulling latest changes..."
+            fi
+
+            # --- STEP 2: ENTER & PULL ---
+            cd $TARGET_DIR
+            git pull origin main
+
+            # --- STEP 3: CREATE 'dotenv' FILE ---
+            # Creating file named 'dotenv' (no .env)
+            echo "BasKey=${{ secrets.BAS_KEY }}" > dotenv
+            echo "IvKey=${{ secrets.IV_KEY }}" >> dotenv
+            echo "prodbaseUrl=${{ secrets.PROD_BASE_URL }}" >> dotenv
+            echo "Secrets file 'dotenv' created."
+
+            # --- STEP 4: BUILD SEQUENCE ---
+            echo "Running pub get..."
+            /opt/flutter/bin/flutter pub get
+
+            echo "Running clean..."
+            /opt/flutter/bin/flutter clean
+
+            echo "Building Web App..."
+            # --base-href is required because we host at /hourlydotapp/
+            /opt/flutter/bin/flutter build web --release --base-href "/hourlydotapp/"
+
+            echo "Deployment Complete. Nginx is serving the new files."

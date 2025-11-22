@@ -1,7 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiConstants {
-  // static String baseUrl = dotenv.get('baseUrl', fallback: 'null');
   static String baseUrl = dotenv.get('prodbaseUrl', fallback: 'null');
   static String refreshToken = "auth/token/refresh/";
   static String login = "auth/login/";
