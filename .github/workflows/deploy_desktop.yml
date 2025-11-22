@@ -53,6 +53,6 @@ jobs:
             $FLUTTER_BIN pub get
 
             echo "🔨 Building Web App..."
-            $FLUTTER_BIN build web --release --base-href "/hourlydotapp/"
+            $FLUTTER_BIN build web
 
             echo "✅ Deployment Complete."
