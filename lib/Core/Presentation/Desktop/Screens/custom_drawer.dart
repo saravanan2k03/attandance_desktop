@@ -5,7 +5,7 @@ import 'package:act/Core/Presentation/Desktop/Widgets/menu_card.dart';
 import 'package:act/Core/Utils/app_text.dart';
 import 'package:act/Core/Utils/extension.dart';
 import 'package:act/Core/gen/assets.gen.dart';
-import 'package:act/Features/Configuration/confiugration.dart';
+import 'package:act/Features/Configuration/configuration.dart';
 import 'package:act/Features/Dashboard/Presentation/dashboard.dart';
 import 'package:act/Features/EmployeeManagement/Screens/AddEmployeeData/add_employee_data.dart';
 import 'package:act/Features/EmployeeManagement/employee_management.dart';
