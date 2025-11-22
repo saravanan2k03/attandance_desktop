@@ -17,19 +17,19 @@ jobs:
           script: |
             # --- CONFIGURATION ---
             REPO_URL="https://github.com/saravanan2k03/attandance_desktop.git"
-            TARGET_DIR="/root/attandance_desktop"
+            # ✅ FIXED: Using /opt/ instead of /root/ for permissions
+            TARGET_DIR="/opt/attandance_desktop"
             FLUTTER_BIN="/opt/flutter/bin/flutter"
             
             # --- STEP 1: FIX BROKEN FOLDER ---
-            # If folder exists but is NOT a valid git repo, delete it so we can clone fresh.
             if [ -d "$TARGET_DIR" ] && [ ! -d "$TARGET_DIR/.git" ]; then
-              echo "⚠️ Folder exists but is corrupted. Deleting..."
+              echo "⚠️ Folder corrupted. Deleting..."
               rm -rf "$TARGET_DIR"
             fi
 
             # --- STEP 2: CLONE OR PULL ---
             if [ ! -d "$TARGET_DIR" ]; then
-              echo "🚀 Cloning new repository..."
+              echo "🚀 Cloning to /opt/..."
               git clone $REPO_URL $TARGET_DIR
             else
               echo "🔄 Pulling latest changes..."
@@ -37,7 +37,6 @@ jobs:
               git pull origin main
             fi
 
-            # Ensure we are inside the folder
             cd $TARGET_DIR
 
             # --- STEP 3: CREATE 'dotenv' FILE ---
@@ -46,7 +45,7 @@ jobs:
             echo "prodbaseUrl=${{ secrets.PROD_BASE_URL }}" >> dotenv
             echo "✅ Secrets file 'dotenv' created."
 
-            # --- STEP 4: BUILD SEQUENCE (USING FULL PATHS) ---
+            # --- STEP 4: BUILD SEQUENCE ---
             echo "🧹 Running clean..."
             $FLUTTER_BIN clean
             
@@ -54,7 +53,6 @@ jobs:
             $FLUTTER_BIN pub get
 
             echo "🔨 Building Web App..."
-            # --base-href is required because we host at /hourlydotapp/
             $FLUTTER_BIN build web --release --base-href "/hourlydotapp/"
 
-            echo "✅ Deployment Complete. Nginx is serving the new files."
+            echo "✅ Deployment Complete."
